@@ -1,21 +1,22 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: c7194c3e-4a69-49aa-935b-136865c09d1d
+- task_id: 1f4de19d-189b-46a2-8538-fd394a7be2dc
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
-- analise: .adapta-cliente/analises/c7194c3e-importar-agenda-central.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada + 2026-10-13T12:52 "pode"
-- teste_humano: aprovado + 2026-10-13T14:42 (print com P1-02..P1-08 todas ✓ Passou, admin@lai.local)
-- verificacao_automatica: passou (QA 100% verde v0.0.16 + E2E servidor + provas executadas na tela de produção + versão no ar = testada)
+- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
+- analise: .adapta-cliente/analises/1f4de19d-cadastrar-tabela-duracao.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada + 2026-10-13T16:53 "Sim, formato real com 2 variáveis" (lentes 8+ = turno de 4h = 240 min, DECISÃO DO CLIENTE)
+- teste_humano: pendente
+- verificacao_automatica: passou (QA 100% verde v0.0.19 + E2E servidor: 22 regras reais importadas/0 rejeitadas, reimport ja_aplicado, aprovação ativa 22, 401 sem auth, banco limpo + P2-07/P2-08 ✓ Passou na tela em produção)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 3dd018e (v0.0.16)
-- skip_publicacao: publicada:3dd018e em 2026-10-13T17:47:28Z
+- skip_versao: 9d1e3f1 (v0.0.19)
+- skip_publicacao: publicada:9d1e3f1 em 2026-10-13T20:10:42Z
 - pendente_github: nao
-- ultima_acao: task concluída após teste humano aprovado (7 provas ✓) e verificação independente completa
-- proxima_acao: aguardar novo pedido do champion ("próxima task")
-- atualizado_em: 2026-10-13T15:50:00-03:00
+- espelho: pendente completar (migration 0004 e hook aprovar espelhados; hook importar/service/página pendentes — conteúdo no Skip e na análise)
+- ultima_acao: implementação concluída, publicada (v0.0.19) e provada (E2E servidor + provas na tela)
+- proxima_acao: aguardar teste humano na URL de produção
+- atualizado_em: 2026-10-13T17:15:00-03:00

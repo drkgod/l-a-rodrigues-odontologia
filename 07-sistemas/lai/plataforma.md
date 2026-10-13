@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 77dd470 (v0.0.9)
-- versao_publicada: 77dd470 em 2026-10-13T14:14:18Z
-- ultima_task: 7805f88a (concluída)
+- versao_aplicada: 3dd018e (v0.0.16)
+- versao_publicada: 3dd018e em 2026-10-13T17:47:28Z
+- ultima_task: c7194c3e (concluída)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -14,6 +14,9 @@
 
 | Data | Task | Versão publicada | Arquivos alterados |
 |---|---|---|---|
+| 13/10/2026 | c7194c3e (concluída — filtro de cadeira) | 3dd018e | src/pages/Agenda.tsx |
+| 13/10/2026 | c7194c3e (debug 4 rodadas — provas/tela/ID-nome) | 8fd29a2 | Provas.tsx, agenda_aplicar_lote.js |
+| 13/10/2026 | c7194c3e (agenda + importação) | 84f34d2 | migration 0003, hooks validar/aplicar-lote, services agenda, telas Importar/Agenda, provas P1-02..08 |
 | 13/10/2026 | 7805f88a (debug 4 — checagem honesta) | 77dd470 | src/services/provas.ts |
 | 13/10/2026 | 7805f88a (debug 3 — seed semfuncao) | d90570c | migration 0002 |
 | 13/10/2026 | 7805f88a (debug 2 prova P1-01) | ee697cf | src/services/provas.ts, migration 0001 (seed semfuncao) |

@@ -6,16 +6,16 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
 - analise: .adapta-cliente/analises/c7194c3e-importar-agenda-central.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: confirmada + 2026-10-13T12:52 "pode"
-- teste_humano: pendente
-- verificacao_automatica: passou (QA 100% verde v0.0.10/11 + E2E de rota no servidor: validar-lote 200, aplicar-lote 2 itens, reimport ja_aplicado, parcial marca ausente, namespaces separados)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (runInTransaction trava pod no JSVM)
+- teste_humano: aprovado + 2026-10-13T14:42 (print com P1-02..P1-08 todas ✓ Passou, admin@lai.local)
+- verificacao_automatica: passou (QA 100% verde v0.0.16 + E2E servidor + provas executadas na tela de produção + versão no ar = testada)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 84f34d2 (v0.0.11)
-- skip_publicacao: publicada:84f34d2 em 2026-10-13T16:03:52Z
+- skip_versao: 3dd018e (v0.0.16)
+- skip_publicacao: publicada:3dd018e em 2026-10-13T17:47:28Z
 - pendente_github: nao
-- ultima_acao: implementação concluída, publicada e provada por E2E no servidor (v0.0.11, ref 84f34d2)
-- proxima_acao: aguardar teste humano na URL de produção
-- atualizado_em: 2026-10-13T16:10:00-03:00
+- ultima_acao: task concluída após teste humano aprovado (7 provas ✓) e verificação independente completa
+- proxima_acao: aguardar novo pedido do champion ("próxima task")
+- atualizado_em: 2026-10-13T15:50:00-03:00

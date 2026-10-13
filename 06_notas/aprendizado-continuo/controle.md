@@ -24,3 +24,18 @@
 
 - **Sinal reutilizável (SDK PocketBase)**: `authWithPassword` devolve AuthResponse, NÃO o cliente — encadear `.collection()` no resultado quebra ((intermediate value).collection is not a function); guardar o cliente numa variável e usar duas vezes. Evidência: bug na checagem do sem-função na v0.0.8.
 - **Sinal reutilizável (provas)**: catch que trata "qualquer erro" como resultado esperado fabrica falso positivo — em prova de acesso, login falho e leitura falha são estados DIFERENTES: falha de checagem deve marcar a prova como FALHA, nunca contar como "0 registros".
+
+## 13/10/2026 — task c7194c3e (agenda/importação)
+
+- **Sinal reutilizável (JSVM/Skip CRÍTICO)**: `$app.runInTransaction((tx) => {...})` dentro de rota routerAdd TRAVA o pod (timeout sem resposta, sem log de request) — o callback da transação no JSVM não enxerga o escopo do handler (nem `e`, nem variáveis externas). Upsert idempotente por namespace + índice único no banco substitui a transação com segurança. Evidência: 3 timeouts seguidos na v0.0.10; rota viva de primeira na v0.0.11 sem a transação.
+- **Sinal reutilizável**: filtro do findRecordsByFilter com aspas duplas DENTRO do valor funciona (ex.: 'origem = "fixture"') — usado nos hooks com concatenação de string.
+- **Sinal reutilizável**: validação de lote linha a linha no servidor (validar-lote sem gravar + aplicar-lote revalidando) manteve o padrão "a tela não manda em regra" — rejeição com motivo testada em produção.
+
+- **Sinal reutilizável**: botão que chama a rotina de prova DIRETO executa mas não registra nem mostra — toda prova deve passar pelo fluxo executar→registrar→recarregar tabela (o dono vê o resultado; sem isso parece que "não acontece nada").
+- **Sinal reutilizável**: PATCH que insere funções por âncora pode mudar a ORDEM das declarações e duplicar identificadores — o QA (lint/build) pega "already been declared" ANTES de publicar; e remover função referenciada no JSX derruba a tela em branco SEM erro no build (caso limpar). Sempre re-ler o arquivo inteiro após 2+ patches na mesma região.
+- **Sinal reutilizável**: contrato entre rotas — validar-lote devolve linhas com RELAÇÃO RESOLVIDA (ID), aplicar-lote revalidava por NOME: mapa de resolução deve aceitar ID ou nome nos dois lados (caso P1-02 = 0 itens).
+
+## 13/10/2026 — fechamento c7194c3e
+
+- **Sinal reutilizável (UI)**: seletor renderizado sem estado/onChange (defaultValue) é campo decorativo — o checklist de UI da verificação final deve conferir que TODO filtro altera a lista (achado no fecho; corrigido na v0.0.16).
+- **Sinal reutilizável (processo)**: snapshot do navegador não vê o DOM do app (SPA em root) — para depurar telas, usar eval com contagens de botões/inner-text e performance entries; root vazio + bundle novo = crash de runtime na tela (caso limpar).

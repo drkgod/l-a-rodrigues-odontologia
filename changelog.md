@@ -14,3 +14,8 @@
 - Incluídos roteiros de teste para leitura parcial, tentativas/concorrência, capacidade, baseline e contingência.
 - Restauradas descrições suprimidas pelo retorno do portal, conservando títulos, UUIDs, status, responsáveis, prazos, hierarquia e visibilidade.
 - Materializadas apenas tasks/SPECs atuais e instruções operacionais; nenhuma fase futura ou análise interna copiada.
+
+## 13/10/2026 — task 7805f88a
+
+- Implementada e publicada a base da unidade piloto com acesso por função (SPEC-1-001, CA-1-01): migration 0001 (profissionais, cadeiras, config_unidade, provas_execucoes, users+papel/ativo/profissional), regras de acesso por função no servidor, telas Login/Sem acesso/Provas/Início, menu por função.
+- Versão Skip v0.0.4 (ref e13e688) publicada em https://projeto-lai-19327.goskip.app com QA 100% verde. Subtask 556859ba (tela de provas) entregue junto. Aguardando teste humano.

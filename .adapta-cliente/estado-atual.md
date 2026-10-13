@@ -1,0 +1,21 @@
+# Estado atual — Adapta Cliente
+
+- schema_version: adapta-cliente-state/v2
+- task_id: 7805f88a-2157-43fc-9a25-a59ef7b45691
+- executor: Luiz (assistente ETHOS)
+- owner_informativo: L A Rodrigues
+- spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
+- analise: .adapta-cliente/analises/7805f88a-criar-base-unidade-piloto.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada + 2026-10-13T10:13 "Sim, podemos implementar!"
+- teste_humano: pendente
+- verificacao_automatica: passou (QA 100% verde: setup, static analysis, build, integrations)
+- aprendizado: pendente
+- sistema: lai
+- skip_projeto: 65741
+- skip_versao: e13e688 (v0.0.4)
+- skip_publicacao: publicada:e13e688 em 2026-10-13T13:22:42Z
+- pendente_github: nao
+- ultima_acao: implementação concluída, publicada e provada (v0.0.4, ref e13e688)
+- proxima_acao: aguardar teste humano na URL de produção
+- atualizado_em: 2026-10-13T13:30:00-03:00

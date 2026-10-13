@@ -8,14 +8,14 @@
 - analise: .adapta-cliente/analises/7805f88a-criar-base-unidade-piloto.md
 - etapa: aguardando_teste_humano
 - autorizacao_implementacao: confirmada + 2026-10-13T10:13 "Sim, podemos implementar!"
-- teste_humano: pendente
-- verificacao_automatica: passou (QA 100% verde: setup, static analysis, build, integrations)
-- aprendizado: pendente
+- teste_humano: pendente (1º teste falhou na prova P1-01 — corrigido, novo teste aguardado)
+- verificacao_automatica: passou (QA 100% verde em v0.0.4 e v0.0.5)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: e13e688 (v0.0.4)
-- skip_publicacao: publicada:e13e688 em 2026-10-13T13:22:42Z
+- skip_versao: 5379b64 (v0.0.5)
+- skip_publicacao: publicada:5379b64 em 2026-10-13T13:41:57Z
 - pendente_github: nao
-- ultima_acao: implementação concluída, publicada e provada (v0.0.4, ref e13e688)
-- proxima_acao: aguardar teste humano na URL de produção
-- atualizado_em: 2026-10-13T13:30:00-03:00
+- ultima_acao: debug da prova P1-01 concluído e publicado (v0.0.5, ref 5379b64)
+- proxima_acao: aguardar novo teste humano na URL de produção
+- atualizado_em: 2026-10-13T13:50:00-03:00

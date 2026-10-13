@@ -24,3 +24,7 @@
 ## Revisão de 13/10 — fundamentação antes de conexões
 
 49 cards atuais, sete SPECs, sem credenciais externas. Cinco cards de acesso/virada transferidos à fase 4 privada e reservados até SPEC futura. Todos os 54 UUIDs, estados, responsáveis, datas e visibilidades preservados. Datas originais são histórico a replanejar. Nenhuma task foi executada/concluída. Endpoints externos estão mapeados no plano privado e serão detalhados para execução na liberação da fase 4; pasta operacional recebe apenas a fundamentação.
+
+## Análise documental por SPEC — orientação de 13/10
+
+Todas as sete SPECs incluem fontes/campos, extração, validação, saída para o app e perguntas limitadas a lacunas comprovadas. 001 agenda/catálogos; 002 tempos; 003 leads/procedimentos/campanhas; 004 políticas/modelo de confirmação; 005 presença/baixa; 006 indicadores/histórico/custo; 007 evidências/aceite. Pasta Drive informada não significa conteúdo já lido. Análise é etapa da task que consome documentos, sem novos cards de solicitação ou reabertura das entregas aceitas.

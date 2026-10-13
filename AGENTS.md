@@ -15,3 +15,7 @@ Drive informado pela clínica: https://drive.google.com/drive/folders/1Zwvm_2xfc
 - Distinguir `recebido`, `localizado`, `lido`, `validado`, `acesso pendente` e `lacuna confirmada`. Card aberto, sozinho, não comprova ausência de entrada.
 
 Consulta documental pelo assistente é preparação do projeto; não autoriza conectar Clinicorp/WhatsApp/IA ao app nas fases 1–3. Dados sintéticos seguem isolados; valores de produção não são inventados.
+
+## 13/10 — análise documental definida nas SPECs
+
+O executor não precisa inventar como analisar a entrada. Cada SPEC vigente descreve documentos/campos, extração, validações, saída e pergunta somente para lacuna não resolvida. Consultar a pasta compartilhada e materiais existentes antes de perguntar; não transformar acesso pendente em ausência nem solicitar formato novo sem necessidade. As análises são parte das tasks existentes. Não copiar dados identificáveis para Git. Nas fases futuras, repetir este contrato na SPEC gerada para cada entrega; não antecipar áudio/financeiro/conexões na fase 1.

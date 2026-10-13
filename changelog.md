@@ -54,3 +54,7 @@
 - 5º teste humano aprovado pelo champion (print com as 3 checagens verdadeiras: sem login 0, sem função 0, gestão 1+, massa apagada). Versão testada = publicada (77dd470).
 - Verificação independente completa: versão no ar conferida, migrations 0001/0002 applied, critério provado também por API no servidor (login 200 + leitura 0 registros), QA 100% verde, zero API externa, sem segredo novo.
 - Task e subtask marcadas [x] em 04_fase-atual/fase.md. 2/49 cards da fase 1 concluídos.
+
+## 13/10 — análise documental definida nas SPECs
+
+O executor não precisa inventar como analisar a entrada. Cada SPEC vigente descreve documentos/campos, extração, validações, saída e pergunta somente para lacuna não resolvida. Consultar a pasta compartilhada e materiais existentes antes de perguntar; não transformar acesso pendente em ausência nem solicitar formato novo sem necessidade. As análises são parte das tasks existentes. Não copiar dados identificáveis para Git. Nas fases futuras, repetir este contrato na SPEC gerada para cada entrega; não antecipar áudio/financeiro/conexões na fase 1.

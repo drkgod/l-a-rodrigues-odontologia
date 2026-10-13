@@ -43,6 +43,26 @@ A gestão escolhe "esta semana" e vê, por exemplo: 412 agendados; 61% confirmad
 - **Risco e plano B:** ocupação histórica indisponível na API → importação histórica controlada com todos os campos do contrato do período e fonte visível; sem campos/período/denominador, dados insuficientes. A agenda corrente não substitui automaticamente histórico da baseline.
 - **Rollback ou reversão:** a linha de base registrada não é apagada; recálculo cria nova versão com motivo.
 
+## Análise dos documentos e perguntas permitidas
+
+**Fonte:** https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9, materiais já recebidos e dados internos citados nesta SPEC. O conteúdo da pasta ainda não foi verificado neste preparo; não presumir que falta documento. Consultar pasta/subpastas com acesso de leitura, registrar arquivos e conteúdo efetivamente lidos em `.adapta-cliente/fontes-do-projeto.md` e seguir `AGENTS.md`. A consulta pelo assistente não é integração do app.
+
+**Método antes de perguntar:** identificar a task e a análise abaixo; procurar os campos nos materiais existentes, mesmo distribuídos entre arquivos; relacionar campo de origem ao campo interno; validar qualidade e conflitos; reaproveitar os dados válidos; registrar apenas a lacuna específica. Preservar unidade/versão/ID de origem, não converter campo vazio em zero nem inferir regra de produção. Arquivo de nome diferente também pode atender. Falha de acesso pede somente acesso, não reenvio. Converter o formato no ambiente autorizado quando viável, sem pedir à clínica trabalho que o assistente pode fazer.
+
+| Material e campos a localizar | Análise que o executor deve fazer | Saída que alimenta o app |
+|---|---|---|
+| Dados locais e período do painel | Conferir estados/contagens e denominador conforme tabela de indicadores desta SPEC; separar demonstração de operação; dado ausente não vira resultado zero | Memória de cálculo por indicador e painel com fonte/período/denominador |
+| Histórico disponível: unidade, cadeira, profissional, visita/paciente, início/fim, regime, comparecimento, cancelado/excluído, jornada/capacidade | Validar cobertura do mesmo período; união de intervalos por cadeira sem duplicar sobreposição; excluir CANCELAMENTO e exigir evidência de atendimento; turno sem duração individual não ganha minutos fictícios | Base histórica validada, numerador/denominador equivalentes, ou dados insuficientes com campo/período exatos |
+| Custo/remuneração por profissional e período | Identificar diária ou forma efetivamente documentada; ligar custo ao período e número de atendidos; não inventar salário, prorrata, câmbio ou rateio | Custo por paciente calculável apenas com base equivalente; senão pendência explicada |
+
+**Perguntar somente se necessário:** esclarecer remuneração/unidade/período realmente ambíguos e dizer qual indicador depende disso. Não pedir histórico novo se o recebido cobre a medição, nem dados reais para aprovar cálculo demonstrativo. A baseline oficial continua na fase 4; faltas de fonte ficam como dados insuficientes, sem bloquear telas ou outros indicadores válidos.
+
+**Registro e limite:** antes de pedir complemento, produzir em `06_notas/analises-documentais/SPEC-1-006.md` a task/critério, arquivos efetivamente consultados (link/ID, aba/seção/página, versão/data), mapa campo de origem → campo interno, dados aproveitados, validações/rejeições, conflitos, lacuna e seu efeito. Pode atualizar uma análise existente; não exigir arquivo separado por cada tarefa. Relatório não contém nomes, telefones, valores individuais, senhas, tokens ou prontuário; registrar metadados e exemplos anonimizados. Não copiar planilhas de pacientes para o Git. Dados normalizados vão ao banco/armazenamento autorizado conforme permissões desta SPEC, com revisão/aprovação já exigidas antes de uso real.
+
+**Pedido permitido:** “Consultei [arquivos/abas]. Já aproveitei [campos]. Para [task e funcionalidade], falta somente [campo/regra/decisão], porque [efeito concreto]. Isso [bloqueia só o uso real afetado / permite continuar a demonstração]. Podem [complementar ou esclarecer esse ponto]?” Perguntar apenas após leitura suficiente e busca nas fontes autorizadas. Falha de acesso deve ser declarada como acesso pendente, nunca como documento ausente; informar conta/permissão só se identificadas. Nenhum pedido ou mensagem à clínica é enviado automaticamente pela análise.
+
+**Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
+
 ## Dados e integrações
 
 | Origem/destino | Fonte de verdade | Campos/contrato | Autenticação/permissão | Timeout/retry/idempotência | Tratamento de erro |

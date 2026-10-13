@@ -7,3 +7,5 @@ Fundamentação mantida: fixture/arquivo/cadastro manual; zero chamadas a APIs e
 Datas históricas dos cards a replanejar (vários vencidos durante o preparo). Próximo passo: champion pede a próxima task ("próxima task") — em ordem vem "Enviar a tabela de tempo por procedimento e por dentista" (entrada do dono: planilha CL-001) ou a seguinte executável da fase.
 
 Repositório de destino: `drkgod/l-a-rodrigues-odontologia` (privado).
+
+13/10/2026 — análise documental definida nas sete SPECs; perguntas limitadas a lacunas comprovadas. Quatro descrições ajustadas sem alterar metadados ou estados. Conteúdo do Drive ainda não verificado neste preparo.

@@ -34,6 +34,26 @@ A equipe entra por função e navega na agenda por profissional/cadeira. Vê ori
 | `dentista` | agenda do próprio profissional | o que a SPEC-1-005 liberar |
 | sem `papel` ou `ativo = false` | nada | nada |
 
+## Análise dos documentos e perguntas permitidas
+
+**Fonte:** https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9, materiais já recebidos e dados internos citados nesta SPEC. O conteúdo da pasta ainda não foi verificado neste preparo; não presumir que falta documento. Consultar pasta/subpastas com acesso de leitura, registrar arquivos e conteúdo efetivamente lidos em `.adapta-cliente/fontes-do-projeto.md` e seguir `AGENTS.md`. A consulta pelo assistente não é integração do app.
+
+**Método antes de perguntar:** identificar a task e a análise abaixo; procurar os campos nos materiais existentes, mesmo distribuídos entre arquivos; relacionar campo de origem ao campo interno; validar qualidade e conflitos; reaproveitar os dados válidos; registrar apenas a lacuna específica. Preservar unidade/versão/ID de origem, não converter campo vazio em zero nem inferir regra de produção. Arquivo de nome diferente também pode atender. Falha de acesso pede somente acesso, não reenvio. Converter o formato no ambiente autorizado quando viável, sem pedir à clínica trabalho que o assistente pode fazer.
+
+| Material e campos a localizar | Análise que o executor deve fazer | Saída que alimenta o app |
+|---|---|---|
+| Catálogos, horários/cadeiras e agenda: unidade, IDs, profissional, cadeira, regime, início/fim, status, cancelado/excluído | Mapear IDs/nomes sem fundir homônimos; normalizar datas/fuso; validar início < fim e vínculo da unidade; separar consulta/compromisso/bloqueio; cadeira ausente não vira vaga livre | Mapa de colunas para profissionais/cadeiras/horários/status/categorias/agenda_itens; prévia e rejeições do importador |
+| Arquivos/lotes do mesmo período | Identificar duplicados, chaves e namespaces; reconhecer visita dividida preservando IDs; omissão não prova cancelamento; registrar período coberto e lote parcial | Chave estável por origem/tipo/ID, alertas de divisão/incerteza e cobertura do lote |
+| Pessoas/papéis já informados | Relacionar papel à matriz desta SPEC, sem gerar permissão a partir de cargo presumido | Configuração proposta de acesso para revisão humana; sem senha/token no relatório |
+
+**Perguntar somente se necessário:** pedir identificação da unidade de um arquivo ambíguo, vínculo de profissional/cadeira ou coluna temporal realmente ausente. Explicar que esse dado determina ocupação/vagas e mostrar os arquivos já aproveitados. Não pedir token nem exportação nova se uma versão existente atende. A demonstração sintética não depende de conta real.
+
+**Registro e limite:** antes de pedir complemento, produzir em `06_notas/analises-documentais/SPEC-1-001.md` a task/critério, arquivos efetivamente consultados (link/ID, aba/seção/página, versão/data), mapa campo de origem → campo interno, dados aproveitados, validações/rejeições, conflitos, lacuna e seu efeito. Pode atualizar uma análise existente; não exigir arquivo separado por cada tarefa. Relatório não contém nomes, telefones, valores individuais, senhas, tokens ou prontuário; registrar metadados e exemplos anonimizados. Não copiar planilhas de pacientes para o Git. Dados normalizados vão ao banco/armazenamento autorizado conforme permissões desta SPEC, com revisão/aprovação já exigidas antes de uso real.
+
+**Pedido permitido:** “Consultei [arquivos/abas]. Já aproveitei [campos]. Para [task e funcionalidade], falta somente [campo/regra/decisão], porque [efeito concreto]. Isso [bloqueia só o uso real afetado / permite continuar a demonstração]. Podem [complementar ou esclarecer esse ponto]?” Perguntar apenas após leitura suficiente e busca nas fontes autorizadas. Falha de acesso deve ser declarada como acesso pendente, nunca como documento ausente; informar conta/permissão só se identificadas. Nenhum pedido ou mensagem à clínica é enviado automaticamente pela análise.
+
+**Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
+
 ## Dados e integrações
 
 | Entrada | Contrato | Permissão e integridade | Falha |

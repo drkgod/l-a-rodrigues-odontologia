@@ -20,6 +20,26 @@ Luiz, Victor e equipe completam um roteiro na demonstração, conferem resultado
 - Rollback conserva eventos, vencedores locais e tentativas; não apagar dados reais nem repetir contatos. Falha mantém task aberta e retorna à SPEC causadora.
 - Não inclui retirar ferramentas, testar provedor externo, go-live, migração final ou dados da segunda unidade.
 
+## Análise dos documentos e perguntas permitidas
+
+**Fonte:** https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9, materiais já recebidos e dados internos citados nesta SPEC. O conteúdo da pasta ainda não foi verificado neste preparo; não presumir que falta documento. Consultar pasta/subpastas com acesso de leitura, registrar arquivos e conteúdo efetivamente lidos em `.adapta-cliente/fontes-do-projeto.md` e seguir `AGENTS.md`. A consulta pelo assistente não é integração do app.
+
+**Método antes de perguntar:** identificar a task e a análise abaixo; procurar os campos nos materiais existentes, mesmo distribuídos entre arquivos; relacionar campo de origem ao campo interno; validar qualidade e conflitos; reaproveitar os dados válidos; registrar apenas a lacuna específica. Preservar unidade/versão/ID de origem, não converter campo vazio em zero nem inferir regra de produção. Arquivo de nome diferente também pode atender. Falha de acesso pede somente acesso, não reenvio. Converter o formato no ambiente autorizado quando viável, sem pedir à clínica trabalho que o assistente pode fazer.
+
+| Material e campos a localizar | Análise que o executor deve fazer | Saída que alimenta o app/aceite |
+|---|---|---|
+| Arquivos Trello/APP CRC fornecidos e relatórios das SPECs 001–006 | Identificar versão/origem e cobertura das rotinas; registrar falta de exportação sem afirmar migração; relacionar cada dado reutilizado ao fluxo demonstrado | Checklist de cobertura por papel e origem da massa/arquivo, sem desligar ferramentas |
+| Evidências já guardadas em cards/Provas/entregas | Cruzar task UUID, versão testada, cenário, esperado/obtido, resultado e aceite humano; não exigir novo print se evidência existente atende; divergência entre relatório e checkbox não inventa conclusão | Matriz de evidências e lacunas por critério, mantendo estado canônico |
+| Resultados de demonstração e painel | Conferir lead → planejamento → reserva local → confirmação → atendimento → painel e encaixe; verificar papéis, ausência de chamadas externas e painel contra a massa | Relatório de demonstração/limitações para revisão e aceite da fundamentação |
+
+**Perguntar somente se necessário:** pedir uma evidência específica ausente/ilegível ou resultado ainda não testado, com critério e versão. Não solicitar reenviar todos os documentos nem repetir testes aprovados sem mudança/falha concreta. Ausência de exportações reais admite fixture conforme esta SPEC; aceite local não vira go-live. Se há conflito de status, registrar para reconciliação, não marcar [x] automaticamente.
+
+**Registro e limite:** antes de pedir complemento, produzir em `06_notas/analises-documentais/SPEC-1-007.md` a task/critério, arquivos efetivamente consultados (link/ID, aba/seção/página, versão/data), mapa campo de origem → campo interno, dados aproveitados, validações/rejeições, conflitos, lacuna e seu efeito. Pode atualizar uma análise existente; não exigir arquivo separado por cada tarefa. Relatório não contém nomes, telefones, valores individuais, senhas, tokens ou prontuário; registrar metadados e exemplos anonimizados. Não copiar planilhas de pacientes para o Git. Dados normalizados vão ao banco/armazenamento autorizado conforme permissões desta SPEC, com revisão/aprovação já exigidas antes de uso real.
+
+**Pedido permitido:** “Consultei [arquivos/abas]. Já aproveitei [campos]. Para [task e funcionalidade], falta somente [campo/regra/decisão], porque [efeito concreto]. Isso [bloqueia só o uso real afetado / permite continuar a demonstração]. Podem [complementar ou esclarecer esse ponto]?” Perguntar apenas após leitura suficiente e busca nas fontes autorizadas. Falha de acesso deve ser declarada como acesso pendente, nunca como documento ausente; informar conta/permissão só se identificadas. Nenhum pedido ou mensagem à clínica é enviado automaticamente pela análise.
+
+**Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
+
 ## Dados e integrações
 
 Coleção `virada`: `tipo` (arquivo_trello, arquivo_app_crc, roteiro_funcao, regressao, conferencia_painel, aceite), arquivo nativo opcional, função, resultado (ok, com_contorno, falhou), observação, autor, data, `modo_dados`, `lote_id`, `versao_app`. Backend restringe gravação de aceite ao consultor/gestor designado; mesma unidade obrigatória. Arquivo com dados reais não é publicado em captura/grupo. Nenhuma API externa.

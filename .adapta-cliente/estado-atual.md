@@ -6,11 +6,11 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
 - analise: .adapta-cliente/analises/f4982b80-tabela-tempo-procedimento-dentista.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: CONFIRMADA 13/10 ~19h48 "pode implementar a task f4982b80"
 - decisao_cliente: RESOLVIDA 13/10 18h16 — regra por dentista prevalece; sem dentista definido = 40 min (COMBO 4 SISOS)
-- teste_humano: pendente (1º teste 19:58: P1-08 falhou → debug concluído, correção publicada v0.0.23; P1-02 passou)
-- verificacao_automatica: passou (QA 100% verde v0.0.23; E2E servidor: 27 regras importadas 0 rejeitadas, v2 ATIVA; P1-08 ✓ e P2-07/P2-08 ✓ na tela; pós-prova zero sobra de teste)
+- teste_humano: aprovado (1º teste 19:58 P1-08 falhou → debug v0.0.23; re-teste 20:14-20:31 P1-02/P1-08/P2-07/P2-08 ✓ na tela)
+- verificacao_automatica: passou (versão no ar = testada b6e6890; migrations 0001-0005 applied; v2 real ATIVA com 27 regras; zero massa de teste)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
@@ -18,6 +18,6 @@
 - skip_publicacao: publicada:b6e6890 em 2026-10-13T23:07:31Z
 - pendente_github: nao
 - espelho: pendente completar (migration 0005 espelhada; demais no Skip)
-- ultima_acao: debug da P1-08 concluído (servidor correto; falha = pod velho; sobra de teste corrigida)
-- proxima_acao: aguardar novo teste humano na URL de produção
-- atualizado_em: 2026-10-13T20:10:00-03:00
+- ultima_acao: task concluída com re-teste humano aprovado e verificação independente
+- proxima_acao: aguardar pedido do champion pela próxima task
+- atualizado_em: 2026-10-13T20:35:00-03:00

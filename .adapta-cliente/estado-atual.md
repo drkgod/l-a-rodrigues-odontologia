@@ -9,15 +9,15 @@
 - etapa: aguardando_teste_humano
 - autorizacao_implementacao: CONFIRMADA 13/10 ~19h48 "pode implementar a task f4982b80"
 - decisao_cliente: RESOLVIDA 13/10 18h16 — regra por dentista prevalece; sem dentista definido = 40 min (COMBO 4 SISOS)
-- teste_humano: pendente
-- verificacao_automatica: passou (QA 100% verde v0.0.22; E2E servidor: 27 regras importadas 0 rejeitadas, v2 ATIVA, reimport idempotente; P2-07/P2-08 ✓ na tela com v2 real presente e sobrevivente)
+- teste_humano: pendente (1º teste 19:58: P1-08 falhou → debug concluído, correção publicada v0.0.23; P1-02 passou)
+- verificacao_automatica: passou (QA 100% verde v0.0.23; E2E servidor: 27 regras importadas 0 rejeitadas, v2 ATIVA; P1-08 ✓ e P2-07/P2-08 ✓ na tela; pós-prova zero sobra de teste)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 11a9012 (v0.0.22)
-- skip_publicacao: publicada:11a9012 em 2026-10-13T22:51:49Z
+- skip_versao: b6e6890 (v0.0.23)
+- skip_publicacao: publicada:b6e6890 em 2026-10-13T23:07:31Z
 - pendente_github: nao
 - espelho: pendente completar (migration 0005 espelhada; demais no Skip)
-- ultima_acao: implementação concluída, publicada (v0.0.22) e provada (E2E + provas na tela)
-- proxima_acao: aguardar teste humano na URL de produção
-- atualizado_em: 2026-10-13T19:55:00-03:00
+- ultima_acao: debug da P1-08 concluído (servidor correto; falha = pod velho; sobra de teste corrigida)
+- proxima_acao: aguardar novo teste humano na URL de produção
+- atualizado_em: 2026-10-13T20:10:00-03:00

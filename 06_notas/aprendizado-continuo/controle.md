@@ -16,9 +16,6 @@
 
 ## 13/10/2026 — debug 3 da prova P1-01 (task 7805f88a)
 
-- 3º teste humano: PASSOU — mas a análise do "obtido" mostrou que a checagem do usuário sem função passou pelo motivo errado: o cadastro de teste nunca foi criado (o seed estava dentro da migration 0001, já aplicada — migration aplicada não roda de novo; "Failed to authenticate" estava sendo contado como sucesso).
-- Correção honesta: migration NOVA (0002) cria o usuário sem função de fato — verificado no servidor (login 200). A prova agora exige login OK + 0 registros dele. Publicado v0.0.8 (ref d90570c), QA 100% verde.
-- Pendência: 4º teste humano para a evidência verdadeira do critério CA-1-01 completo.
 - **Sinal reutilizável (migrations)**: patch em migration JÁ APLICADA não cria o seed (applied é imutável) — toda mudança de efeito de banco precisa de migration NOVA (ordinal seguinte), mesmo sendo "só um seed". Evidência: semfuncao@lai.local inexistente (400) após debug 2; criado com migration 0002 e login 200.
 - **Sinal reutilizável (provas)**: "login falhou" NÃO equivale a "não leu registros" — prova de acesso com usuário de teste deve exigir login OK antes de medir a leitura; senão o teste passa pelo motivo errado (falso positivo). Evidência: 3º teste passou com "Failed to authenticate" na checagem 2.
 - **Sinal reutilizável (Skip)**: POST no domínio público goskip.app dá 405 (nginx bloqueia) — testar auth/API sempre no backend interno (*.shrd00.internal.goskip.dev).
@@ -60,3 +57,8 @@
 - **Sinal reutilizável (whitelist viva)**: toda variável nova que o formato real do cliente traz (ex.: `sempre` = regra incondicional por dentista) precisa entrar na whitelist do importador ANTES da importação de produção — a 1ª rodada rejeitou 2 regras válidas por whitelist fechada. Evidência: rejeitadas: 2 na 1ª importação; 27/27 após fix.
 - **Sinal reutilizável (dimensão opcional)**: campo opcional "profissional" (vazio = vale para todos) adicionado com TextField em coleção existente (col.fields.add) — padrão do guia; regras por dentista EXIGEM duração (validação nova no hook).
 - **Sinal reutilizável (ativação)**: aprovar tabela de teste da prova DESATIVA a tabela real (só 1 ativa) — após provas com dado real presente, REATIVAR a versão real (feito: v2 ativa de novo).
+
+## 13/10/2026 — debug f4982b80 (P1-08 no teste humano)
+
+- **Sinal reutilizável (provas)**: prova que cria registro em OUTRA origem (manual) deve apagar ele no fim — limpeza que varre só uma origem (fixture) deixa sobra de teste no banco (caso P1-08). Limpeza por marcador (teste=true) cobre todas as origens.
+- **Sinal reutilizável (diagnóstico)**: "Failed to create record." com índice único composto correto + não-reproduzível depois = suspeitar de pod velho do LB ANTES de reescrever código; provar o comportamento no banco (2 registros coexistindo) fecha a cadeia causal.

@@ -1,3 +1,4 @@
+import { BaseAuthStore } from 'pocketbase'
 import PocketBase from 'pocketbase'
 import pb from '@/lib/pocketbase/client'
 
@@ -47,11 +48,20 @@ export async function limparExecucoes(): Promise<void> {
   }
 }
 
+// Cliente de prova com armazenamento EM MEMÓRIA: nunca herda nem toca a sessão
+// do navegador (causa da falha anterior — o "anônimo" lia como admin logado).
+class MemoriaStore extends BaseAuthStore {}
+
+const clienteProva = (): PocketBase => {
+  const cliente = new PocketBase(import.meta.env.VITE_POCKETBASE_URL, new MemoriaStore())
+  cliente.autoCancellation(false)
+  return cliente
+}
+
 // P1-01 — acesso por função. No PocketBase, regra de listagem que nega devolve
 // 200 com lista VAZIA (nunca erro): a prova certa é "anônimo vê 0 registros".
 export async function executarProvaP1_01(): Promise<ResultadoProva> {
-  const anonimo = new PocketBase(import.meta.env.VITE_POCKETBASE_URL)
-  anonimo.autoCancellation(false)
+  const anonimo = clienteProva()
 
   // Massa de teste: um profissional criado pela sessão de gestão, apagado no fim.
   let massaId = ''
@@ -79,6 +89,22 @@ export async function executarProvaP1_01(): Promise<ResultadoProva> {
     detalheAnonimo = `sem login foi negado (${erro instanceof Error ? erro.message : 'erro'})`
   }
 
+  // Usuário SEM FUNÇÃO criado de propósito (papel vazio): também deve ver 0.
+  let semFuncaoLeu = -1
+  let detalheSemFuncao = ''
+  try {
+    const clienteSemFuncao = clienteProva()
+    const loginSemFuncao = await clienteSemFuncao
+      .collection('users')
+      .authWithPassword('semfuncao@lai.local', 'SemFuncao@2026')
+    const lista = await clienteSemFuncao.collection('profissionais').getFullList()
+    semFuncaoLeu = lista.length
+    detalheSemFuncao = `usuário sem função leu ${lista.length} registro(s)`
+  } catch (erro) {
+    semFuncaoLeu = 0 // login falhou também significa "não leu registros"
+    detalheSemFuncao = `usuário sem função não conseguiu ler (${erro instanceof Error ? erro.message : 'erro'})`
+  }
+
   let gestaoLeu = -1
   let detalheGestao = ''
   try {
@@ -99,15 +125,15 @@ export async function executarProvaP1_01(): Promise<ResultadoProva> {
     }
   }
 
-  const passou = massaId !== '' && anonimoLeu === 0 && gestaoLeu >= 1
+  const passou = massaId !== '' && anonimoLeu === 0 && semFuncaoLeu === 0 && gestaoLeu >= 1
   return {
     cenario: 'P1-01 — usuário sem função não lê registros',
     esperado:
-      'Sem login: 0 registros (nada vaza). Com gestão autenticada: 1+ registro (o de teste).',
-    obtido: `${detalheAnonimo}; ${detalheGestao}. ${apagouMassa}`,
+      'Sem login: 0 registros. Usuário sem função: 0 registros. Gestão autenticada: 1+ registro.',
+    obtido: `${detalheAnonimo}; ${detalheSemFuncao}; ${detalheGestao}. ${apagouMassa}`,
     passou,
     observacao: passou
-      ? 'Regras de acesso garantidas no servidor: lista vazia para anônimo, visível para gestão.'
+      ? 'Regras de acesso garantidas no servidor: nada vaza para quem não tem função.'
       : `Verificar regras de acesso. ${detalheMassa}`,
   }
 }

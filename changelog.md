@@ -1,3 +1,9 @@
+## 13/10/2026 — fontes compartilhadas e pedidos de documentos
+
+- Registrada a pasta Drive indicada pela clínica, sem afirmar listagem/leitura não realizadas.
+- AGENTS/README exigem procurar e reaproveitar materiais antes de pedir reenvio; pedido explica documento, campos, finalidade, fontes consultadas e lacuna.
+- CL-001 deve ser procurado nos arquivos existentes antes de ser considerado ausente. Demonstração continua permitida com dados sintéticos separados.
+
 ## 13/10/2026 — fundamentação antes de integrações
 
 - AC-13-IT aplicada: fases 1–3 locais; conexões e piloto na 4; segunda unidade/conjunto na 5.

@@ -7,12 +7,14 @@ Comece por `04_fase-atual/fase.md` e `04_fase-atual/specs/00-INDICE.md`. Esta fa
 ## Como começar
 
 1. Disponibilize esta pasta ao Maestro no ambiente de construção.
-2. Escolha uma única task elegível e leia sua SPEC. Títulos históricos foram preservados; a descrição atual define o recorte local.
+2. Leia `AGENTS.md` e `.adapta-cliente/fontes-do-projeto.md`, escolha uma única task elegível e leia sua SPEC. Títulos históricos foram preservados; a descrição atual define o recorte local.
 3. Use fixture separada, arquivo validado ou cadastro manual. Não precisa de token Clinicorp, conta Meta ou provedor de IA para começar. Login, banco e arquivos nativos do Skip são a base.
 4. Construa apenas a task, rode RED/GREEN/regressão e registre evidência em `05_entregas/`, ligada ao UUID.
 5. A equipe segue o teste humano da SPEC. Só concluir e avançar depois de evidência e resposta explícita “testei, pode seguir”. Falha volta à mesma task.
 
 ## Dados e regras
+
+A clínica indicou a pasta de documentos: https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9. Antes de pedir material, procurar nela e nas fontes recebidas. Falha de acesso não significa documento não enviado. Cada pedido identifica documento/campos, finalidade na task e lacuna; não solicitar reenvio genérico.
 
 Tabelas de duração/cadeiras e modelos de arquivos ajudam a validar os dados reais. Demonstração sintética permite começar enquanto faltam entradas, sem preencher parâmetros reais por suposição. Unidade/turno de Leonel, limite de Wesley/Pamela, regime de Erika e cobertura de ligações exigem confirmação no uso afetado.
 

@@ -12,6 +12,8 @@ Esta SPEC executa apenas no app e banco nativos. Dados vêm da SPEC-1-001 por fi
 
 ## Contexto e decisões fechadas
 
+**Consulta de CL-001 antes de solicitar:** a clínica informou a pasta https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9. Procurar e ler os arquivos disponíveis, seguindo `AGENTS.md` e `.adapta-cliente/fontes-do-projeto.md`, antes de pedir tabela ou reenvio. “CL-001” identifica uma necessidade de dados, não um nome obrigatório de arquivo: regras podem estar distribuídas entre materiais existentes. Se faltar acesso, explicar e pedir somente acesso; se faltar campo após leitura, especificar campo, finalidade no cálculo e fonte consultada. Não declarar tabela ausente sem verificar. Essa consulta pelo assistente não conecta o app ao Drive.
+
 - **Estado atual:** quem agenda decide a duração "de cabeça". Os critérios existem, mas não são aplicados; a duração depende de procedimento, quantidade, combinação e profissional, e não é linear (exemplos da clínica: 3 facetas ≈ 30 min, 10 facetas ≈ 1 h, 10 facetas + 1 implante ≈ 1 h 15; 2 coroas ≈ 30 min, 4 coroas ≈ 40 min).
 - **Estado desejado:** ao planejar um agendamento na central, a CRC informa paciente, procedimento, quantidade, combinação e profissional e recebe o tempo sugerido pela tabela da clínica, arredondado, e as vagas compatíveis. Depois de vincular uma reserva importada ou simulada, a CRC liga a reserva ao planejamento; se o tempo reservado for diferente do sugerido, registra o motivo. A gestão revisa os desvios.
 - **Decisões já fechadas:**

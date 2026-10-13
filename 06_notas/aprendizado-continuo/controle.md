@@ -54,3 +54,9 @@
 
 - **Sinal reutilizável (provas x dado real)**: rotina de limpeza de prova que apaga "todas as tabelas" destrói dado REAL do usuário (caso: importação das 22 regras sumiu após o teste do champion). Limpeza de prova deve filtrar por marcador (teste=true) ou apagar só o que criou (ids conhecidos) — nunca "apagar tudo da coleção".
 - **Sinal reutilizável (regra de ouro)**: dado real criado pelo usuário durante o teste humano faz parte do estado aprovado — restaurá-lo (reimportar + ativar) antes de concluir, e o teste da prova seguinte deve provar que o dado real sobrevive.
+
+## 13/10/2026 — task f4982b80 (tabela por dentista)
+
+- **Sinal reutilizável (whitelist viva)**: toda variável nova que o formato real do cliente traz (ex.: `sempre` = regra incondicional por dentista) precisa entrar na whitelist do importador ANTES da importação de produção — a 1ª rodada rejeitou 2 regras válidas por whitelist fechada. Evidência: rejeitadas: 2 na 1ª importação; 27/27 após fix.
+- **Sinal reutilizável (dimensão opcional)**: campo opcional "profissional" (vazio = vale para todos) adicionado com TextField em coleção existente (col.fields.add) — padrão do guia; regras por dentista EXIGEM duração (validação nova no hook).
+- **Sinal reutilizável (ativação)**: aprovar tabela de teste da prova DESATIVA a tabela real (só 1 ativa) — após provas com dado real presente, REATIVAR a versão real (feito: v2 ativa de novo).

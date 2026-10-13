@@ -75,3 +75,13 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - Correção de fecho (v0.0.20, ref ec815d4): a limpeza das provas P2-07/P2-08 apagava TODAS as tabelas, inclusive a importação real do usuário — agora só apaga massa de teste (regras teste=true ou tabela sem regras); prova: tabela real 22 regras sobreviveu às provas na tela.
 - Estado final restaurado: tabela real v1 ATIVA com 22 regras (lentes 8+ = 240 min pela decisão do dono).
 - 6/49 cards da fase 1 concluídos.
+
+## 13/10/2026 — task f4982b80: tabela de tempo por procedimento e por dentista (entregue, aguardando teste)
+
+- Fonte: mesma planilha do Drive (abas db_regras_duracao + db_procedimento_profissional). Das 395 linhas de procedimento×profissional, só 5 têm duração específica — as 388 restantes são preferências de agenda (não importadas como tempo; alimentam SPEC-1-001).
+- DECISÃO DO CLIENTE (13/10 18h16): "a regra vale dependendo de qual agenda ele vai entrar, pois cada profissional leva um determinado tempo, na dúvida deixa 40 min" — regra por dentista prevalece sobre a do grupo; COMBO 4 SISOS sem dentista definido = 40 min (não os 60 da planilha).
+- Entrega: migration 0005 (regras_duracao +profissional, text opcional; vazio = vale para todos), hook importar aceita profissional + valida "regra por profissional exige duração" + variável `sempre` na whitelist (regra incondicional por dentista), service lê/escreve a coluna, tela mostra coluna Profissional ("todos" quando vazio).
+- CSV v2 (artifacts/tabela-duracao-v2.csv): 27 regras — 22 de grupo (SISOS_COMBO 40 com nota da decisão; lentes 8+ = 240) + 5 por dentista (SISOS: Luiz Sergio 40, Leonel 30, Ana Clara 60; Alice: exodontia decíduo 20 e mantenedor de espaço 20, grupos próprios EXODONTIA_DECIDUO/MANTENEDOR_ESPACO).
+- Debug: 1ª importação rejeitou as 2 regras da Alice (variável `sempre` fora da whitelist) — corrigido v0.0.22 (ref 11a9012); reimport completo: 27 gravadas, 0 rejeitadas, v2 ATIVA.
+- E2E servidor: reimport idempotente, ativação única, P2-07 ✓ e P2-08 ✓ na tela em produção (com a v2 real presente; sobreviveu às provas pela guarda da v0.0.20).
+- Publicado v0.0.21 (190c454) → v0.0.22 (11a9012). Aguardando teste humano.

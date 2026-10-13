@@ -39,3 +39,10 @@
 
 - **Sinal reutilizável (UI)**: seletor renderizado sem estado/onChange (defaultValue) é campo decorativo — o checklist de UI da verificação final deve conferir que TODO filtro altera a lista (achado no fecho; corrigido na v0.0.16).
 - **Sinal reutilizável (processo)**: snapshot do navegador não vê o DOM do app (SPA em root) — para depurar telas, usar eval com contagens de botões/inner-text e performance entries; root vazio + bundle novo = crash de runtime na tela (caso limpar).
+
+## 13/10/2026 — task 1f4de19d (tabela de duração)
+
+- **Sinal reutilizável (PocketBase)**: string VAZIA em campo number dá "The submitted number is not properly formatted" no create via SDK — o cliente deve omitir a chave (delete) quando vazia; o hook aceita ausente e converte para 0/sem-regra.
+- **Sinal reutilizável (validação)**: `Number(x) <= 0` deixa NaN passar (NaN <= 0 = false) — usar `!Number.isFinite(Number(x)) || Number(x) <= 0` em validação de número que veio de texto (CSV). Caso: "PRC074" virou duração e passou na 1ª versão do hook.
+- **Sinal reutilizável (debug)**: interceptar window.fetch no navegador mostrou o payload REAL da prova — achou CSV desalinhado (10 colunas vs 11 do cabeçalho) que a leitura do código não pegou; payload capturado > hipótese.
+- **Sinal reutilizável (fontes)**: planilha do Drive era base estruturada (abas db_) — consultar o conteúdo ANTES de pedir documento (AGENTS.md) evitou pedido desnecessário; inventário registrado em fontes-do-projeto.md com estado lido/localizado.

@@ -1,3 +1,5 @@
+# Histórico operacional
+
 ## 13/10/2026 — fontes compartilhadas e pedidos de documentos
 
 - Registrada a pasta Drive indicada pela clínica, sem afirmar listagem/leitura não realizadas.
@@ -11,12 +13,10 @@
 - App começa sem credenciais de provedores; importação/fixture com origem, acesso e isolamento. Nenhuma task executada.
 - Pasta operacional atualizada; destino GitHub privado `drkgod/l-a-rodrigues-odontologia`, conforme pedido explícito de publicação.
 
-# Histórico operacional
-
 ## 13/10/2026
 
-- Preparado pacote local da fase 1 com7 SPECs e54 tasks; conservados49 UUIDs e conciliados5 novos devolvidos pelo portal.
-- Incorporadas regras de3mensagens+1ligação/corte17h, avaliação2×30min e limites de agendas locais com configuração pendente explícita.
+- Preparado pacote local da fase 1 com 7 SPECs e 54 tasks; conservados 49 UUIDs e conciliados 5 novos devolvidos pelo portal.
+- Incorporadas regras de 3 mensagens + 1 ligação/corte 17h, avaliação 2×30min e limites de agendas locais com configuração pendente explícita.
 - Incluídos roteiros de teste para leitura parcial, tentativas/concorrência, capacidade, baseline e contingência.
 - Restauradas descrições suprimidas pelo retorno do portal, conservando títulos, UUIDs, status, responsáveis, prazos, hierarquia e visibilidade.
 - Materializadas apenas tasks/SPECs atuais e instruções operacionais; nenhuma fase futura ou análise interna copiada.
@@ -41,7 +41,7 @@
 
 - 3º teste humano: PASSOU — mas a análise do "obtido" mostrou que a checagem do usuário sem função passou pelo motivo errado: o cadastro de teste nunca foi criado (o seed estava dentro da migration 0001, já aplicada — migration aplicada não roda de novo; "Failed to authenticate" estava sendo contado como sucesso).
 - Correção honesta: migration NOVA (0002) cria o usuário sem função de fato — verificado no servidor (login 200). A prova agora exige login OK + 0 registros dele. Publicado v0.0.8 (ref d90570c), QA 100% verde.
-- Pendência: 4º teste humano para evidência verdadeira do critério CA-1-01 completo.
+- Pendência: 4º teste humano para a evidência verdadeira do critério CA-1-01 completo.
 
 ## 13/10/2026 — debug 4 da task 7805f88a (prova P1-01)
 
@@ -58,3 +58,12 @@
 ## 13/10 — análise documental definida nas SPECs
 
 O executor não precisa inventar como analisar a entrada. Cada SPEC vigente descreve documentos/campos, extração, validações, saída e pergunta somente para lacuna não resolvida. Consultar a pasta compartilhada e materiais existentes antes de perguntar; não transformar acesso pendente em ausência nem solicitar formato novo sem necessidade. As análises são parte das tasks existentes. Não copiar dados identificáveis para Git. Nas fases futuras, repetir este contrato na SPEC gerada para cada entrega; não antecipar áudio/financeiro/conexões na fase 1.
+
+## 13/10/2026 — task 1f4de19d: cadastrar a tabela de duração na central (entregue, aguardando teste)
+
+- Fonte consultada ANTES de pedir (AGENTS.md): planilha "Tabela Procedimentos x Tempos.xlsx" no Drive da clínica — base estruturada com abas db_ (22 regras multi-variável em 7 grupos, 91 procedimentos, 22 profissionais, horários ALC/ITA, escala). CSV preparado em artifacts/tabela-duracao-v1.csv.
+- DECISÃO DO CLIENTE (13/10 16:53): importar o formato REAL com 2 variáveis (preserva regras como implante 2 + 2 exodontias = 40 min); lentes 8+ = turno de 4 horas (240 min) — valor informado pelo dono, não inventado pelo sistema.
+- Entrega: migration 0004 (tabela_duracao + regras_duracao, regras de acesso padrão), rotas /backend/v1/duracao/importar-tabela (valida linha a linha, cria versão RASCUNHO, reimport por hash idempotente) e /duracao/aprovar-tabela (ativa UMA versão, desativa as outras, grava aprovada_por/em), service duracao.ts (parser CSV ; ou ,), tela /tabela-duracao (importar → prévia com rejeitadas → versões com badge Ativa/Rascunho → Ativar → conferência das regras da versão ativa), provas P2-07/P2-08 na tela Provas.
+- Debug: PocketBase rejeita string vazia em campo number (v0.0.18: vazio → omitir no cliente) e CSV de teste desalinhado ocultava NaN como duração (v0.0.19: validação Number.isFinite no hook — duração e faixas não numéricas são rejeitadas com motivo).
+- E2E servidor: 22 regras reais (0 rejeitadas), reimport ja_aplicado, aprovação ativa 22 regras (coroas 3-4=40, lentes 8+=240 conferidas), 401 sem auth, dados de teste apagados (0 restantes).
+- Provas na tela em produção: P2-07 ✓ e P2-08 ✓ (17:12, admin@lai.local). Publicado v0.0.19 (ref 9d1e3f1). Aguardando teste humano.

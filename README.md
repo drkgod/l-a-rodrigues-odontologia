@@ -26,3 +26,15 @@ Toda tela identifica origem/data e modo demonstrativo ou importado, sem sincroni
 - `07-sistemas/`: arquivos ou referências do app construído.
 
 Conexões externas ficam para a fase 4 e segunda unidade para a fase 5; instruções serão disponibilizadas na liberação. Cinco cards de acesso/virada foram reservados no plano futuro, preservando UUIDs. Os 49 cards atuais conservam estado, responsável, data e visibilidade; datas antigas são histórico a replanejar. Nenhuma implementação/aceite foi produzido neste preparo. Destino GitHub autorizado: `drkgod/l-a-rodrigues-odontologia`, privado.
+
+## Repositório do sistema
+
+O projeto [LAi](https://github.com/Luizrodri/Projeto-LAi---Reposit-rio) está vinculado como submódulo em `07-sistemas/Projeto-LAi---Reposit-rio`. O código mantém seu próprio histórico; o repositório do cliente registra a versão utilizada.
+
+Para baixar a pasta do cliente com o sistema:
+
+```sh
+git clone --recurse-submodules https://github.com/drkgod/l-a-rodrigues-odontologia.git
+```
+
+Em um clone existente, execute `git submodule update --init --recursive`.

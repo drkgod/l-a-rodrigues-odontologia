@@ -1,3 +1,8 @@
+## 13/10/2026 — submódulo do sistema LAi
+
+- Adicionado `Luizrodri/Projeto-LAi---Reposit-rio` em `07-sistemas/Projeto-LAi---Reposit-rio`, fixado no commit `8abc2da95a8e0dd3ce82a7cc19cb45ca3ed83e99`.
+- README inclui instruções para clonar e inicializar os submódulos. Atualizações remotas da pasta do cliente foram incorporadas antes desta alteração.
+
 ## 13/10/2026 — fundamentação antes de integrações
 
 - AC-13-IT aplicada: fases 1–3 locais; conexões e piloto na 4; segunda unidade/conjunto na 5.

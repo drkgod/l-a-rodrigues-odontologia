@@ -67,3 +67,11 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - Debug: PocketBase rejeita string vazia em campo number (v0.0.18: vazio → omitir no cliente) e CSV de teste desalinhado ocultava NaN como duração (v0.0.19: validação Number.isFinite no hook — duração e faixas não numéricas são rejeitadas com motivo).
 - E2E servidor: 22 regras reais (0 rejeitadas), reimport ja_aplicado, aprovação ativa 22 regras (coroas 3-4=40, lentes 8+=240 conferidas), 401 sem auth, dados de teste apagados (0 restantes).
 - Provas na tela em produção: P2-07 ✓ e P2-08 ✓ (17:12, admin@lai.local). Publicado v0.0.19 (ref 9d1e3f1). Aguardando teste humano.
+
+## 13/10/2026 · Luiz (assistente ETHOS) · Task 1f4de19d CONCLUÍDA
+
+- Teste humano aprovado pelo champion (17:46, admin@lai.local): importou a tabela real (22 regras, nada duplicado), ativou a versão e rodou P2-07 ✓ e P2-08 ✓ na tela em produção.
+- Verificação independente: versão no ar = testada (9d1e3f1 na hora do teste; ec815d4 depois), migrations 0001-0004 applied, E2E servidor com as 22 regras reais, 401 sem auth, banco limpo de massa de teste.
+- Correção de fecho (v0.0.20, ref ec815d4): a limpeza das provas P2-07/P2-08 apagava TODAS as tabelas, inclusive a importação real do usuário — agora só apaga massa de teste (regras teste=true ou tabela sem regras); prova: tabela real 22 regras sobreviveu às provas na tela.
+- Estado final restaurado: tabela real v1 ATIVA com 22 regras (lentes 8+ = 240 min pela decisão do dono).
+- 6/49 cards da fase 1 concluídos.

@@ -16,6 +16,9 @@
 
 ## 13/10/2026 — debug 3 da prova P1-01 (task 7805f88a)
 
+- 3º teste humano: PASSOU — mas a análise do "obtido" mostrou que a checagem do usuário sem função passou pelo motivo errado: o cadastro de teste nunca foi criado (o seed estava dentro da migration 0001, já aplicada — migration aplicada não roda de novo; "Failed to authenticate" estava sendo contado como sucesso).
+- Correção honesta: migration NOVA (0002) cria o usuário sem função de fato — verificado no servidor (login 200). A prova agora exige login OK + 0 registros dele. Publicado v0.0.8 (ref d90570c), QA 100% verde.
+- Pendência: 4º teste humano para a evidência verdadeira do critério CA-1-01 completo.
 - **Sinal reutilizável (migrations)**: patch em migration JÁ APLICADA não cria o seed (applied é imutável) — toda mudança de efeito de banco precisa de migration NOVA (ordinal seguinte), mesmo sendo "só um seed". Evidência: semfuncao@lai.local inexistente (400) após debug 2; criado com migration 0002 e login 200.
 - **Sinal reutilizável (provas)**: "login falhou" NÃO equivale a "não leu registros" — prova de acesso com usuário de teste deve exigir login OK antes de medir a leitura; senão o teste passa pelo motivo errado (falso positivo). Evidência: 3º teste passou com "Failed to authenticate" na checagem 2.
 - **Sinal reutilizável (Skip)**: POST no domínio público goskip.app dá 405 (nginx bloqueia) — testar auth/API sempre no backend interno (*.shrd00.internal.goskip.dev).
@@ -46,3 +49,8 @@
 - **Sinal reutilizável (validação)**: `Number(x) <= 0` deixa NaN passar (NaN <= 0 = false) — usar `!Number.isFinite(Number(x)) || Number(x) <= 0` em validação de número que veio de texto (CSV). Caso: "PRC074" virou duração e passou na 1ª versão do hook.
 - **Sinal reutilizável (debug)**: interceptar window.fetch no navegador mostrou o payload REAL da prova — achou CSV desalinhado (10 colunas vs 11 do cabeçalho) que a leitura do código não pegou; payload capturado > hipótese.
 - **Sinal reutilizável (fontes)**: planilha do Drive era base estruturada (abas db_) — consultar o conteúdo ANTES de pedir documento (AGENTS.md) evitou pedido desnecessário; inventário registrado em fontes-do-projeto.md com estado lido/localizado.
+
+## 13/10/2026 — fechamento 1f4de19d (tabela de duração)
+
+- **Sinal reutilizável (provas x dado real)**: rotina de limpeza de prova que apaga "todas as tabelas" destrói dado REAL do usuário (caso: importação das 22 regras sumiu após o teste do champion). Limpeza de prova deve filtrar por marcador (teste=true) ou apagar só o que criou (ids conhecidos) — nunca "apagar tudo da coleção".
+- **Sinal reutilizável (regra de ouro)**: dado real criado pelo usuário durante o teste humano faz parte do estado aprovado — restaurá-lo (reimportar + ativar) antes de concluir, e o teste da prova seguinte deve provar que o dado real sobrevive.

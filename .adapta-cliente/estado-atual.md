@@ -1,21 +1,21 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 7805f88a-2157-43fc-9a25-a59ef7b45691
+- task_id: c7194c3e-4a69-49aa-935b-136865c09d1d
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
-- analise: .adapta-cliente/analises/7805f88a-criar-base-unidade-piloto.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada + 2026-10-13T10:13 "Sim, podemos implementar!"
-- teste_humano: aprovado + 2026-10-13T11:16 "passou, testado" (print com as 3 checagens verdadeiras)
-- verificacao_automatica: passou (QA 100% verde em v0.0.4/5/7/8/9)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (8 sinais dos 4 debugs)
+- analise: .adapta-cliente/analises/c7194c3e-importar-agenda-central.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada + 2026-10-13T12:52 "pode"
+- teste_humano: pendente
+- verificacao_automatica: passou (QA 100% verde v0.0.10/11 + E2E de rota no servidor: validar-lote 200, aplicar-lote 2 itens, reimport ja_aplicado, parcial marca ausente, namespaces separados)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (runInTransaction trava pod no JSVM)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 77dd470 (v0.0.9)
-- skip_publicacao: publicada:77dd470 em 2026-10-13T14:14:18Z
+- skip_versao: 84f34d2 (v0.0.11)
+- skip_publicacao: publicada:84f34d2 em 2026-10-13T16:03:52Z
 - pendente_github: nao
-- ultima_acao: task concluída após verificação independente (fase/STATUS/changelog atualizados)
-- proxima_acao: aguardar pedido do cliente pela próxima task
-- atualizado_em: 2026-10-13T14:30:00-03:00
+- ultima_acao: implementação concluída, publicada e provada por E2E no servidor (v0.0.11, ref 84f34d2)
+- proxima_acao: aguardar teste humano na URL de produção
+- atualizado_em: 2026-10-13T16:10:00-03:00

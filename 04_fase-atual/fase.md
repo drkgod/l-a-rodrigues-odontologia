@@ -31,9 +31,9 @@ tarefas que já têm um.
 
 - [ ] Fazer a call de início da construção da fase 1 @"Rodrigo Santos" !06/10/2026  <!-- id:029c9b34-b67b-4390-9df1-ca940b9eaa25 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Call de validação com Luiz e Victor: apresentar as SPECs da fase 1, combinar como testar com o Maestro e combinar a massa local/importação, usuários/papéis e provas sem credenciais externas (SPEC-1-001). Pronto quando a ata curta estiver no card.
-- [ ] Criar a base da unidade piloto com acesso por função @"L A Rodrigues" !07/10/2026  <!-- id:7805f88a-2157-43fc-9a25-a59ef7b45691 -->
+- [x] Criar a base da unidade piloto com acesso por função @"L A Rodrigues" !07/10/2026  <!-- id:7805f88a-2157-43fc-9a25-a59ef7b45691 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Projeto Skip só da unidade piloto, com as coleções e a matriz de acesso da SPEC-1-001. Prova: P1-01 (usuário sem função não vê nada · CA-1-01). Pare se alguma função precisar de acesso fora da matriz.
-  - [ ] Montar a tela de provas da fase 1 @"L A Rodrigues" !07/10/2026  <!-- id:556859ba-f5f4-4154-9908-69d216d1070a -->
+  - [x] Montar a tela de provas da fase 1 @"L A Rodrigues" !07/10/2026  <!-- id:556859ba-f5f4-4154-9908-69d216d1070a -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Tela só da gestão com um botão por SPEC que roda os cenários e grava o resultado; massa de teste sempre marcada como teste e botão para limpá-la (SPEC-1-001, mecanismo de provas).
 - [ ] Enviar a tabela de tempo por procedimento e por dentista @"L A Rodrigues" !07/10/2026  <!-- id:f4982b80-9c9e-4a0b-95b2-49a41af4e476 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Planilha com procedimento, quantidade ou combinação, dentista e minutos, mais as cadeiras (qual é de avaliação) e os horários de cada dentista (CL-001). É a base do tempo sugerido (SPEC-1-002 · CA-1-07).

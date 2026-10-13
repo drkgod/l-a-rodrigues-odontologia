@@ -6,16 +6,16 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
 - analise: .adapta-cliente/analises/7805f88a-criar-base-unidade-piloto.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: confirmada + 2026-10-13T10:13 "Sim, podemos implementar!"
-- teste_humano: pendente (4º teste aprovou, mas revalidação achou bug na checagem do sem-função; critério provado no servidor pelo executor; 5º teste aguardado)
+- teste_humano: aprovado + 2026-10-13T11:16 "passou, testado" (print com as 3 checagens verdadeiras)
 - verificacao_automatica: passou (QA 100% verde em v0.0.4/5/7/8/9)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (8 sinais dos 4 debugs)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: 77dd470 (v0.0.9)
 - skip_publicacao: publicada:77dd470 em 2026-10-13T14:14:18Z
 - pendente_github: nao
-- ultima_acao: debug 4 concluído e publicado (v0.0.9, ref 77dd470) — checagem do sem-função não conta mais falha como sucesso
-- proxima_acao: aguardar 5º teste humano na URL de produção
-- atualizado_em: 2026-10-13T14:20:00-03:00
+- ultima_acao: task concluída após verificação independente (fase/STATUS/changelog atualizados)
+- proxima_acao: aguardar pedido do cliente pela próxima task
+- atualizado_em: 2026-10-13T14:30:00-03:00

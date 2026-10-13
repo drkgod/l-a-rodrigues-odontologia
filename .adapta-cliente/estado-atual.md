@@ -1,16 +1,16 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: f4982b80-9c9e-4a0b-95b2-49a41af4e476
+- task_id: (nenhuma ativa — última: f4982b80 concluída)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
-- analise: .adapta-cliente/analises/f4982b80-tabela-tempo-procedimento-dentista.md
-- etapa: concluida
-- autorizacao_implementacao: CONFIRMADA 13/10 ~19h48 "pode implementar a task f4982b80"
-- decisao_cliente: RESOLVIDA 13/10 18h16 — regra por dentista prevalece; sem dentista definido = 40 min (COMBO 4 SISOS)
-- teste_humano: aprovado (1º teste 19:58 P1-08 falhou → debug v0.0.23; re-teste 20:14-20:31 P1-02/P1-08/P2-07/P2-08 ✓ na tela)
-- verificacao_automatica: passou (versão no ar = testada b6e6890; migrations 0001-0005 applied; v2 real ATIVA com 27 regras; zero massa de teste)
+- spec: —
+- analise: —
+- etapa: concluida (f4982b80) — sem task ativa
+- autorizacao_implementacao: n/a (aguardando próxima task)
+- decisao_cliente: —
+- teste_humano: —
+- verificacao_automatica: n/a
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
@@ -18,6 +18,6 @@
 - skip_publicacao: publicada:b6e6890 em 2026-10-13T23:07:31Z
 - pendente_github: nao
 - espelho: pendente completar (migration 0005 espelhada; demais no Skip)
-- ultima_acao: task concluída com re-teste humano aprovado e verificação independente
-- proxima_acao: aguardar pedido do champion pela próxima task
-- atualizado_em: 2026-10-13T20:35:00-03:00
+- ultima_acao: fase.md reconstruído (regressão própria corrigida a partir de bab4256); aguardando seleção da próxima task
+- proxima_acao: champion pede a próxima task
+- atualizado_em: 2026-10-13T20:40:00-03:00

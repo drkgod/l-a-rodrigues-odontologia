@@ -1,22 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 1f4de19d-189b-46a2-8538-fd394a7be2dc
+- task_id: f4982b80-9c9e-4a0b-95b2-49a41af4e476
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
-- analise: .adapta-cliente/analises/1f4de19d-cadastrar-tabela-duracao.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada + 2026-10-13T16:53 "Sim, formato real com 2 variáveis" (lentes 8+ = 240 min, DECISÃO DO CLIENTE)
-- teste_humano: aprovado (2026-10-13T17:46 champion na tela: 22 regras importadas sem duplicar, P2-07 ✓ P2-08 ✓)
-- verificacao_automatica: passou (v0.0.19 testada = publicada; v0.0.20 guarda da limpeza; E2E servidor 22 regras; 401 sem auth; banco limpo)
+- analise: .adapta-cliente/analises/f4982b80-tabela-tempo-procedimento-dentista.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 13/10 ~19h48 "pode implementar a task f4982b80"
+- decisao_cliente: RESOLVIDA 13/10 18h16 — regra por dentista prevalece; sem dentista definido = 40 min (COMBO 4 SISOS)
+- teste_humano: pendente
+- verificacao_automatica: passou (QA 100% verde v0.0.22; E2E servidor: 27 regras importadas 0 rejeitadas, v2 ATIVA, reimport idempotente; P2-07/P2-08 ✓ na tela com v2 real presente e sobrevivente)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: ec815d4 (v0.0.20)
-- skip_publicacao: publicada:ec815d4 em 2026-10-13T20:50:33Z
+- skip_versao: 11a9012 (v0.0.22)
+- skip_publicacao: publicada:11a9012 em 2026-10-13T22:51:49Z
 - pendente_github: nao
-- espelho: pendente completar (migration 0004 e hook aprovar espelhados; hook importar/service/página pendentes)
-- ultima_acao: task concluída com teste humano aprovado e verificação independente
-- proxima_acao: aguardar pedido do champion pela próxima task
-- atualizado_em: 2026-10-13T17:55:00-03:00
+- espelho: pendente completar (migration 0005 espelhada; demais no Skip)
+- ultima_acao: implementação concluída, publicada (v0.0.22) e provada (E2E + provas na tela)
+- proxima_acao: aguardar teste humano na URL de produção
+- atualizado_em: 2026-10-13T19:55:00-03:00

@@ -4,7 +4,6 @@
 
 - **Sinal reutilizável**: `skip_project_apply_changes` recusa mensagem de commit acima de 120 caracteres — escrever a mensagem já no formato curto `task <ID>: <resumo>`. Evidência: erro -32602 "expected string to have <=120 characters" na 1ª tentativa, sucesso na 2ª com mensagem encurtada.
 - **Sinal reutilizável**: `skip_project_create` falha com "Unknown error" sem `orgId` explícito; passar `orgId` da organização resolve. Evidência: 2 falhas seguidas e sucesso com orgId 19751.
-- Sem outros sinais reutilizáveis nesta task: o fluxo migration → serviços → contexto → telas → rotas seguiu o plano aprovado sem desvio, e o QA passou de primeira.
 
 ## 13/10/2026 — debug da prova P1-01 (task 7805f88a)
 
@@ -20,3 +19,8 @@
 - **Sinal reutilizável (migrations)**: patch em migration JÁ APLICADA não cria o seed (applied é imutável) — toda mudança de efeito de banco precisa de migration NOVA (ordinal seguinte), mesmo sendo "só um seed". Evidência: semfuncao@lai.local inexistente (400) após debug 2; criado com migration 0002 e login 200.
 - **Sinal reutilizável (provas)**: "login falhou" NÃO equivale a "não leu registros" — prova de acesso com usuário de teste deve exigir login OK antes de medir a leitura; senão o teste passa pelo motivo errado (falso positivo). Evidência: 3º teste passou com "Failed to authenticate" na checagem 2.
 - **Sinal reutilizável (Skip)**: POST no domínio público goskip.app dá 405 (nginx bloqueia) — testar auth/API sempre no backend interno (*.shrd00.internal.goskip.dev).
+
+## 13/10/2026 — debug 4 da prova P1-01 (task 7805f88a)
+
+- **Sinal reutilizável (SDK PocketBase)**: `authWithPassword` devolve AuthResponse, NÃO o cliente — encadear `.collection()` no resultado quebra ((intermediate value).collection is not a function); guardar o cliente numa variável e usar duas vezes. Evidência: bug na checagem do sem-função na v0.0.8.
+- **Sinal reutilizável (provas)**: catch que trata "qualquer erro" como resultado esperado fabrica falso positivo — em prova de acesso, login falho e leitura falha são estados DIFERENTES: falha de checagem deve marcar a prova como FALHA, nunca contar como "0 registros".

@@ -90,19 +90,20 @@ export async function executarProvaP1_01(): Promise<ResultadoProva> {
   }
 
   // Usuário SEM FUNÇÃO criado de propósito (papel vazio): também deve ver 0.
+  // Login DEVE funcionar (o cadastro existe) — se falhar, a prova FALHA e explica.
   let semFuncaoLeu = -1
   let detalheSemFuncao = ''
   try {
     const clienteSemFuncao = clienteProva()
-    const loginSemFuncao = await clienteSemFuncao
+    await clienteSemFuncao
       .collection('users')
       .authWithPassword('semfuncao@lai.local', 'SemFuncao@2026')
     const lista = await clienteSemFuncao.collection('profissionais').getFullList()
     semFuncaoLeu = lista.length
     detalheSemFuncao = `usuário sem função leu ${lista.length} registro(s)`
   } catch (erro) {
-    semFuncaoLeu = 0 // login falhou também significa "não leu registros"
-    detalheSemFuncao = `usuário sem função não conseguiu ler (${erro instanceof Error ? erro.message : 'erro'})`
+    semFuncaoLeu = -1 // login ou leitura falhou: a prova NÃO passa por acidente
+    detalheSemFuncao = `usuário sem função: falha na checagem (${erro instanceof Error ? erro.message : 'erro'})`
   }
 
   let gestaoLeu = -1

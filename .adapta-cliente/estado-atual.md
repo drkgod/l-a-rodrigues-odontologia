@@ -8,14 +8,14 @@
 - analise: .adapta-cliente/analises/7805f88a-criar-base-unidade-piloto.md
 - etapa: aguardando_teste_humano
 - autorizacao_implementacao: confirmada + 2026-10-13T10:13 "Sim, podemos implementar!"
-- teste_humano: pendente (3º teste aprovou, mas revalidação achou checagem passando pelo motivo errado — usuário sem função não existia; corrigido com migration 0002; 4º teste aguardado)
-- verificacao_automatica: passou (QA 100% verde em v0.0.4/5/7/8)
+- teste_humano: pendente (4º teste aprovou, mas revalidação achou bug na checagem do sem-função; critério provado no servidor pelo executor; 5º teste aguardado)
+- verificacao_automatica: passou (QA 100% verde em v0.0.4/5/7/8/9)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: d90570c (v0.0.8)
-- skip_publicacao: publicada:d90570c em 2026-10-13T14:00:40Z
+- skip_versao: 77dd470 (v0.0.9)
+- skip_publicacao: publicada:77dd470 em 2026-10-13T14:14:18Z
 - pendente_github: nao
-- ultima_acao: debug 3 concluído e publicado (v0.0.8, ref d90570c) — usuário sem função criado de fato (migration nova)
-- proxima_acao: aguardar 4º teste humano na URL de produção
-- atualizado_em: 2026-10-13T14:05:00-03:00
+- ultima_acao: debug 4 concluído e publicado (v0.0.9, ref 77dd470) — checagem do sem-função não conta mais falha como sucesso
+- proxima_acao: aguardar 5º teste humano na URL de produção
+- atualizado_em: 2026-10-13T14:20:00-03:00

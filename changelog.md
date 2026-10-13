@@ -1,5 +1,3 @@
-# Histórico operacional
-
 ## 13/10/2026 — fontes compartilhadas e pedidos de documentos
 
 - Registrada a pasta Drive indicada pela clínica, sem afirmar listagem/leitura não realizadas.
@@ -12,6 +10,8 @@
 - Sete SPECs/TDD/testes humanos e índice revisados; 49 cards na fase 1 e cinco reservados na 4. Todos os 54 UUIDs/metadados preservados.
 - App começa sem credenciais de provedores; importação/fixture com origem, acesso e isolamento. Nenhuma task executada.
 - Pasta operacional atualizada; destino GitHub privado `drkgod/l-a-rodrigues-odontologia`, conforme pedido explícito de publicação.
+
+# Histórico operacional
 
 ## 13/10/2026
 
@@ -85,3 +85,5 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - Debug: 1ª importação rejeitou as 2 regras da Alice (variável `sempre` fora da whitelist) — corrigido v0.0.22 (ref 11a9012); reimport completo: 27 gravadas, 0 rejeitadas, v2 ATIVA.
 - E2E servidor: reimport idempotente, ativação única, P2-07 ✓ e P2-08 ✓ na tela em produção (com a v2 real presente; sobreviveu às provas pela guarda da v0.0.20).
 - Publicado v0.0.21 (190c454) → v0.0.22 (11a9012). Aguardando teste humano.
+
+- 13/10/2026 · [executor] · DEBUG task f4982b80: P1-08 "Failed to create record." no teste humano → causa raiz: servidor correto (índice composto confirmado; coexistência fixture+manual provada no banco e na tela); falha do teste = pod velho atrás do LB; achado real: limpeza da P1-08 deixava sobra do registro manual de teste → corrigido (v0.0.23, ref b6e6890): sobras de teste incluem origem manual (filtro teste=true). Aguardando novo teste.

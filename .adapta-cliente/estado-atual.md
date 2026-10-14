@@ -1,23 +1,24 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: a9f9e30e-5f5b-4212-900b-a679a4ae2290
+- task_id: 097ff6ce-cdc7-44fd-984c-4ee315fc8406
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
-- analise: .adapta-cliente/analises/a9f9e30e-regras-confirmacao-liberacao.md
+- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
+- analise: .adapta-cliente/analises/097ff6ce-tempo-sugerido-planejamento.md
 - etapa: concluida
-- autorizacao_implementacao: CONFIRMADA 13/10 ~21h (dono respondeu os vínculos pedidos na análise e autorizou seguir)
-- decisao_cliente: RESOLVIDAS 13/10 ~21h — Leonel ITA qua 16h+ 5/turno; Wesley e Pamella 20/turno para cada (manhã e tarde); Erika ALC sábado = ortodontia 2/horário; cobertura de ligação = recepção (cadastro por turno na próxima task)
-- teste_humano: APROVADO (print do dono com banner verde P4-07 na tela; P4-04/P4-05/P4-07 ✓, v0.0.30)
-- verificacao_automatica: verificação independente reexecutou os gates do zero no servidor (recusa sem ligação ✓, liberação com eventos completos às 17h ✓, ordem de chegada sem política = regra_nao_validada ✓); massa teste apagada; versão no ar = testada (5e25a8c)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
+- autorizacao_implementacao: CONFIRMADA 13/10 ~21h57 ("Pode implementar este plano" após a análise)
+- decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
+- teste_humano: APROVADO ("Bateu, pode concluir", 22h42 — COMBO 4 com Leonel/Ana Clara bateu com a tabela; casos sem regra ok na tela)
+- verificacao_automatica: passou — verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU) + caso do dono por API (combo 4 Leonel = 30), E2E da tabela real v2 (coroas 30/40, sisos 40/30/60 por dentista, implante+exodontia 2 variáveis, lentes 8 = 240, sem_regra, 401 sem auth), QA 100% verde, v0.0.34 publicada (7745c9f); base limpa (0 sobras de teste; 24 resíduos P4 apagados)
+- aprendizado: pendente (triagem no fim da task)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 5e25a8c (v0.0.30)
+- skip_versao: c5e48f7 (v0.0.36)
 - skip_publicacao: publicada:5e25a8c em 2026-10-14T00:38:40Z
 - pendente_github: nao
-- espelho: completo (backend + Provas.tsx + confirmacao.ts)
-- ultima_acao: task concluída com verificação independente (gates reexecutados do zero, 3/3 ✓)
+- github_analise_pendente: sim (estado + análise vão no commit da entrega — regra da skill proxima-task)
+- espelho: pendente (provas.ts/Provas.tsx/duracao_importar_tabela.js/duracao_sugerir.js/Planejar.tsx/planejamento.ts/App.tsx/Layout.tsx/migrations 0007-0008 vão no commit da entrega)
+- ultima_acao: task concluída com verificação independente (P2 reexecutada 4/4; base limpa; 7 profissionais reais)
 - proxima_acao: parado — champion pede a próxima task
-- atualizado_em: 2026-10-13T21:50:00-03:00
+- atualizado_em: 2026-10-13T22:45:00-03:00

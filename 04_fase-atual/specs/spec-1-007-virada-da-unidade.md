@@ -44,6 +44,10 @@ Luiz, Victor e equipe completam um roteiro na demonstração, conferem resultado
 
 Coleção `virada`: `tipo` (arquivo_trello, arquivo_app_crc, roteiro_funcao, regressao, conferencia_painel, aceite), arquivo nativo opcional, função, resultado (ok, com_contorno, falhou), observação, autor, data, `modo_dados`, `lote_id`, `versao_app`. Backend restringe gravação de aceite ao consultor/gestor designado; mesma unidade obrigatória. Arquivo com dados reais não é publicado em captura/grupo. Nenhuma API externa.
 
+## Demonstração adicional — sequência individual (14/10)
+
+No aceite da fundamentação, acrescentar o percurso P3-09–13 e P4-22–25: avaliador aprova etapas e exceção de paciente A sem alterar B; CRC vê dependência bloqueada, agenda somente etapa liberada e revisão não apaga reserva existente. A tela Sem regra demonstra separadamente P2-07/08 (duração clínica validada e regra publicada). Usar fixture, acesso por papel, zero API externa e evidências existentes quando suficientes. Tasks anteriormente aceitas não são reabertas por esta emenda; o incremento tem suas próprias tasks/testes. Não chamar ajuste das SPECs de implementação entregue.
+
 ## Fluxo e regras
 
 1. Gestão identifica versão do app e massa/arquivo; registra exportações recebidas ou “não recebido — demonstração sintética”.
@@ -87,6 +91,8 @@ CL-008: Luiz/Victor, CRC, recepção e dentista seguem roteiro na massa, sem tel
 ## Handoff e operação
 
 Próxima fase aprofunda rotinas internas; credenciais e go-live ficam para a fase 4. Nenhuma task de operação clínica foi executada neste trabalho documental. Preservar log/versionamento e abrir correção na SPEC correspondente quando necessário.
+
+**Fixture integrada P7-05:** no percurso de tratamento, criar plano/etapas sintéticos aprovados e liberados por avaliador de teste atribuído, com versão e vínculos corretos antes de confirmar planejamento/encaixe. Acrescentar o negativo sem plano e o caso de revisão após oferta. Percurso de lead/avaliação sem execução de tratamento continua sem exigir plano. Não inferir autorização clínica a partir da massa antiga prontidao=pronto.
 
 ## Tasks vinculadas
 

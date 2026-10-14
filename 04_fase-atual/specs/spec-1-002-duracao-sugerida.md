@@ -35,7 +35,7 @@ A CRC escolhe "4 coroas com a Dra. X" e a central mostra, por exemplo, "40 min (
 - **Entradas e pré-condições:** SPEC-1-001 aceita (agenda e profissionais aplicados de lote local); CL-001 (tabela de duração e cadeiras); `arredondamento_min` informado pela clínica (5 ou 10).
 - **Saídas/artefatos:** coleções `tabela_duracao`, `regras_duracao`, `planejamentos`, `desvios_duracao`; rota `/backend/v1/duracao/sugerir`; tela "Planejar agendamento"; listas "Casos sem regra" e "Desvios".
 - **Dependências e responsáveis:** tabela — Luiz; construção — clínica com o Maestro; revisão de desvios — gestão.
-- **Atores e permissões mínimas:** `crc_agendamento` e `crc_confirmacao` planejam e ligam reservas; `gestao` importa a tabela, valida casos sem regra e revisa desvios; demais funções só leem a duração sugerida.
+- **Atores e permissões mínimas:** CRCs planejam e ligam reservas; gestão importa, organiza/publica versões e revisa desvios; avaliador habilitado valida clinicamente novas combinações e tempos conforme a emenda. Demais funções só leem a duração. Gestão sem habilitação clínica não substitui essa validação.
 - **Superfícies/arquivos/configurações afetadas:** migrations das coleções desta SPEC; hook `duracao_sugerir` (rota); hook de verificação pós-importação `planejamentos_conciliar`; telas e serviços em `src/`.
 - **Risco e plano B:** tabela incompleta → casos sem regra listados para a direção, sem tempo fictício; CRC continua agendando no Clinicorp normalmente.
 - **Rollback ou reversão:** voltar para a versão anterior da tabela (versões nunca são apagadas); desligar a tela de planejamento sem afetar a agenda.
@@ -60,6 +60,18 @@ A CRC escolhe "4 coroas com a Dra. X" e a central mostra, por exemplo, "40 min (
 
 **Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
 
+## Emenda — duração não define sequência (14/10)
+
+A tabela responde quanto tempo reservar para procedimentos feitos na mesma visita. A ordem entre etapas pertence ao planejamento individual da SPEC-1-003. A tela “Sem regra” pode ser construída antes desse planejamento; cálculo/rascunho não depende dele. Finalizar planejamento de tratamento, ofertar ou vincular nova reserva exige a liberação descrita na SPEC-1-004. Avaliações e cadastro de leads não exigem plano de tratamento prévio.
+
+**Validar duração:** gestão mantém a tabela; dentista avaliador habilitado faz a validação clínica das novas combinações/tempos e direção/gestão aprova sua publicação conforme o versionamento existente. Casos são agrupados por combinação/quantidade/faixa/profissional, exibindo ocorrências e última data; acesso clínico somente aos avaliadores habilitados, usando dados agregados sem fichas de outros pacientes. Gestão lê/organiza, mas não inventa duração.
+
+“Marcar validado” sem regra utilizável não resolve a pendência. Registrar combinação, faixa/quantidade, profissional e minutos, autor/data da validação clínica; gestão publica nova versão. Só sair dos pendentes quando a versão ativa resolve o cálculo correspondente. Decisão de não cadastrar a combinação encerra como rejeitada, com motivo; o planejamento continua sem regra. Uma exceção do paciente não cria regra global nem altera outros tratamentos. Regras existentes aprovadas permanecem válidas; a revisão não reabre tasks aceitas ou exige reenviar tabela.
+
+**Campos adicionais:** `regras_duracao.validada_clinicamente_por/em`, `origem_validacao` (referência restrita), `casos_sem_regra.situacao` (pendente/resolvido/rejeitado), `regra_resolvedora`, autor/data/motivo. Se os casos já são derivados de planejamentos, manter essa origem e registrar resolução por chave lógica, sem duplicar casos.
+
+**CA-SEQ-D / P2-07:** usuário gestão sem autorização clínica não valida; avaliador registra nova regra sem publicá-la; versão ativa antiga continua; publicação torna a combinação resolvida. Tentar apenas ocultar pendência sem regra permanece sem tempo. **P2-08:** ajustar a sequência de paciente A não muda duração/catálogo/ordem de B. RED antes dos controles, GREEN com esses resultados e regressão P2-01–06. CL-008: avaliador + gestão conferem um caso com regra criada e outro rejeitado; mensagem ao paciente não faz parte do teste.
+
 ## Dados e integrações
 
 | Origem/destino | Fonte de verdade | Campos/contrato | Autenticação/permissão | Timeout/retry/idempotência | Tratamento de erro |
@@ -78,7 +90,7 @@ A CRC escolhe "4 coroas com a Dra. X" e a central mostra, por exemplo, "40 min (
 |---|---|---|---|---|
 | RN-01 | Existe regra para procedimento + faixa de quantidade + profissional | Sugere `minutos` da regra, arredondado para cima no múltiplo configurado | Regra do profissional prevalece sobre a de "todos" | CL-001; `00:52:42` (arredondar para 5 ou 10) |
 | RN-02 | Combinação de procedimentos | Usa a regra cuja `combinacao` corresponde exatamente; sem correspondência, `sem_regra` | Nunca soma tempos automaticamente | `00:11:56`, `00:41:17` |
-| RN-03 | Nenhuma regra aplicável | `situacao = sem_regra`; entra em "Casos sem regra" para a gestão; nenhum tempo é mostrado | — | AC-001 |
+| RN-03 | Nenhuma regra aplicável | `situacao = sem_regra`; entra em "Casos sem regra" para avaliador habilitado e gestão; nenhum tempo é mostrado | — | AC-001 |
 | RN-04 | Reserva ligada com `minutos_reservados ≠ minutos_sugeridos` | Cria `desvios_duracao` com `sem_motivo`; vira pendência da CRC até o motivo ser registrado | A comparação usa o tempo sugerido já arredondado; se a grade do profissional no Clinicorp obrigar um bloco maior, o motivo "grade do profissional" é uma opção da lista de motivos | AC-001 |
 | RN-05 | Item de agenda novo sem planejamento ligado | Aparece em "Reservas sem planejamento" (contagem no painel) | Compromissos e bloqueios não contam | AC-001 |
 | RN-06 | Planejamento `planejado` sem reserva ligada até o fim do dia do planejamento | `reserva_nao_encontrada`, pendência da CRC que planejou | — | Registro duplo na fase 1 |
@@ -91,14 +103,14 @@ A CRC escolhe "4 coroas com a Dra. X" e a central mostra, por exemplo, "40 min (
 3. A rota `/backend/v1/duracao/sugerir` devolve minutos sugeridos e a regra aplicada (ou `sem_regra`); a tela mostra as vagas compatíveis.
 4. A CRC clica “Ligar reserva” e escolhe um item da massa/arquivo (mesmo profissional e paciente, com origem e lote), sem ação externa. Reserva simulada tem marcador de demonstração.
 5. Se os minutos reservados forem diferentes do sugerido, a central abre o campo "motivo" e cria o desvio; sem motivo, o desvio fica pendente na lista da CRC.
-6. A gestão revisa "Desvios" e "Casos sem regra" e marca como revisado.
+6. Gestão revisa desvios; avaliador habilitado valida clinicamente combinações novas e gestão publica a versão, conforme a emenda. Não encerrar caso só por clicar em validado.
 
 | Cenário | Dado/condição | Resultado esperado | Caminho de erro/recuperação |
 |---|---|---|---|
 | Principal | 4 coroas, Dra. X, regra 3–4 coroas = 40 min | 40 min, regra mostrada, vagas ≥ 40 min | — |
 | Limite | 2 coroas, mesma profissional, regra 1–2 = 30 min | 30 min (não é metade de 40) | — |
 | Limite | Profissional com regra própria e regra "todos" | Usa a do profissional | — |
-| Falha | Combinação sem regra | "Sem regra — validar com a direção"; caso listado | Gestão acrescenta a regra em nova versão |
+| Falha | Combinação sem regra | "Sem regra — validar com a direção"; caso listado | Avaliador habilitado valida clinicamente a combinação; gestão publica a regra em nova versão |
 | Falha | Reserva de 60 min para sugestão de 40 | Desvio `sem_motivo` até a CRC justificar | Pendência visível para a CRC e no painel |
 
 ## Instruções de execução para o Ethos
@@ -160,6 +172,8 @@ A CRC escolhe "4 coroas com a Dra. X" e a central mostra, por exemplo, "40 min (
 - **Como monitorar:** contagem de casos sem regra, desvios sem motivo e reservas sem planejamento (painel da SPEC-1-006).
 - **Pendência conhecida:** média automática por dentista na fase 2.
 
+**Fixtures após a emenda:** P2-01–04 de cálculo continuam independentes de plano. P2-05/06, quando envolverem vínculo/finalização de tratamento, usam plano/etapas sintéticos aprovados e liberados na mesma unidade/paciente, sem reaproveitar autor de produção. Vincular avaliação não exige plano; tratamento sem plano é cenário negativo. Durante construção da tela Sem regra, antes do guard, cálculo/rascunho permanecem aceitos e não prometem reserva real. Regressão do vínculo integrado ocorre após a task de guard; provas anteriores não são reabertas sem mudança no caminho testado.
+
 ## Tasks vinculadas
 
 Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados; descrição atual define o recorte local. Status/responsável/prazo somente nos cards.
@@ -169,7 +183,7 @@ Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados
 | f4982b80-9c9e-4a0b-95b2-49a41af4e476 | Enviar a tabela de tempo por procedimento e por dentista | CA-1-07 | Evidência/entrada definida no card; teste humano quando exigido | Dados locais e dependências desta SPEC |
 | 1f4de19d-189b-46a2-8538-fd394a7be2dc | Cadastrar a tabela de duração na central | CA-1-07 | Evidência/entrada definida no card; teste humano quando exigido | Dados locais e dependências desta SPEC |
 | 097ff6ce-cdc7-44fd-984c-4ee315fc8406 | Mostrar o tempo sugerido ao planejar um agendamento | CA-1-08 | P2-01 a P2-03 | Dados locais e dependências desta SPEC |
-| 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 | Listar as combinações sem regra para a direção validar | CA-1-09 | P2-04 | Dados locais e dependências desta SPEC |
+| 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 | Listar as combinações sem regra para a direção validar | CA-1-09; CA-SEQ-D | P2-04; P2-07/08 | Dados locais e dependências desta SPEC |
 | fdca5fb0-379d-4ede-8b73-409508033157 | Pedir o motivo quando a reserva fugir do tempo sugerido | CA-1-10 e CA-1-11 | P2-05 e P2-06 | Dados locais e dependências desta SPEC |
 | c9b95987-0344-4a5f-b528-b5561c1717ca | Testar duas e quatro coroas com dentistas diferentes | CA-1-08/09; CA-1-10/11 | P2-01 a P2-04; P2-05/06 | Dados locais e dependências desta SPEC |
 

@@ -61,6 +61,16 @@ A CRC confere a prévia e o XLSX na massa local, registra respostas/tentativas s
 
 **Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
 
+## Emenda — respeitar a etapa liberada (14/10)
+
+Antes de finalizar novo agendamento de tratamento, oferecer encaixe, aceitar oferta ou ligar nova reserva, usar a consulta compartilhada `elegibilidade_tratamento` da SPEC-1-003. Ela devolve elegível/motivos, plano/versão e etapas da visita. Exigir plano aprovado vigente, liberação clínica explícita, dependências concluídas e prontidão operacional; depois aplicar duração/profissional/capacidade/disponibilidade. Se qualquer etapa da combinação estiver bloqueada, a visita inteira não é elegível. Avaliações sem execução de tratamento são dispensadas deste gate; tipo/categoria ambíguos exigem revisão, não bypass.
+
+CRC vê motivo concreto (“aguarda etapa anterior”, “aguarda avaliador”, “plano em revisão”). Não pode mudar sequência, concluir etapas nem usar prontidao=pronto para contornar o gate. Cálculo e rascunho da SPEC-1-002 continuam utilizáveis como referência. Construir o guard antes das tasks de oferta/aceite; nenhum conector novo é necessário.
+
+**Concorrência:** consulta traz versão; decisão/oferta/aceite/vínculo revalidam no backend imediatamente antes da gravação. Aprovação/revisão/conclusão e gravação de reserva compartilham proteção transacional/compare-and-set sobre versão do plano e da vaga; sem mecanismo comprovado, manter proposta pendente e não confirmar. Se avaliador revogou/revisou antes do commit, abortar; se depois de reserva já gravada, alertar para revisão humana, não cancelar reserva automaticamente. Oferta aberta torna-se em revisão e aceite tardio não vence silenciosamente. Plano de paciente não afeta nenhum outro.
+
+**CA-SEQ-06 / P4-22:** duração e vaga compatíveis, prontidao pronto, mas etapa anterior pendente: não oferecer; após conclusão conferida e liberação explícita, oferecer. **P4-23:** combinação contém uma etapa bloqueada → bloquear visita inteira; duas etapas paralelas liberadas são elegíveis quando também passam capacidade/tempo. **P4-24:** revisão concorrente entre consulta e commit impede nova confirmação/vínculo; reserva anterior preservada com alerta. **P4-25:** plano ausente impede tratamento, não avaliação. RED/GREEN com endpoints reais internos e fixtures; regressão P4-01–21. CL-008: CRC e avaliador percorrem bloqueio → liberação → revisão e conferem motivo; sem mensagem externa.
+
 ## Dados e integrações
 
 | Origem/destino | Fonte de verdade | Campos/contrato | Autenticação/permissão | Timeout/retry/idempotência | Tratamento de erro |
@@ -103,7 +113,7 @@ Regra específica aprovada prevalece sobre a geral apenas no vínculo exato de u
 | RN-07 | Liberação decidida | `decidida` e tarefa desmarcar no Clinicorp; só `liberada` após cancelamento/exclusão explicitamente comprovados ou conferência humana registrada da desmarcação no Clinicorp, com autor/hora/evidência | Item ausente, leitura parcial ou falha => ocupado/incerto; nunca ofertar | DH-01 e WA-01 |
 | RN-08 | Capacidade por agenda | Avaliação 2 por horário e 30min; ordem de chegada por turno e política local identificada; regra específica aprovada prevalece só no vínculo exato | Excesso alerta e bloqueia planejamento/oferta; configuração ambígua fica pendente | WA-02/03 |
 | RN-09 | Tratamento com horário marcado | Sem sobreposição na política geral | Exceção somente em agenda específica aprovada; Erika/regime pendente não autoriza exceção geral | WA-03 |
-| RN-10 | Elegíveis para a vaga liberada | Itens `aberto` e `pronto` de "Pacientes a agendar" cujo procedimento tem regra de duração para o profissional da vaga, com tempo sugerido ≤ duração da vaga e disponibilidade compatível com a data | Lista vazia → "nenhum elegível"; nunca inventa candidato | RQ-004 |
+| RN-10 | Elegíveis para a vaga liberada | Itens `aberto` e `pronto` de "Pacientes a agendar" cujo procedimento tem regra de duração para o profissional da vaga, com tempo sugerido ≤ duração da vaga e disponibilidade compatível com a data; tratamento exige elegibilidade_tratamento válida e sua versão conforme a emenda | Lista vazia → "nenhum elegível"; nunca inventa candidato | RQ-004 |
 | RN-11 | Ofertas | No máximo 3 ofertas abertas por vaga; vaga passa a `em_oferta` | — | DH-03 |
 | RN-12 | Primeiro aceite | Revalidar política e agenda disponível; se leitura falhou, está incerta ou foi ocupado/bloqueado, não atribuir vencedor e devolver pendência. Em transação local sobre versão da liberação, eleger apenas um candidato, com aceite pendente de reserva | Transação local não reserva no Clinicorp; No modo local, CRC valida a massa/arquivo e marca o resultado como demonstrativo; reserva real só na fase 4. Conflito => vaga indisponível, avisos e próxima ação, sem nova consulta | DH-01/WA-01 e exclusividade local |
 | RN-13 | Vencedora sem reserva ligada até o fim do dia | Pendência "aceite sem reserva" para a CRC | Reserva ligada → vaga `preenchida` | — |
@@ -163,7 +173,7 @@ No modo demonstrativo, eventos sintéticos de mensagem/ligação e cancelamento 
 - [ ] **CA-1-20:** o backend recusa liberação por silêncio com menos de 3 mensagens enviadas ou menos de 1 ligação sem sucesso no dia anterior, antes de 17h do dia anterior ou depois de confirmação. Às 17h, com eventos completos e sem confirmação, permite decisão; cancelamento/remarcação explícitos são caminhos próprios. Exportação, evento duplicado e relógio do browser não burlam a regra.
 - [ ] **CA-1-21:** avaliação permite 2 por horário e alerta/bloqueia o terceiro planejamento; duração 30min. Ordem de chegada conta visitas únicas por turno sob política aprovada e alerta/bloqueia acima do limite local. Uma configuração pendente não vira ilimitada nem 40; exceções de profissional só se aplicam na agenda validada, sem contaminar a regra geral de tratamento.
 - [ ] **CA-1-22:** vaga só aparece livre após confirmação explícita da desmarcação/exclusão ou conferência humana auditada no Clinicorp. Item ausente em leitura parcial, falha ou erro de permissão mantém ocupado/incerto e bloqueia oferta. Antes da desmarcação, a pendência segue visível.
-- [ ] **CA-1-23:** os elegíveis respeitam profissional (regra de duração), tempo, disponibilidade e prontidão; sem elegível, a tela diz "nenhum elegível".
+- [ ] **CA-1-23:** os elegíveis respeitam profissional, duração, disponibilidade, capacidade e prontidão; tratamento também exige plano/etapas aprovados e liberados pelo guard da emenda. Sem elegível, a tela diz "nenhum elegível"; avaliação segue sua dispensa explícita de plano.
 - [ ] **CA-1-24:** com três ofertas e dois aceites, só o primeiro fica com a vaga, o segundo recebe "vaga preenchida" e a tela lista quem avisar; toda oferta termina em estado final.
 - [ ] **CA-1-25:** o aceite vencedor só vira vaga `preenchida` quando a nova reserva é ligada; sem reserva até o fim do dia vira pendência "aceite sem reserva".
 
@@ -213,6 +223,8 @@ No modo demonstrativo, eventos sintéticos de mensagem/ligação e cancelamento 
 - **Como monitorar:** tamanho da lista de ligação, liberações pendentes de desmarcação e aceites sem reserva (painel da SPEC-1-006).
 - **Pendência conhecida:** critério de prioridade do encaixe (CL-PEND-005); envio automático após conexão na fase 4.
 
+**Fixtures do gate:** acrescentar a P4-08/09 candidatos de tratamento com plano sintético aprovado, versão identificada, liberação explícita e dependências concluídas quando aplicável; candidato sem isso é negativo nas P4-22–25. Cenários de avaliação devem declarar categoria de avaliação. Não transformar a fixture antiga prontidao=pronto em autorização clínica nem usar plano real para fazer prova passar. O caso de concorrência pausa antes do commit, revisa o plano e confirma que não surge reserva/vencedor confirmado indevido.
+
 ## Tasks vinculadas
 
 Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados; descrição atual define o recorte local. Status/responsável/prazo somente nos cards.
@@ -226,11 +238,12 @@ Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados
 | f79847a5-0ec1-4549-b19c-8c982cef25c6 | Montar a lista de ligação e liberar vagas só pela regra | CA-1-20 e CA-1-22 | P4-04 a P4-06 | Dados locais e dependências desta SPEC |
 | 8421e27b-e7d2-4f59-a3df-633cde760d9e | Sinalizar sobreposição na avaliação e conflito no tratamento | CA-1-21 | P4-07 | Dados locais e dependências desta SPEC |
 | 1c8eb871-e670-4b77-af97-56b6232e9efe | Validar as regras de liberação e encaixe em call com a equipe | CA-1-18–25 | Evidência/entrada definida no card; teste humano quando exigido | Dados locais e dependências desta SPEC |
-| e2369241-9bca-4732-a139-874cdd1d6a5e | Ofertar a vaga liberada a até três pacientes | CA-1-23 | P4-08 | Dados locais e dependências desta SPEC |
-| 36cdfc82-9bd2-400e-96d6-101b4240abab | Garantir que a vaga fique com o primeiro que aceitar | CA-1-24 e CA-1-25 | P4-09 | Dados locais e dependências desta SPEC |
+| e2369241-9bca-4732-a139-874cdd1d6a5e | Ofertar a vaga liberada a até três pacientes | CA-1-23; CA-SEQ-06 | P4-08; P4-22/23 | Dados locais e dependências desta SPEC |
+| 36cdfc82-9bd2-400e-96d6-101b4240abab | Garantir que a vaga fique com o primeiro que aceitar | CA-1-24 e CA-1-25; CA-SEQ-06 | P4-09; P4-24 | Dados locais e dependências desta SPEC |
 | b2cb546c-7900-48db-9211-08e29a45b382 | Testar a reposição de uma vaga do começo ao fim | CA-1-18 a CA-1-25 | P4-01 a P4-21 | Dados locais e dependências desta SPEC |
 | 6a8a817e-1b0d-49e0-bea7-e805d3ade439 | Criar o registro das tentativas de confirmação | CA-1-19/20 | P4-03, P4-04, P4-05, P4-10, P4-11, P4-16, P4-17, P4-18, P4-19, P4-20 | Dados locais e dependências desta SPEC |
 | 84b8f8d6-e64f-402d-9339-c078493063b4 | Configurar os limites de pacientes por agenda e turno | CA-1-21 | P4-07, P4-13, P4-14, P4-15 | Dados locais e dependências desta SPEC |
+| id pendente | Liberar agendamento e encaixe conforme a etapa aprovada | CA-SEQ-06 | P4-22/23/24/25 | Implementar elegibilidade_tratamento compartilhada e integrar finalização de planejamento, oferta, aceite e vínculo de nova reserva. Todas as etapas da visita exigem plano aprovado, dependências concluídas, liberação clínica e prontidão; avaliações são dispensadas. Revalidar versão no commit com proteção comprovada, bloquear tratamento sem plano sem bloquear cálculo/rascunho. Depende de editor/conclusão/revisão; entregar antes das ofertas e aceites de tratamento. |
 
 ## Histórico da revisão de 13/10/2026
 

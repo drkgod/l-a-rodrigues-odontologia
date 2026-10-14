@@ -34,7 +34,7 @@ A CRC cadastra um lead com a campanha de origem, acompanha a etapa até o compar
 - **Entradas e pré-condições:** SPEC-1-001 aceita; CL-PEND-001, CL-PEND-002 e CL-PEND-004 quando confirmados; a SPEC-1-005 alimenta as faltas e a SPEC-1-004 alimenta o estado "confirmado".
 - **Saídas/artefatos:** coleções `campanhas`, `origens_manuais`, `leads`, `pacientes`, `eventos`, `pendencias_procedimento`, `pacientes_a_agendar`; serviço local `pendencias_importar`; telas "Leads", "Pacientes a agendar", "Ficha" e "Relatório de origem".
 - **Dependências e responsáveis:** campanhas e relatório — gestão com a agência; construção — clínica com o Maestro.
-- **Atores e permissões mínimas:** `crc_agendamento`, `crc_confirmacao` e `crc_comercial` criam e editam leads, fichas, eventos e próxima ação; `gestao` gerencia campanhas, origens manuais e exporta o relatório; `recepcao` lê a ficha dos pacientes do dia; `dentista` não acessa leads nem fichas nesta fase.
+- **Atores e permissões mínimas:** `crc_agendamento`, `crc_confirmacao` e `crc_comercial` criam e editam leads, fichas, eventos e próxima ação; `gestao` gerencia campanhas, origens manuais e exporta o relatório; `recepcao` lê a ficha dos pacientes do dia; `dentista` não acessa leads nem a ficha completa; avaliador habilitado atribuído acessa só o planejamento mínimo conforme a emenda.
 - **Superfícies/arquivos/configurações afetadas:** migrations das coleções; hooks locais `pendencias_importar` e `leads_importar` (rota); telas e serviços em `src/`; `config_unidade.pendencias_desde`.
 - **Risco e plano B:** arquivo de orçamentos indisponível → a CRC cadastra a pendência à mão com `origem = manual`; APP CRC sem exportação → cadastro manual dos leads em aberto antes da virada.
 - **Rollback ou reversão:** pausar a importação de pendências; leads e fichas continuam consultáveis; nenhum dado do Clinicorp é alterado.
@@ -58,6 +58,47 @@ A CRC cadastra um lead com a campanha de origem, acompanha a etapa até o compar
 **Pedido permitido:** “Consultei [arquivos/abas]. Já aproveitei [campos]. Para [task e funcionalidade], falta somente [campo/regra/decisão], porque [efeito concreto]. Isso [bloqueia só o uso real afetado / permite continuar a demonstração]. Podem [complementar ou esclarecer esse ponto]?” Perguntar apenas após leitura suficiente e busca nas fontes autorizadas. Falha de acesso deve ser declarada como acesso pendente, nunca como documento ausente; informar conta/permissão só se identificadas. Nenhum pedido ou mensagem à clínica é enviado automaticamente pela análise.
 
 **Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
+
+## Emenda — etapas e sequência por paciente (14/10)
+
+**Resultado:** na Ficha, aba “Etapas do tratamento”, o avaliador designado monta ou adapta um plano operacional para aquele paciente. A CRC vê o que está liberado, o que aguarda etapa anterior e o motivo, sem decidir clínica. O plano clínico oficial continua no Clinicorp; esta aba guarda apenas etapas/procedimentos/dependências/liberação necessários à agenda, inseridos ou conferidos pelo avaliador. Não lê nem duplica prontuário completo. Sem API externa nesta fase.
+
+**Modelos e exceções:** pode haver modelo padrão aprovado pela clínica, nunca obrigatório para todos. Aplicar modelo copia uma versão para o paciente; não deixa vínculo mutável com o catálogo. Modelo sem aprovação é só rascunho. Ordem visual organiza a tela; dependências explícitas dizem o que precisa estar concluído. Permitir etapas independentes/paralelas, sem criar cadeia linear artificial. Nenhuma sequência clínica universal é definida nesta SPEC, pela IA ou por inferência de duração. Caso individual não atualiza modelo ou outros pacientes. Mudança no modelo só vale para novas cópias; revisão dos planos existentes é humana e versionada.
+
+### Dados, permissões e operações internas
+
+- `modelos_sequencia`: nome, versão, estado rascunho/aprovado/arquivado, etapas com chaves locais/dependências, autor, aprovado_por/em. Avaliador habilitado aprova o conteúdo clínico; gestão organiza disponibilidade sem modificar aprovação.
+- `planos_tratamento`: paciente, avaliador (user/profissional habilitado), versão atual aprovada, modelo/versão de origem opcionais, estado rascunho/aprovado/em_revisao/encerrado, criado/aprovado/revisado_por/em e motivo. Só uma versão aprovada vigente por plano. Dados reais e fixture separados.
+- `etapas_tratamento`: plano/versão, ID estável, procedimento/quantidade, profissional indicado, pendências de origem vinculadas quando comprovadas, ordem_visual, lista `depende_de`, estado pendente/concluida/cancelada, liberacao_clinica pendente/liberada/bloqueada, motivo, validada_por/em e conclusao_por/em/fonte. Ausência de dependência não dispensa aprovação do avaliador. Etapa única pode ser aprovada explicitamente; não exigir modelo completo.
+- `pacientes_a_agendar.etapa_plano` e `planejamentos.etapas_plano` ligam atendimento/proposta ao plano; identidade paciente/unidade/procedimento/quantidade deve conferir. Uma visita com combinação referencia todas as etapas e só é elegível quando todas estiverem liberadas. Vínculo ausente/ambíguo vai para revisão; não escolher etapa apenas pelo nome.
+- Rotas internas `POST /backend/v1/tratamento/modelo-salvar`, `/plano-salvar`, `/plano-aprovar`, `/etapa-atualizar`: payload apenas IDs/versão/campos acima; servidor exige auth, vínculo/papel e versão esperada. Proibir ciclos, autorreferência, dependência externa ao plano e escrita em paciente não atribuído. Stale version/conflict = rejeitar e recarregar. Fonte clínica de alteração e eventos antes/depois ficam auditados; nenhum prontuário/paciente real é registrado no Git.
+
+**Matriz específica:** avaliador = dentista ativo, flag avaliador_habilitado e atribuído ao plano, vê/edita/aprova etapas mínimas dos pacientes sob sua responsabilidade; outro dentista não recebe ficha alheia por isso. Gestão designa avaliador e lê situação operacional, não aprova clínica sem habilitação. CRCs e recepção leem apenas a sequência/procedimentos liberados necessários à agenda dos pacientes autorizados, sem modificar dependências, conclusão ou liberação. Cadastro/associação de paciente continua no fluxo já existente, não acesso a leads por avaliador. Demais regras da ficha continuam válidas. Gestão altera a designação com auditoria e não concede acesso entre unidades.
+
+### Fluxo e regra de liberação
+
+1. Cadastrar/localizar a ficha e designar avaliador habilitado. Antes disso, nenhuma etapa de tratamento é liberada por padrão; demonstração pode continuar com fixture.
+2. Avaliador cria etapas ou copia modelo aprovado; ajusta somente aquele paciente, registra motivo da exceção e dependências. Validar grafo sem ciclos e vínculos ao salvar.
+3. Avaliador aprova a versão e libera as etapas iniciais conforme seu plano. `disponivel_para_agendar` exige versão aprovada vigente, etapa pendente e liberação clínica liberada, todas as dependências concluídas com evidência válida, prontidão operacional e dados do procedimento coerentes. Encaixe acrescenta tempo/profissional/capacidade/disponibilidade; o plano não substitui essas regras.
+4. Registrar conclusão/revisão pelo avaliador habilitado após conferência. Execução importada é evidência a conferir, não transição clínica automática; CANCELAMENTO/baixa financeira e data sem vínculo não concluem etapa. Etapa agendada não é etapa concluída. Uma dependência concluída apenas remove esse impedimento; a sucessora continua dependente da liberação clínica explícita.
+5. Alterar dependências ou ordem clínica de versão aprovada cria rascunho de nova versão; plano fica em_revisao e não aceita novos agendamentos/ofertas de tratamento até nova aprovação. Reservas existentes não são canceladas; gerar alerta para revisão pela CRC/avaliador. Ao publicar, etapas concluídas/canceladas e seus eventos são preservados por ID e evidência; mudar procedimento/quantidade/identidade cria nova etapa, sem transportar conclusão clínica automaticamente; não apagar histórico.
+6. Cancelar etapa nunca satisfaz dependência. Para mudar a necessidade de uma etapa anterior, avaliador revisa o plano com motivo e nova aprovação. Correção de conclusão/liberação invalida a disponibilidade dependente e deixa ofertas abertas em revisão; não dispara cancelamento remoto nem mexe na regra global.
+
+**Sem plano:** pendência de tratamento permanece visível como “aguarda sequência/liberação do avaliador”; não ofertar automaticamente. Avaliação de novos leads/reavaliação sem execução de tratamento segue seu fluxo, sem exigir plano antes de avaliar. A regra não bloqueia cadastro de leads, cálculo de duração, importação ou telas de demonstração.
+
+### Aceite e provas desta emenda
+
+- **CA-SEQ-01 / P3-09:** permissão por avaliador/paciente/unidade; CRC, gestão não habilitada e dentista alheio não aprovam nem alteram clínica.
+- **CA-SEQ-02 / P3-10:** modelo A→B copiado para dois pacientes; exceção aprovada em um não altera o outro/modelo; rejeitar ciclo/cross-plano e aceitar duas etapas paralelas sem dependências artificiais.
+- **CA-SEQ-03 / P3-11:** A liberada, B depende de A; A agendada não libera B; conclusão conferida de A + liberação clínica explícita de B permite agendar B. Falta de aprovação/liberação/vínculo mantém em revisão.
+- **CA-SEQ-04 / P3-12:** cancelar A ou registrar Executed/CANCELAMENTO não conclui A; dado importado isolado não libera B. Revisão preserva versões/evidências e bloqueia novas ofertas sem cancelar reservas existentes.
+- **CA-SEQ-05 / P3-13:** duas edições concorrentes com mesma versão: uma commit, outra conflito; CRC não contorna endpoint alterando campos diretamente. Sem plano de tratamento, lead ainda pode agendar avaliação.
+- **RED/GREEN/REGRESSÃO:** executar cenários sintéticos antes/depois do comportamento; esperado/obtido em provas_execucoes, zero API externa, regressão P3-01–08 e P2-07/08. Nenhum cenário declara conduta médica ou usa paciente real no Git.
+- **CL-008:** avaliador e CRC testam plano com duas etapas, exceção individual, paralelas, bloqueio/liberação e revisão. Confirmar “testei, pode seguir” por task; aprovação clínica do plano não substitui teste humano de software. Não implementar várias tasks em uma rodada.
+
+### Execução, migração e contingência
+
+Ordem: habilitação/vínculos → modelos versionados → editor e aprovação por paciente → conclusão/revisão → uso pela SPEC-1-004. As primeiras partes entregam tela/rascunho independente de oferta. Criar migrations novas para coleções/campos; não reexecutar nem alterar efeitos de migrations já aplicadas. Pacientes/importações existentes não ganham plano fictício nem etapas concluídas por default. Contingência mantém atendimento e agenda oficial com a clínica; app exibe revisão e preserva reservas/eventos, sem “liberar tudo” ao desativar o módulo. Recuperação exige conciliar versão e aprovação clínica antes de retomar novas ofertas.
 
 ## Dados e integrações
 
@@ -83,7 +124,7 @@ A CRC cadastra um lead com a campanha de origem, acompanha a etapa até o compar
 | RN-01 | Lead criado sem campanha nem origem manual | `origem_tipo = desconhecida` | — | Dados desconhecidos não são inferidos |
 | RN-02 | Código digitado/colado corresponde a `campanhas.codigo` ativo | `origem_tipo = campanha` | Código inexistente → aviso e origem continua desconhecida | DH-05 (UTM) |
 | RN-03 | Telefone já existe em lead ou ficha | Mostra "possível duplicado" e a CRC escolhe ligar à ficha existente ou criar outra | Nunca funde sozinho | RQ-001 |
-| RN-04 | Procedimento aprovado e pendente | Atualiza a pendência segundo fonte validada; Executed sem exceção confirmada pode concluir etapa | Profissional CANCELAMENTO => cancelado, fora de produção; implante/protocolo com lançamento cirúrgicoR$0/etapa incerta => verificar, sem assumir prótese concluída; preservar sinais originais | CB-06/07 e RQ-004 |
+| RN-04 | Procedimento aprovado e pendente | Atualiza apenas a situação documental de pendencias_procedimento segundo fonte validada; Executed não altera etapas_tratamento nem sua liberação. Conclusão clínica exige conferência do avaliador | Profissional CANCELAMENTO => cancelado, fora de produção; implante/protocolo com lançamento cirúrgicoR$0/etapa incerta => verificar, sem assumir prótese concluída; preservar sinais originais | CB-06/07 e RQ-004 |
 | RN-05 | Paciente da pendência tem agendamento futuro não desmarcado com o profissional da pendência | Pendência `agendado` e sai da lista | Não verificado ainda → "agendamento futuro não verificado" | — |
 | RN-06 | Lead em `novo`, `em_atendimento` ou `aguardando_retorno` | Entra na lista de pacientes a agendar com motivo `lead` | — | — |
 | RN-07 | Falta registrada (SPEC-1-005) | Entra na lista com motivo `falta`; responsável = CRC de confirmação do turno da consulta, conforme a cobertura por turno definida pela clínica (CL-004, SPEC-1-004) | Sem cobertura cadastrada, responsável fica "a definir" e o item aparece para a gestão | RQ-018 |
@@ -179,6 +220,14 @@ A CRC cadastra um lead com a campanha de origem, acompanha a etapa até o compar
 - **Como monitorar:** leads sem etapa atualizada, próximas ações vencidas e pendências "não verificadas".
 - **Pendência conhecida:** origem automática do anúncio só com a API oficial do WhatsApp (fase 4).
 
+### Contrato complementar das rotas clínicas
+
+`POST /backend/v1/tratamento/atribuir-avaliador` recebe paciente_id, avaliador_id e versao_esperada; somente gestão atribui dentista ativo/habilitado da unidade e cria rascunho mínimo quando necessário. Não aprova nem libera etapas. `GET /backend/v1/tratamento/plano?paciente_id=...` retorna projeção mínima de identificação/etapas/status: avaliador apenas planos atribuídos, gestão/CRC/recepção somente pacientes autorizados da unidade. Não abre a ficha clínica completa nem leads ao dentista.
+
+Nas rotas de salvar/aprovar/atualizar, servidor deriva autor, horário, papel e unidade da sessão/contexto, nunca de valores fornecidos pelo cliente. plano-salvar usa plano_id/paciente_id/versao_esperada e etapas com IDs/procedimentos/quantidades/dependências; criar rascunho não aprova. plano-aprovar recebe plano_id/versao_esperada, sem substituição silenciosa dos dados aprovados. etapa-atualizar recebe etapa_id/versao_esperada/ação (concluir, cancelar, liberar, bloquear, corrigir), fonte/motivo quando exigidos, e permite somente o avaliador responsável. modelo-salvar usa nome/versão/etapas e ação salvar/aprovar/arquivar com permissão clínica na aprovação. Campos calculados, aprovação, autoria e disponibilidade não aceitam escrita direta por CRC nem pelos CRUD genéricos das coleções; aplicar regras/hooks equivalentes no servidor.
+
+P3-09 inclui atribuição somente por gestão, tentativa de forjar avaliador/autor no payload e leitura de paciente de outra unidade. P3-10 pode ser verificado no catálogo com snapshots em fixture antes do editor: cópias independentes e grafo válido; percurso de adaptação/aprovação na tela do paciente é aceito no card do editor, após sua implementação. Isso não bloqueia o aceite do catálogo por falta da tela seguinte.
+
 ## Tasks vinculadas
 
 Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados; descrição atual define o recorte local. Status/responsável/prazo somente nos cards.
@@ -188,12 +237,16 @@ Fonte editável: `04_fase-atual/fase.md`. Títulos históricos/UUIDs preservados
 | 8d76cea5-87db-4604-9180-148613b0a5d1 | Cadastrar leads com a origem da campanha | CA-1-12 e CA-1-13 | P3-01 a P3-03 | Dados locais e dependências desta SPEC |
 | ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca | Cadastrar as campanhas com o código combinado com a agência | CA-1-12 e CA-1-13 | P3-01 a P3-03 | Dados locais e dependências desta SPEC |
 | eec75533-0163-4b64-a7d3-cb2bc6e91a31 | Importar os leads em aberto do APP CRC | CA-1-12 e CA-1-13 | P3-01 a P3-03 | Dados locais e dependências desta SPEC |
-| 55a359b0-bb52-4a85-8648-77d323dc1620 | Montar a lista de pacientes a agendar | CA-1-14 e CA-1-15 | P3-04 a P3-06 | Dados locais e dependências desta SPEC |
+| 55a359b0-bb52-4a85-8648-77d323dc1620 | Montar a lista de pacientes a agendar | CA-1-14 e CA-1-15; CA-SEQ-03 | P3-04 a P3-06; P3-11 | Dados locais e dependências desta SPEC |
 | 90ad21b0-1692-4994-bdcf-13767f603968 | Trazer do Clinicorp os procedimentos aprovados e não executados | CA-1-14/15 | P3-04/05/06 | Dados locais e dependências desta SPEC |
-| 35bff70c-73f2-40e5-96cf-c17bd68d1499 | Montar a ficha do paciente com histórico e próxima ação | CA-1-16 | Evidência/entrada definida no card; teste humano quando exigido | Dados locais e dependências desta SPEC |
+| 35bff70c-73f2-40e5-96cf-c17bd68d1499 | Montar a ficha do paciente com histórico e próxima ação | CA-1-16; CA-SEQ-01 | Evidência/entrada definida no card; teste humano quando exigido; P3-09 | Dados locais e dependências desta SPEC |
 | d03a15ee-3488-48f2-8bc3-64014ad412f7 | Acompanhar o lead até o comparecimento | CA-1-17 | P3-07 | Dados locais e dependências desta SPEC |
 | d45e8f8a-c3a7-4096-8d45-206a635bf804 | Gerar o relatório de origem para a agência | CA-1-17 | P3-07 | Dados locais e dependências desta SPEC |
 | 1ccd1bb9-ad1c-4d16-8327-462ae08621ac | Conferir o histórico de campanhas com a agência | CA-1-12/17 | P3-08 | Dados locais e dependências desta SPEC |
+| id pendente | Configurar quem pode validar o planejamento clínico | CA-SEQ-01 | P3-09 | Primeiro incremento da emenda: flag avaliador_habilitado e atribuição por plano/paciente/unidade; backend permite decisão clínica só ao dentista habilitado atribuído. Gestão designa, CRC lê status operacional; não dá acesso a todos os leads/prontuários. Provar acesso direto e paciente alheio. Depende da base de papéis existente. |
+| id pendente | Cadastrar modelos de sequência de tratamento | CA-SEQ-02 | P3-10 | Criar catálogo opcional de modelos, versões e aprovação clínica. Ordem visual separada de dependências; validar ciclos/cross-plano e etapas paralelas. Modelo não é regra universal; copiar para paciente gera snapshot próprio. Depende da habilitação clínica. A clínica fornece/valida o conteúdo, sem ordem médica inventada. |
+| id pendente | Definir e aprovar as etapas de cada paciente | CA-SEQ-02/03/05 | P3-10/11/13 | Editor de etapas e aprovação pelo avaliador atribuído: criar manualmente ou copiar modelo aprovado, adaptar o caso com motivo, ligar procedimentos e liberar etapas explicitamente. Rascunho/versão, etapa única e paralelo; exceção de A não altera B/modelo. Depende de habilitação/modelos; sem API. Teste humano com avaliador e CRC. |
+| id pendente | Registrar conclusão e revisão das etapas do paciente | CA-SEQ-03/04/05 | P3-11/12/13 | Avaliador confere e registra conclusão/fonte ou revisão, preservando versões e eventos. Agendada não é concluída; cancelamento/Executed financeiro não libera próxima etapa. Revisão de plano aprovado bloqueia novos agendamentos até nova aprovação e sinaliza reservas existentes sem cancelá-las. Depende do editor/aprovação; concorrência por versão. |
 
 ## Emendas
 

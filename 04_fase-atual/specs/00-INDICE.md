@@ -28,3 +28,7 @@
 ## Análise documental por SPEC — orientação de 13/10
 
 Todas as sete SPECs incluem fontes/campos, extração, validação, saída para o app e perguntas limitadas a lacunas comprovadas. 001 agenda/catálogos; 002 tempos; 003 leads/procedimentos/campanhas; 004 políticas/modelo de confirmação; 005 presença/baixa; 006 indicadores/histórico/custo; 007 evidências/aceite. Pasta Drive informada não significa conteúdo já lido. Análise é etapa da task que consome documentos, sem novos cards de solicitação ou reabertura das entregas aceitas.
+
+## Emenda 14/10 — planejamento por etapas
+
+SPEC-1-001 habilitação clínica; 002 duração/combinações novas; 003 sequência, modelo opcional, aprovação/conclusão/revisão por paciente; 004 gate de elegibilidade/concorrência; 007 regressão. Construir rascunho e lista Sem regra pode continuar; oferta/novo agendamento de tratamento depende do guard. Tasks novas sem UUID até retorno do portal, sem prazos inventados.

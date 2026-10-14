@@ -54,6 +54,10 @@ A equipe entra por função e navega na agenda por profissional/cadeira. Vê ori
 
 **Conferência da análise (quando a task consumir documentos):** arquivo encontrado suficiente → aproveitar sem pedido; arquivo parcial → pedir só campo ausente; acesso negado → pedir acesso, não upload; fontes conflitantes → apresentar valores/regras para decisão, sem escolher por suposição. Conferir três exemplos anonimizados (válido, incompleto e conflito) contra o contrato e guardar esperado/obtido. Os cenários não exigem novas tasks nem reabrem entregas concluídas; nenhuma leitura ou teste é declarado executado por esta atualização das SPECs.
 
+## Ajuste de papéis — planejamento clínico (14/10)
+
+Preservar os papéis existentes. Acrescentar `users.avaliador_habilitado` (bool, default false), ligado a profissional ativo; apenas gestão habilita/atribui, com auditoria. Isso permite ao dentista designado na SPEC-1-003 ver e validar o planejamento mínimo dos seus pacientes. Não dá acesso a todos os leads/fichas, não expõe prontuário e não concede autorização clínica a usuário de gestão sozinho. Operações clínicas verificam papel dentista + flag + vínculo da mesma unidade no backend. Gestão coordena cadastro/designação; quem também é avaliador usa seu acesso clínico habilitado. A matriz de leitura clínica específica da SPEC-1-003 complementa a visão da agenda definida aqui. Não ativar permissão nova por inferência de cargo.
+
 ## Dados e integrações
 
 | Entrada | Contrato | Permissão e integridade | Falha |

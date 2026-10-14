@@ -9,3 +9,5 @@ Datas históricas dos cards a replanejar (vários vencidos durante o preparo). P
 Repositório de destino: `drkgod/l-a-rodrigues-odontologia` (privado).
 
 13/10/2026 — análise documental definida nas sete SPECs; perguntas limitadas a lacunas comprovadas. Quatro descrições ajustadas sem alterar metadados ou estados. Conteúdo do Drive já verificado e lido (planilha de tempos estruturada em abas db_).
+
+14/10/2026 — SPECs e tarefas corrigidas para sequência individual. Cinco incrementos novos abertos;49cards anteriores preservados/restaurados com seus metadados. A revisão documental não implementou nem aprovou o incremento. A tela Sem regra continua para duração; plano/gate clínico precedem novas ofertas e reservas de tratamento. Avaliação sem execução de tratamento não exige plano.

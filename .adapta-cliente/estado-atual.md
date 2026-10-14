@@ -6,19 +6,19 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
 - analise: .adapta-cliente/analises/5b3fe9b6-tela-agenda-vagas-unidade.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: CONFIRMADA 13/10 23h22 ("Pode implementar este plano")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: pendente (roteiro entregue 23h35: /horarios conferir, /agenda vagas reais, visão cadeira, desmarcação, usuário sem função)
-- verificacao_automatica: passou — QA 100% verde 1ª tentativa (v0.0.37 e43abd9), publicada e provada (lastPublishedRef=e43abd9); seed real: 67 horários (38 blocos da db_horarios_profissionais, almoço=2 blocos) + 11 cadeiras (ALC 1-6, ITA 1-5); checagens: anônimo 0 registros, sem-função 0 registros, 0 sobras teste=true em planejamentos/agenda_itens; P1-05 re-executável na tela Provas (regressão)
+- teste_humano: APROVADO pelo dono ("testei e tudo funciona", 23h38 — /horarios, /agenda com vagas, visão por cadeira)
+- verificacao_automatica: passou — verificação independente 7/7 PASSOU (versão no ar = testada e43abd9; 67 horários; 11 cadeiras; CA-1-05 por API: EVENT/ASSIGN nunca vaga; banco limpo; anônimo 0; sem-função 0) + QA verde v0.0.37
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: e43abd9 (v0.0.37)
 - skip_publicacao: publicada:e43abd9 em 2026-10-14T02:29:14Z
-- pendente_github: nao (entrega enviada ao remoto neste commit)
+- pendente_github: nao (conclusão enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
 - espelho: completo (10/10 anteriores + 4 novos desta task: horarios.ts, Horarios.tsx, App.tsx, Layout.tsx — fontes lidas do Skip v0.0.37)
-- ultima_acao: task 5b3fe9b6 implementada e publicada (v0.0.37): tela /horarios + CSV + cadeiras, menu e rota, seed real 67 horários + 11 cadeiras
-- proxima_acao: aguardar teste humano do dono ("testei, pode seguir" no card)
-- atualizado_em: 2026-10-13T23:40:00-03:00
+- ultima_acao: task 5b3fe9b6 CONCLUÍDA (teste humano aprovado + verificação independente 7/7 + fase/STATUS/changelog atualizados)
+- proxima_acao: parado — dono pede "próxima task" pra selecionar a seguinte
+- atualizado_em: 2026-10-13T23:55:00-03:00

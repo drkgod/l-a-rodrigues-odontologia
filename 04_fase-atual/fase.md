@@ -15,3 +15,58 @@
 - [x] Cadastrar a tabela de duração na central @"L A Rodrigues" !08/10/2026  <!-- id:1f4de19d-189b-46a2-8538-fd394a7be2dc -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Importar a planilha de tempos, mostrar as linhas rejeitadas com o motivo e a gestão aprovar a versão (SPEC-1-002 · CA-1-07). Os tempos só vêm da clínica; o sistema não completa lacunas.
 - [x] Definir as regras de confirmação e liberação de vagas @"L A Rodrigues" !08/10/2026  <!-- id:a9f9e30e-5f5b-4212-900b-a679a4ae2290 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Cadastrar as respostas recebidas: 3 mensagens e 1 ligação no dia anterior, corte às 17h (America/Sao_Paulo), avaliação 2 por horário com 30min. Confirmar somente cobertura por turno/texto e os vínculos pendentes de Leonel, Wesley/Pamela e Erika; não reabrir regras já respondidas. Pronto quando parâmetros aprovados estiverem gravados e provas passarem (CL-004 · SPEC-1-004 · CA-1-20/21). Resposta recebida não equivale a configuração concluída.
+  - [ ] Enviar o modelo da planilha do robô de confirmação @"L A Rodrigues" !07/10/2026  <!-- id:71531c1d-0e0d-443f-9b6e-3e8dbf3e00b8 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Exemplo da planilha que hoje vai no robô (nome, telefone e mensagem), junto com as planilhas da rotina pedidas no kickoff (CL-009 · SPEC-1-004 · CA-1-18).
+- [x] Montar a tela de agenda e vagas da unidade @"L A Rodrigues" !09/10/2026  <!-- id:5b3fe9b6-78b3-4cda-b45d-9c3f23f49305 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Agenda por data, profissional e cadeira com ocupados e livres; horário ocupado por consulta, compromisso ou bloqueio nunca aparece livre; consulta dividida aparece como uma visita com alerta (SPEC-1-001 · CA-1-05). Prova P1-05.
+  - [x] Cadastrar os horários de atendimento de cada dentista @"L A Rodrigues" !09/10/2026  <!-- id:81d10fc4-1ab6-4c12-85cf-8d99442e74ff -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Horários por dia da semana a partir da tabela enviada (CL-001); dentista sem horário mostra "horário não cadastrado" (SPEC-1-001).
+  - [x] Testar a agenda de um dia real com a equipe @"L A Rodrigues" !09/10/2026  <!-- id:b1b67130-339f-4348-bfd5-db6bb5a12f0c -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Roteiro do teste humano da SPEC-1-001: conferir horários, trocar para a visão por cadeira, ver uma desmarcação de teste liberar o horário e entrar com usuário sem função. Responder "testei, pode seguir" no card (CL-008).
+- [ ] Cadastrar leads com a origem da campanha @"L A Rodrigues" !09/10/2026  <!-- id:8d76cea5-87db-4604-9180-148613b0a5d1 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lead com origem campanha (código), manual ou desconhecida, nunca preenchida por suposição; telefone repetido mostra o possível duplicado sem juntar fichas (SPEC-1-003 · CA-1-12 e CA-1-13). Provas P3-01 a P3-03.
+  - [ ] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Código de campanha combinado com a agência para atribuição de origem dos leads; SPEC-1-003.
+  - [ ] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026  <!-- id:eec75533-0163-4b64-a7d3-cb2bc6e91a31 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Leads em aberto do APP CRC importados por arquivo; SPEC-1-003.
+- [x] Mostrar o tempo sugerido ao planejar um agendamento @"L A Rodrigues" !13/10/2026  <!-- id:097ff6ce-cdc7-44fd-984c-4ee315fc8406 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Rota /duracao/sugerir + tela de planejamento: tempo pela tabela da clínica (grupo ou por dentista, específica prevalece), arredondamento no múltiplo configurado, vagas compatíveis; combinação sem regra lista para a direção (subtask 6d5de2f5). SPEC-1-002 · CA-1-08/09 · P2-01..P2-04.
+  - [ ] Listar as combinações sem regra para a direção validar @"L A Rodrigues" !13/10/2026  <!-- id:6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de casos sem regra (combinação/profissional sem tempo na tabela) para validação da direção; nunca inventar tempo. SPEC-1-002 · CA-1-09 · P2-04.
+- [ ] Montar a lista de pacientes a agendar @"L A Rodrigues" !13/10/2026  <!-- id:55a359b0-bb52-4a85-8648-77d323dc1620 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de pacientes a agendar com procedimentos aprovados e não executados do Clinicorp (subtask 90ad21b0); SPEC-1-003.
+  - [ ] Trazer do Clinicorp os procedimentos aprovados e não executados @"L A Rodrigues" !13/10/2026  <!-- id:90ad21b0-1692-4994-bdcf-13767f603968 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Procedimentos aprovados e não executados por arquivo autorizado; SPEC-1-003.
+- [ ] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026  <!-- id:5bcfa6f1-3634-485d-8740-49c6ce94df0a -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de confirmação do dia para o robô (3 mensagens + 1 ligação, corte 17h); registro da resposta de cada paciente (subtask f124df8f). SPEC-1-004.
+  - [ ] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.
+- [ ] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Desvio com motivo obrigatório quando a reserva difere do sugerido; reservas sem planejamento e planejamento sem reserva no fim do dia (CA-1-11); teste de duas e quatro coroas com dentistas diferentes (subtask c9b95987). SPEC-1-002 · CA-1-10/11 · P2-05/06.
+  - [ ] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026  <!-- id:c9b95987-0344-4a5f-b528-b5561c1717ca -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano com 2 CRCs: 2 e 4 coroas com dois dentistas conferindo a tabela; SPEC-1-002.
+- [ ] Montar a ficha do paciente com histórico e próxima ação @"L A Rodrigues" !14/10/2026  <!-- id:35bff70c-73f2-40e5-96cf-c17bd68d1499 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Ficha do paciente com histórico e próxima ação; SPEC-1-003.
+- [ ] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026  <!-- id:f79847a5-0ec1-4549-b19c-8c982cef25c6 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de ligação e liberação de vagas só pela regra de confirmação; sobreposição na avaliação e conflito no tratamento sinalizados (subtask 8421e27b). SPEC-1-004.
+  - [ ] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026  <!-- id:8421e27b-e7d2-4f59-a3df-633cde760d9e -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Sinal de sobreposição na avaliação e conflito no tratamento; SPEC-1-004.
+- [ ] Validar as regras de liberação e encaixe em call com a equipe @"Rodrigo Santos" !15/10/2026  <!-- id:1c8eb871-e670-4b77-af97-56b6232e9efe -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Call de validação das regras de liberação/encaixe com a equipe; SPEC-1-004.
+- [ ] Ofertar a vaga liberada a até três pacientes @"L A Rodrigues" !15/10/2026  <!-- id:e2369241-9bca-4732-a139-874cdd1d6a5e -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Oferta da vaga liberada a até 3 pacientes; vaga fica com o primeiro que aceitar (subtask 36cdfc82). SPEC-1-004.
+  - [ ] Garantir que a vaga fique com o primeiro que aceitar @"L A Rodrigues" !15/10/2026  <!-- id:36cdfc82-9bd2-400e-96d6-101b4240abab -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Primeiro aceite ganha a vaga; demais ficam sem. SPEC-1-004.
+- [ ] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026  <!-- id:d03a15ee-3488-48f2-8bc3-64014ad412f7 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Acompanhamento do lead até o comparecimento; relatório de origem para a agência (subtask d45e8f8a). SPEC-1-003.
+  - [ ] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026  <!-- id:d45e8f8a-c3a7-4096-8d45-206a635bf804 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Relatório de origem dos leads para a agência; SPEC-1-003.
+- [ ] Montar a tela de atendimento do dia @"L A Rodrigues" !15/10/2026  <!-- id:a3dc6e0f-adca-4b99-83cf-933f305ba6cc -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Atendimento do dia: chegada, chamada, início e fim (subtask 2ab1282b); falta vira pendência de reagendamento (subtask b517d69d). SPEC-1-005.
+  - [ ] Registrar chegada, chamada, início e fim de cada paciente @"L A Rodrigues" !15/10/2026  <!-- id:2ab1282b-8315-43c1-823d-1ddca08f05ed -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro de chegada/chamada/início/fim por paciente no dia; SPEC-1-005.
+  - [ ] Transformar falta em pendência de reagendamento @"L A Rodrigues" !15/10/2026  <!-- id:b517d69d-91e1-4496-82fc-f1e04a8be0c9 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Falta vira pendência de reagendamento para a lista de ligação; SPEC-1-005.
+- [ ] Testar a reposição de uma vaga do começo ao fim @"L A Rodrigues" !16/10/2026  <!-- id:b2cb546c-7900-48db-9211-08e29a45b382 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano da reposição de vaga de ponta a ponta; SPEC-1-004/005.

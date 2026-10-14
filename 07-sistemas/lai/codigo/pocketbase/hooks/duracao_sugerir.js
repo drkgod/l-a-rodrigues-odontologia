@@ -98,7 +98,7 @@ routerAdd(
       )
       const especificas = []
       const deGrupo = []
-      for (const r de regras) {
+      for (const r of regras) {
         const prof = r.getString('profissional')
         if (prof && profissional && prof.toLowerCase() === profissional.toLowerCase()) {
           especificas.push(r)

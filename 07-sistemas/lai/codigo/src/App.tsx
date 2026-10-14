@@ -12,6 +12,7 @@ import Importar from './pages/Importar'
 import Agenda from './pages/Agenda'
 import TabelaDuracao from './pages/TabelaDuracao'
 import Planejar from './pages/Planejar'
+import Horarios from './pages/Horarios'
 import Layout from './components/Layout'
 import { AuthProvider, Protegido, SomenteGestao } from '@/contexts/AuthContext'
 
@@ -53,6 +54,14 @@ const App = () => (
             />
             <Route path="/agenda" element={<Agenda />} />
             <Route path="/planejar" element={<Planejar />} />
+            <Route
+              path="/horarios"
+              element={
+                <SomenteGestao>
+                  <Horarios />
+                </SomenteGestao>
+              }
+            />
             <Route
               path="/tabela-duracao"
               element={

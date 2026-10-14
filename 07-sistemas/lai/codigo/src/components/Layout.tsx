@@ -12,6 +12,7 @@ export default function Layout() {
     { para: '/', rotulo: 'Início', visivel: true },
     { para: '/agenda', rotulo: 'Agenda', visivel: true },
     { para: '/planejar', rotulo: 'Planejar agendamento', visivel: true },
+    { para: '/horarios', rotulo: 'Horários', visivel: eGestao },
     { para: '/tabela-duracao', rotulo: 'Tabela de duração', visivel: eGestao },
     { para: '/importar', rotulo: 'Importar', visivel: eGestao },
     { para: '/provas', rotulo: 'Provas', visivel: eGestao },

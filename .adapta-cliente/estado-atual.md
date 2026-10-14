@@ -6,19 +6,19 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-ficha.md
 - analise: .adapta-cliente/analises/8d76cea5-leads-origem-campanha.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: CONFIRMADA 14/10 23h48 ("Pode implementar este plano")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: pendente (novo lead com origem, duplicado, etapa, desqualificação, importação CSV)
-- verificacao_automatica: passou — QA verde (v0.0.38→39: QA pegou relação cruzada em 1 migration, corrigida em 2 partes); publicada e provada (3297f6a); E2E por API: P3-01/02/03 PASSOU, etapa muda, desqualificar sem motivo → erro, importação 2 gravadas+1 rejeitada+reimport dedup PASSOU, anônimo/sem-função 0 registros, eventos append-only negado a gestão, dados anteriores intactos (67/11), banco limpo
+- teste_humano: APROVADO pelo dono 14/10 11h55 ("testei pode seguir") — fluxo real: criar com origem, duplicado, etapa
+- verificacao_automatica: passou — reexecução independente do zero por API (P3-01/02/03 PASSOU na versão 414e0e6 no ar); resíduos de teste apagados (3: 2 da 1ª rodada API sem teste=true + 1 do dono); banco final 0 leads/0 campanhas teste
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 414e0e6 (v0.0.40) — fix do teste humano: import criarLead faltava na tela
+- skip_versao: 414e0e6 (v0.0.40)
 - skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
 - pendente_github: nao (conclusão enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
-- espelho: completo (10/10 anteriores + 4 novos desta task: horarios.ts, Horarios.tsx, App.tsx, Layout.tsx — fontes lidas do Skip v0.0.37)
-- ultima_acao: bug do teste humano corrigido (criarLead is not defined → import faltando em Leads.tsx); fluxo provado no navegador: criar com origem desconhecida, banner duplicado, cancelar, etapa em_atendimento
-- proxima_acao: aguardar re-teste do dono
-- atualizado_em: 2026-10-14T11:35:00-03:00
+- espelho: completo
+- ultima_acao: task 8d76cea5 CONCLUÍDA (teste humano aprovado + verificação independente 4/4 + fase.md 15/49)
+- proxima_acao: apresentar próxima task ao dono
+- atualizado_em: 2026-10-14T11:58:00-03:00

@@ -103,3 +103,10 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - Menu "Horários" e rota registrados (SomenteGestao). Sem migration nova (coleções já existiam).
 - Seed real: 67 horários dos 7 dentistas cadastrados (fonte: db_horarios_profissionais da planilha CL-001; Leonel ITA QUA 16:00 fim aberto assumido 18:00 — conferir) + 11 cadeiras (ALC 1–6, ITA 1–5).
 - Publicado v0.0.37 (e43abd9) 02:29 UTC; QA verde 1ª tentativa.
+- 14/10/2026 · [executor] · Task 5b3fe9b6 CONCLUÍDA: teste humano aprovado pelo dono ("testei e tudo funciona", 23h38 — /horarios conferida, vagas reais na /agenda, visão por cadeira); verificação independente 7/7 PASSOU (versão no ar = testada e43abd9; 67 horários; 11 cadeiras; CA-1-05 provado por API com EVENT/ASSIGN; banco limpo; anônimo e sem-função 0 registros); fase.md 12/49 cards [x] — 3 fechados nesta task.
+
+## 2026-10-14 — task 8d76cea5 (SPEC-1-003, CA-1-12/13)
+- Coleções: campanhas (codigo único), origens_manuais (seed Indicação/Outra), leads (origem_tipo/etapa/motivo), pacientes (ficha mínima), eventos append-only. Relações cruzadas leads↔pacientes na migration 0010 (QA pegou referência circular na 0009).
+- Hook leads_regras.js (regra NO SERVIDOR): /leads/criar (RN-01/02/03: código casa exato em campanha ATIVA senão desconhecida+aviso; duplicado por telefone em leads+pacientes devolve aviso SEM criar; cria só com confirmação; nunca funde), /leads/etapa (desqualificar exige motivo; evento append-only), /leads/importar-app-crc (rejeita linha sem telefone com motivo; dedup por id_app_crc/telefone; origem = casamento exato de código).
+- Tela /leads (SomenteGestao): novo lead com fluxo de duplicado (banner âmbar), etapas, desqualificar com confirmação, importação CSV do APP CRC com prévia, seção de campanhas/origens para a gestão.
+- Provas P3-01..03 na tela Provas (SPEC-1-003). QA verde (v0.0.39, 3297f6a); E2E por API 100% (P3-01/02/03, etapa, desqualificação, importação+dedup, acesso, append-only, regressão 67/11); banco limpo.

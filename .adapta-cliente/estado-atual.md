@@ -1,24 +1,24 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 5b3fe9b6-78b3-4cda-b45d-9c3f23f49305
+- task_id: 8d76cea5-87db-4604-9180-148613b0a5d1
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
-- analise: .adapta-cliente/analises/5b3fe9b6-tela-agenda-vagas-unidade.md
-- etapa: concluida
-- autorizacao_implementacao: CONFIRMADA 13/10 23h22 ("Pode implementar este plano")
+- spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-ficha.md
+- analise: .adapta-cliente/analises/8d76cea5-leads-origem-campanha.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 14/10 23h48 ("Pode implementar este plano")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: APROVADO pelo dono ("testei e tudo funciona", 23h38 — /horarios, /agenda com vagas, visão por cadeira)
-- verificacao_automatica: passou — verificação independente 7/7 PASSOU (versão no ar = testada e43abd9; 67 horários; 11 cadeiras; CA-1-05 por API: EVENT/ASSIGN nunca vaga; banco limpo; anônimo 0; sem-função 0) + QA verde v0.0.37
+- teste_humano: pendente (novo lead com origem, duplicado, etapa, desqualificação, importação CSV)
+- verificacao_automatica: passou — QA verde (v0.0.38→39: QA pegou relação cruzada em 1 migration, corrigida em 2 partes); publicada e provada (3297f6a); E2E por API: P3-01/02/03 PASSOU, etapa muda, desqualificar sem motivo → erro, importação 2 gravadas+1 rejeitada+reimport dedup PASSOU, anônimo/sem-função 0 registros, eventos append-only negado a gestão, dados anteriores intactos (67/11), banco limpo
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: e43abd9 (v0.0.37)
-- skip_publicacao: publicada:e43abd9 em 2026-10-14T02:29:14Z
+- skip_versao: 3297f6a (v0.0.39)
+- skip_publicacao: publicada:3297f6a em 2026-10-14T02:53:16Z
 - pendente_github: nao (conclusão enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
 - espelho: completo (10/10 anteriores + 4 novos desta task: horarios.ts, Horarios.tsx, App.tsx, Layout.tsx — fontes lidas do Skip v0.0.37)
-- ultima_acao: task 5b3fe9b6 CONCLUÍDA (teste humano aprovado + verificação independente 7/7 + fase/STATUS/changelog atualizados)
-- proxima_acao: parado — dono pede "próxima task" pra selecionar a seguinte
-- atualizado_em: 2026-10-13T23:55:00-03:00
+- ultima_acao: task 8d76cea5 implementada e publicada v0.0.39 (campanhas/origens/leads/pacientes/eventos + hook 3 rotas + tela Leads + provas P3-01..03)
+- proxima_acao: aguardar teste humano do dono
+- atualizado_em: 2026-10-14T01:00:00-03:00

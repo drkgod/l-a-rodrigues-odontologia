@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 45af710 (v0.0.26)
-- versao_publicada: 45af710 em 2026-10-14T00:10:45Z
-- ultima_task: a9f9e30e (em teste humano — provas P4-04/05/07)
+- versao_aplicada: e43abd9 (v0.0.37)
+- versao_publicada: e43abd9 em 2026-10-14T02:29:14Z
+- ultima_task: 5b3fe9b6 (tela Horários + cadeiras + seed real)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -24,3 +24,4 @@
 | 13/10/2026 | 7805f88a (debug 2 prova P1-01) | ee697cf | src/services/provas.ts, migration 0001 (seed semfuncao) |
 | 13/10/2026 | 7805f88a (debug prova P1-01) | 5379b64 | src/services/provas.ts |
 | 13/10/2026 | 7805f88a (base + acesso por função) | e13e688 | migration 0001, App.tsx, Layout.tsx, AuthContext.tsx, pages (Index/Login/SemAcesso/Provas), services (auth/config/provas) |
+| 13-14/10 | 5b3fe9b6 | e43abd9 (v0.0.37) | src/pages/Horarios.tsx, src/services/horarios.ts, src/App.tsx, src/components/Layout.tsx |

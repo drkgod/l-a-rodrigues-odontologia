@@ -1,24 +1,24 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 097ff6ce-cdc7-44fd-984c-4ee315fc8406
+- task_id: 5b3fe9b6-78b3-4cda-b45d-9c3f23f49305
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
-- analise: .adapta-cliente/analises/097ff6ce-tempo-sugerido-planejamento.md
-- etapa: concluida
-- autorizacao_implementacao: CONFIRMADA 13/10 ~21h57 ("Pode implementar este plano" após a análise)
+- spec: 04_fase-atual/specs/spec-1-001-agenda-da-unidade.md
+- analise: .adapta-cliente/analises/5b3fe9b6-tela-agenda-vagas-unidade.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 13/10 23h22 ("Pode implementar este plano")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: APROVADO ("Bateu, pode concluir", 22h42 — COMBO 4 com Leonel/Ana Clara bateu com a tabela; casos sem regra ok na tela)
-- verificacao_automatica: passou — verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU) + caso do dono por API (combo 4 Leonel = 30), E2E da tabela real v2 (coroas 30/40, sisos 40/30/60 por dentista, implante+exodontia 2 variáveis, lentes 8 = 240, sem_regra, 401 sem auth), QA 100% verde, v0.0.34 publicada (7745c9f); base limpa (0 sobras de teste; 24 resíduos P4 apagados)
+- teste_humano: pendente (roteiro entregue 23h35: /horarios conferir, /agenda vagas reais, visão cadeira, desmarcação, usuário sem função)
+- verificacao_automatica: passou — QA 100% verde 1ª tentativa (v0.0.37 e43abd9), publicada e provada (lastPublishedRef=e43abd9); seed real: 67 horários (38 blocos da db_horarios_profissionais, almoço=2 blocos) + 11 cadeiras (ALC 1-6, ITA 1-5); checagens: anônimo 0 registros, sem-função 0 registros, 0 sobras teste=true em planejamentos/agenda_itens; P1-05 re-executável na tela Provas (regressão)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: c5e48f7 (v0.0.36)
-- skip_publicacao: publicada:c5e48f7 em 2026-10-14T01:38:28Z (v0.0.36)
-- pendente_github: nao (espelho completo: 10/10 arquivos no remoto, byte a byte, verificado por diff em 13/10 ~23h20 — commits ea67bf0..f6d35e2 + 0ca089e)
+- skip_versao: e43abd9 (v0.0.37)
+- skip_publicacao: publicada:e43abd9 em 2026-10-14T02:29:14Z
+- pendente_github: nao (entrega enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
-- espelho: completo (content-hash 10/10 idêntico ao disco; 2 linhas corrompidas da versão anterior corrigidas no remoto)
-- ultima_acao: task concluída com verificação independente (P2 reexecutada 4/4; base limpa; 7 profissionais reais)
-- proxima_acao: parado — champion pede a próxima task; clone reconciliado com origin/main (f6d35e2) em 13/10 ~23h20
-- atualizado_em: 2026-10-13T23:22:00-03:00
+- espelho: completo (10/10 anteriores + 4 novos desta task: horarios.ts, Horarios.tsx, App.tsx, Layout.tsx — fontes lidas do Skip v0.0.37)
+- ultima_acao: task 5b3fe9b6 implementada e publicada (v0.0.37): tela /horarios + CSV + cadeiras, menu e rota, seed real 67 horários + 11 cadeiras
+- proxima_acao: aguardar teste humano do dono ("testei, pode seguir" no card)
+- atualizado_em: 2026-10-13T23:40:00-03:00

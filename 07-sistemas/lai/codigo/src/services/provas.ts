@@ -497,7 +497,7 @@ async function limparTabelasTeste(): Promise<void> {
       .collection('regras_duracao')
       .getFullList({ filter: pb.filter('tabela = {:id}', { id: t.id }) })
     if (regras.length > 0 && regras.some((r) => r.teste === false)) continue
-    for (const r de regras) await pb.collection('regras_duracao').delete(r.id)
+    for (const r of regras) await pb.collection('regras_duracao').delete(r.id)
     await pb.collection('tabela_duracao').delete(t.id)
   }
 }

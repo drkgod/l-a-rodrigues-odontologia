@@ -97,3 +97,9 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - TESTE HUMANO APROVADO (13/10 ~21h40, admin@lai.local, produção v0.0.30): P4-04 ✓ PASSOU, P4-05 ✓ PASSOU, P4-07 ✓ PASSOU — banners verdes na tela, execuções registradas.
 
 - 13/10/2026 · [executor] · Task 097ff6ce CONCLUÍDA: teste humano aprovado pelo dono ("Bateu, pode concluir", 22h42 — tempos do COMBO bateram com a tabela: Leonel 30, Ana Clara 60; casos sem regra registrados); verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU, tabela v2 ativa) e o caso do dono por API; 2 bugs reais pegos no teste (tela branca: campo JSON parseado quebrava o React; dropdown sem "COMBO 4 SISOS": rótulo agora une os nomes do grupo) + 2 na implementação (JSVM: função top-level no callback dá 500; tabela de teste sem campo teste); fase.md 9/49 cards [x].
+
+## 2026-10-14 — task 5b3fe9b6 (SPEC-1-001, CA-1-05)
+- Tela /horarios (gestão): horários por dentista (dia/início/fim, almoço = 2 blocos), importação CSV com prévia/rejeições, cadeiras da unidade (nome/tipo, apagar com confirmação).
+- Menu "Horários" e rota registrados (SomenteGestao). Sem migration nova (coleções já existiam).
+- Seed real: 67 horários dos 7 dentistas cadastrados (fonte: db_horarios_profissionais da planilha CL-001; Leonel ITA QUA 16:00 fim aberto assumido 18:00 — conferir) + 11 cadeiras (ALC 1–6, ITA 1–5).
+- Publicado v0.0.37 (e43abd9) 02:29 UTC; QA verde 1ª tentativa.

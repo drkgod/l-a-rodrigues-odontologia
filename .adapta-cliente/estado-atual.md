@@ -16,9 +16,9 @@
 - skip_projeto: 65741
 - skip_versao: c5e48f7 (v0.0.36)
 - skip_publicacao: publicada:c5e48f7 em 2026-10-14T01:38:28Z (v0.0.36)
-- pendente_github: parcial (registros vão no commit de conclusão; espelho de código vai na recuperação — 2 timeouts de subagente + git sem credencial)
-- github_analise_pendente: sim (estado + análise vão no commit da entrega — regra da skill proxima-task)
-- espelho: 10/10 no disco local conferidos por marcador v0.0.36; reenvio ao GitHub na recuperação
+- pendente_github: nao (espelho completo: 10/10 arquivos no remoto, byte a byte, verificado por diff em 13/10 ~23h20 — commits ea67bf0..f6d35e2 + 0ca089e)
+- github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
+- espelho: completo (content-hash 10/10 idêntico ao disco; 2 linhas corrompidas da versão anterior corrigidas no remoto)
 - ultima_acao: task concluída com verificação independente (P2 reexecutada 4/4; base limpa; 7 profissionais reais)
-- proxima_acao: parado — champion pede a próxima task
-- atualizado_em: 2026-10-13T22:45:00-03:00
+- proxima_acao: parado — champion pede a próxima task; clone reconciliado com origin/main (f6d35e2) em 13/10 ~23h20
+- atualizado_em: 2026-10-13T23:22:00-03:00

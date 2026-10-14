@@ -4,6 +4,7 @@ import pb from '@/lib/pocketbase/client'
 import { aplicarLote, validarLote } from '@/services/agenda'
 import { aprovarTabelaDuracao, importarTabelaDuracao } from '@/services/duracao'
 import { limparPlanejamentosTeste, sugerirDuracao } from '@/services/planejamento'
+import { criarLead } from '@/services/leads'
 import {
   decidirLiberacao,
   limparMassaConfirmacao,
@@ -1073,5 +1074,134 @@ export async function executarProvaP2_04(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou ? 'CA-1-09 provado (sem tempo fictício).' : 'Verificar caso sem regra.',
+  }
+}
+
+// ===== PROVAS P3-01..P3-03 (SPEC-1-003, CA-1-12/13) =====
+// Regras de origem e duplicado NO SERVIDOR (hook leads_regras.js):
+// P3-01: código de campanha ativo → origem campanha.
+// P3-02: sem código → desconhecida; código inexistente → aviso + desconhecida.
+// P3-03: mesmo telefone → aviso de duplicado e NENHUMA fusão (2 registros).
+
+async function limparMassaP3(): Promise<void> {
+  // leads/pacientes/eventos de teste (nunca dado real: teste=true)
+  for (const nome of ['eventos', 'leads', 'pacientes']) {
+    const lista = await pb
+      .collection(nome)
+      .getFullList({ filter: 'teste = true' })
+      .catch(() => [])
+    for (const r of lista) {
+      await pb
+        .collection(nome)
+        .delete(r.id)
+        .catch(() => {})
+    }
+  }
+  // campanha de teste da prova (TESTE-CAMP)
+  const camps = await pb
+    .collection<{ id: string; codigo: string }>('campanhas')
+    .getFullList({ filter: "codigo = 'TESTE-CAMP'" })
+    .catch(() => [])
+  for (const c of camps) {
+    await pb
+      .collection('campanhas')
+      .delete(c.id)
+      .catch(() => {})
+  }
+}
+
+export async function executarProvaP3_01(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    await pb.collection('campanhas').create({
+      codigo: 'TESTE-CAMP',
+      nome: 'Campanha de prova P3',
+      ativa: true,
+      teste: true,
+    })
+    const r = await criarLead('Lead Prova P3-01', '5521999991001', 'TESTE-CAMP', '', false)
+    passou = r.criado === true && r.origem_tipo === 'campanha'
+    detalhe = 'lead com código TESTE-CAMP → origem ' + r.origem_tipo
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaP3()
+  }
+  return {
+    cenario: 'P3-01 — lead com código de campanha ativa → origem campanha',
+    esperado: 'Origem "campanha" pelo casamento exato do código TESTE-CAMP.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-12 provado (campanha).' : 'Verificar origem por código.',
+  }
+}
+
+export async function executarProvaP3_02(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const semCodigo = await criarLead('Lead Prova P3-02a', '5521999991002', '', '', false)
+    const codigoRuim = await criarLead('Lead Prova P3-02b', '5521999991003', 'NAO-EXISTE', '', false)
+    passou =
+      semCodigo.criado === true &&
+      semCodigo.origem_tipo === 'desconhecida' &&
+      codigoRuim.criado === true &&
+      codigoRuim.origem_tipo === 'desconhecida' &&
+      Boolean(codigoRuim.aviso)
+    detalhe =
+      'sem código → ' +
+      semCodigo.origem_tipo +
+      '; código inexistente → ' +
+      codigoRuim.origem_tipo +
+      ' com aviso: ' +
+      (codigoRuim.aviso || '—')
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaP3()
+  }
+  return {
+    cenario: 'P3-02 — sem código ou código inexistente → desconhecida (nunca finge)',
+    esperado: 'Origem "desconhecida"; código inexistente dá aviso e NÃO vira campanha.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-12 provado (desconhecida).' : 'Verificar código inexistente.',
+  }
+}
+
+export async function executarProvaP3_03(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const primeiro = await criarLead('Lead Prova P3-03a', '5521999991004', '', '', false)
+    const segundo = await criarLead('Lead Prova P3-03b', '5521999991004', '', '', false)
+    const confirmado = await criarLead('Lead Prova P3-03c', '5521999991004', '', '', true)
+    const total = await pb
+      .collection('leads')
+      .getFullList({ filter: pb.filter('telefone = {:t}', { t: '+5521999991004' }) })
+    passou =
+      primeiro.criado === true &&
+      segundo.criado === false &&
+      segundo.aviso_duplicado === true &&
+      confirmado.criado === true &&
+      total.length === 2
+    detalhe =
+      '1º criou; 2º devolveu aviso_duplicado=' +
+      String(segundo.aviso_duplicado) +
+      '; com confirmação criou; total no telefone: ' +
+      total.length +
+      ' (2 fichas separadas, NENHUMA fusão)'
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaP3()
+  }
+  return {
+    cenario: 'P3-03 — telefone repetido avisa duplicado e nunca funde fichas',
+    esperado: '2ª criação bloqueada com aviso; com confirmação existem 2 fichas separadas.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-13 provado (sem fusão).' : 'Verificar duplicado.',
   }
 }

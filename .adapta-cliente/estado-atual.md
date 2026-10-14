@@ -11,14 +11,14 @@
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
 - teste_humano: APROVADO ("Bateu, pode concluir", 22h42 — COMBO 4 com Leonel/Ana Clara bateu com a tabela; casos sem regra ok na tela)
 - verificacao_automatica: passou — verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU) + caso do dono por API (combo 4 Leonel = 30), E2E da tabela real v2 (coroas 30/40, sisos 40/30/60 por dentista, implante+exodontia 2 variáveis, lentes 8 = 240, sem_regra, 401 sem auth), QA 100% verde, v0.0.34 publicada (7745c9f); base limpa (0 sobras de teste; 24 resíduos P4 apagados)
-- aprendizado: pendente (triagem no fim da task)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: c5e48f7 (v0.0.36)
-- skip_publicacao: publicada:5e25a8c em 2026-10-14T00:38:40Z
-- pendente_github: nao
+- skip_publicacao: publicada:c5e48f7 em 2026-10-14T01:38:28Z (v0.0.36)
+- pendente_github: parcial (registros vão no commit de conclusão; espelho de código vai na recuperação — 2 timeouts de subagente + git sem credencial)
 - github_analise_pendente: sim (estado + análise vão no commit da entrega — regra da skill proxima-task)
-- espelho: pendente (provas.ts/Provas.tsx/duracao_importar_tabela.js/duracao_sugerir.js/Planejar.tsx/planejamento.ts/App.tsx/Layout.tsx/migrations 0007-0008 vão no commit da entrega)
+- espelho: 10/10 no disco local conferidos por marcador v0.0.36; reenvio ao GitHub na recuperação
 - ultima_acao: task concluída com verificação independente (P2 reexecutada 4/4; base limpa; 7 profissionais reais)
 - proxima_acao: parado — champion pede a próxima task
 - atualizado_em: 2026-10-13T22:45:00-03:00

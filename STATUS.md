@@ -4,7 +4,7 @@
 
 Fundamentação mantida: fixture/arquivo/cadastro manual; zero chamadas a APIs externas; nenhuma mensagem de teste enviada. Conexões e piloto real passam para a fase 4; segunda unidade/validação para a 5. Sistemas atuais continuam em uso.
 
-Datas históricas dos cards a replanejar (vários vencidos durante o preparo). Próximo passo: champion pede a próxima task ("próxima task") — em ordem vem "Montar a tela de agenda e vagas da unidade" (5b3fe9b6) ou "Cadastrar leads com a origem da campanha" (8d76cea5). Pendência de entrada: modelo da planilha do robô (71531c1d, CL-009). Pendência de entrada: modelo da planilha do robô (71531c1d, CL-009).
+Datas históricas dos cards a replanejar (vários vencidos durante o preparo). Próximo passo: champion pede a próxima task ("próxima task") — em ordem vem "Montar a tela de agenda e vagas da unidade" (5b3fe9b6) ou "Cadastrar leads com a origem da campanha" (8d76cea5). Pendência de entrada: modelo da planilha do robô (71531c1d, CL-009).
 
 Repositório de destino: `drkgod/l-a-rodrigues-odontologia` (privado).
 

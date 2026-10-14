@@ -6,18 +6,18 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
 - analise: .adapta-cliente/analises/a9f9e30e-regras-confirmacao-liberacao.md
-- etapa: aguardando_conclusao (teste humano APROVADO 13/10 ~21h40 — P4-04/P4-05/P4-07 ✓ na tela)
+- etapa: concluida
 - autorizacao_implementacao: CONFIRMADA 13/10 ~21h (dono respondeu os vínculos pedidos na análise e autorizou seguir)
 - decisao_cliente: RESOLVIDAS 13/10 ~21h — Leonel ITA qua 16h+ 5/turno; Wesley e Pamella 20/turno para cada (manhã e tarde); Erika ALC sábado = ortodontia 2/horário; cobertura de ligação = recepção (cadastro por turno na próxima task)
-- teste_humano: APROVADO (3 provas ✓ com banner de resultado na tela, v0.0.30)
-- verificacao_automatica: E2E dos gates provado por API no servidor (recusas e permissões corretas; massa teste limpa, 0 sobras; políticas = 12 seeds pendentes)
-- aprendizado: pendente
+- teste_humano: APROVADO (print do dono com banner verde P4-07 na tela; P4-04/P4-05/P4-07 ✓, v0.0.30)
+- verificacao_automatica: verificação independente reexecutou os gates do zero no servidor (recusa sem ligação ✓, liberação com eventos completos às 17h ✓, ordem de chegada sem política = regra_nao_validada ✓); massa teste apagada; versão no ar = testada (5e25a8c)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: 5e25a8c (v0.0.30)
 - skip_publicacao: publicada:5e25a8c em 2026-10-14T00:38:40Z
 - pendente_github: nao
-- espelho: parcial (backend espelhado; provas.ts/Provas.tsx/confirmacao.ts atual ficam para a rodada de conclusão)
-- ultima_acao: teste humano aprovado com banner de resultado na tela (v0.0.30)
-- proxima_acao: concluir task (revalidação + fase.md [x] + espelho do frontend) e parar
-- atualizado_em: 2026-10-13T21:45:00-03:00
+- espelho: completo (backend + Provas.tsx + confirmacao.ts)
+- ultima_acao: task concluída com verificação independente (gates reexecutados do zero, 3/3 ✓)
+- proxima_acao: parado — champion pede a próxima task
+- atualizado_em: 2026-10-13T21:50:00-03:00

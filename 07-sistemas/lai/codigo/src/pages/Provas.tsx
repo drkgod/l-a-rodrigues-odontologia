@@ -40,6 +40,9 @@ import {
   executarProvaP4_04,
   executarProvaP4_05,
   executarProvaP4_07,
+  executarProvaP3_01,
+  executarProvaP3_02,
+  executarProvaP3_03,
   limparExecucoes,
   listarExecucoes,
   type ExecucaoProva,
@@ -60,11 +63,12 @@ const Provas = () => {
   const carregar = useCallback(async () => {
     setErro('')
     try {
-      const [da001, da004] = await Promise.all([
+      const [da001, da004, da003] = await Promise.all([
         listarExecucoes('SPEC-1-001'),
         listarExecucoes('SPEC-1-004'),
+        listarExecucoes('SPEC-1-003'),
       ])
-      setExecucoes(da001.concat(da004))
+      setExecucoes(da001.concat(da004).concat(da003))
     } catch {
       setErro('Não foi possível carregar as execuções. Tente novamente.')
     } finally {
@@ -106,6 +110,7 @@ const Provas = () => {
     try {
       await limparExecucoes('SPEC-1-001')
       await limparExecucoes('SPEC-1-004')
+      await limparExecucoes('SPEC-1-003')
       await carregar()
     } catch {
       setErro('Não foi possível limpar as execuções. Tente novamente.')
@@ -219,6 +224,27 @@ const Provas = () => {
           </Button>
           <Button
             variant="outline"
+            onClick={() => void executar(executarProvaP3_01, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-01 (código → campanha)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_02, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-02 (sem código)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_03, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-03 (duplicado)
+          </Button>
+          <Button
+            variant="outline"
             onClick={() => void executar(executarProvaP4_04, 'SPEC-1-004')}
             disabled={executando}
           >
@@ -295,7 +321,7 @@ const Provas = () => {
           <CardTitle className="text-base">Execuções registradas</CardTitle>
           <CardDescription>
             {execucoes.length > 0
-              ? `${execucoes.length} execução(ões) registradas (SPEC-1-001, SPEC-1-002 e SPEC-1-004).`
+              ? `${execucoes.length} execução(ões) registradas (SPEC-1-001, SPEC-1-002 e SPEC-1-003 e SPEC-1-004).`
               : 'Nenhuma execução ainda.'}
           </CardDescription>
         </CardHeader>

@@ -1,23 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: (nenhuma ativa — última: f4982b80 concluída)
+- task_id: a9f9e30e-5f5b-4212-900b-a679a4ae2290
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: —
-- analise: —
-- etapa: concluida (f4982b80) — sem task ativa
-- autorizacao_implementacao: n/a (aguardando próxima task)
-- decisao_cliente: —
-- teste_humano: —
-- verificacao_automatica: n/a
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md
+- spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
+- analise: .adapta-cliente/analises/a9f9e30e-regras-confirmacao-liberacao.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 13/10 ~21h (dono respondeu os vínculos pedidos na análise e autorizou seguir)
+- decisao_cliente: RESOLVIDAS 13/10 ~21h — Leonel ITA qua 16h+ 5/turno; Wesley e Pamella 20/turno para cada (manhã e tarde); Erika ALC sábado = ortodontia 2/horário; cobertura de ligação = recepção (cadastro por turno na próxima task)
+- teste_humano: pendente — provas P4-04, P4-05 e P4-07 na tela Provas (produção v0.0.26)
+- verificacao_automatica: E2E dos gates provado por API no servidor (recusas e permissões corretas; massa teste limpa, 0 sobras; políticas = 12 seeds pendentes)
+- aprendizado: pendente
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: b6e6890 (v0.0.23)
-- skip_publicacao: publicada:b6e6890 em 2026-10-13T23:07:31Z
+- skip_versao: 45af710 (v0.0.26)
+- skip_publicacao: publicada:45af710 em 2026-10-14T00:10:45Z
 - pendente_github: nao
-- espelho: pendente completar (migration 0005 espelhada; demais no Skip)
-- ultima_acao: fase.md reconstruído (regressão própria corrigida a partir de bab4256); aguardando seleção da próxima task
-- proxima_acao: champion pede a próxima task
-- atualizado_em: 2026-10-13T20:40:00-03:00
+- espelho: parcial (backend espelhado; provas.ts/Provas.tsx ficam para a rodada de conclusão)
+- ultima_acao: task implementada, publicada e provada por E2E; aguardando teste humano
+- proxima_acao: dono roda P4-04/P4-05/P4-07 na tela Provas e responde "testei, pode seguir"
+- atualizado_em: 2026-10-13T21:15:00-03:00

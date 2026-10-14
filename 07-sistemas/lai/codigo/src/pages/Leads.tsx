@@ -16,6 +16,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import {
+  criarLead,
   csvParaLinhasAppCrc,
   importarLeadsAppCrc,
   listarCampanhas,

@@ -4,8 +4,8 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 3297f6a (v0.0.39)
-- versao_publicada: 3297f6a em 2026-10-14T02:53:16Z
+- versao_aplicada: 414e0e6 (v0.0.40)
+- versao_publicada: 414e0e6 em 2026-10-14T14:27:43Z
 - ultima_task: 8d76cea5 (leads com origem)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
@@ -26,3 +26,4 @@
 | 13/10/2026 | 7805f88a (base + acesso por função) | e13e688 | migration 0001, App.tsx, Layout.tsx, AuthContext.tsx, pages (Index/Login/SemAcesso/Provas), services (auth/config/provas) |
 | 13-14/10 | 5b3fe9b6 | e43abd9 (v0.0.37) | src/pages/Horarios.tsx, src/services/horarios.ts, src/App.tsx, src/components/Layout.tsx |
 | 14/10 | 8d76cea5 | 3297f6a (v0.0.39) | migrations 0009/0010, hook leads_regras.js, service leads.ts, tela Leads.tsx, Provas.tsx, provas.ts, App.tsx, Layout.tsx |
+| 14/10 | 8d76cea5 (debug teste humano) | 414e0e6 (v0.0.40) | src/pages/Leads.tsx (import criarLead) |

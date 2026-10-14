@@ -45,7 +45,7 @@
 
 ## 13/10/2026 — debug 4 da task 7805f88a (prova P1-01)
 
-- 4º teste: "passou", mas o obtido mostrou bug de código na checagem do usuário sem função: o resultado do login era usado como cliente ((intermediate value).collection is not a function) e o catch continuava contando falha como sucesso. Critério agora PROVADO no servidor: login do sem-função OK (200) e leitura dele = 0 registros (curl com token próprio).
+- 4º teste: "passou", mas o obtido mostrou bug de código na checagem: o resultado do login era usado como cliente ((intermediate value).collection is not a function) e o catch continuava contando falha como sucesso. Critério agora PROVADO no servidor: login do sem-função OK (200) e leitura dele = 0 registros (curl com token próprio).
 - Correção: checagem separa login da leitura; qualquer falha na checagem agora marca a prova como FALHA (não passa por acidente). Publicado v0.0.9 (ref 77dd470), QA 100% verde.
 - Pendência: 5º teste humano para a evidência honesta de fechamento.
 
@@ -53,7 +53,7 @@
 
 - 5º teste humano aprovado pelo champion (print com as 3 checagens verdadeiras: sem login 0, sem função 0, gestão 1+, massa apagada). Versão testada = publicada (77dd470).
 - Verificação independente completa: versão no ar conferida, migrations 0001/0002 applied, critério provado também por API no servidor (login 200 + leitura 0 registros), QA 100% verde, zero API externa, sem segredo novo.
-- Task e subtask marcadas [x] em 04_fase-atual/fase.md. 2/49 cards da fase 1 concluídos.
+- Task e subtask marcadas [x] em 04_fase-atual/fase.md: 2/49 cards da fase 1 concluídos.
 
 ## 13/10 — análise documental definida nas SPECs
 
@@ -81,7 +81,7 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - Fonte: mesma planilha do Drive (abas db_regras_duracao + db_procedimento_profissional). Das 395 linhas de procedimento×profissional, só 5 têm duração específica — as 388 restantes são preferências de agenda (não importadas como tempo; alimentam SPEC-1-001).
 - DECISÃO DO CLIENTE (13/10 18h16): "a regra vale dependendo de qual agenda ele vai entrar, pois cada profissional leva um determinado tempo, na dúvida deixa 40 min" — regra por dentista prevalece sobre a do grupo; COMBO 4 SISOS sem dentista definido = 40 min (não os 60 da planilha).
 - Entrega: migration 0005 (regras_duracao +profissional, text opcional; vazio = vale para todos), hook importar aceita profissional + valida "regra por profissional exige duração" + variável `sempre` na whitelist (regra incondicional por dentista), service lê/escreve a coluna, tela mostra coluna Profissional ("todos" quando vazio).
-- CSV v2 (artifacts/tabela-duracao-v2.csv): 27 regras — 22 de grupo (SISOS_COMBO 40 com nota da decisão; lentes 8+ = 240) + 5 por dentista (SISOS: Luiz Sergio 40, Leonel 30, Ana Clara 60; Alice: exodontia decíduo 20 e mantenedor de espaço 20, grupos próprios EXODONTIA_DECIDUO/MANTENEDOR_ESPACO).
+- CSV v2 (artifacts/tabela-duracao-v2.csv): 27 regras — 22 de grupo + 5 por dentista (SISOS: Luiz Sergio 40, Leonel 30, Ana Clara 60; Alice: exodontia decíduo 20 e mantenedor de espaço 20, grupos próprios EXODONTIA_DECIDUO/MANTENEDOR_ESPACO).
 - Debug: 1ª importação rejeitou as 2 regras da Alice (variável `sempre` fora da whitelist) — corrigido v0.0.22 (ref 11a9012); reimport completo: 27 gravadas, 0 rejeitadas, v2 ATIVA.
 - E2E servidor: reimport idempotente, ativação única, P2-07 ✓ e P2-08 ✓ na tela em produção (com a v2 real presente; sobreviveu às provas pela guarda da v0.0.20).
 - Publicado v0.0.21 (190c454) → v0.0.22 (11a9012). Aguardando teste humano.
@@ -93,20 +93,21 @@ O executor não precisa inventar como analisar a entrada. Cada SPEC vigente desc
 - DECISÃO DO CLIENTE (13/10 ~21h): Leonel = ITA, quarta a partir das 16h, ordem de chegada, 5/turno; Wesley e Pamella (ITA) = 20 por turno PARA CADA, manhã e tarde; Erika (ALC sábado) = agenda de ORTODONTIA, 2 por horário; cobertura de ligação = recepção (cadastro de cobertura por turno fica para a task da lista de ligação — RN-04 hoje devolve "a definir" com alerta).
 - Políticas gravadas como PENDENTES (12) até gestão vincular o ID real do profissional — pendente nunca vira ilimitado.
 
-- 13/10/2026 · [executor] · DEBUG task a9f9e30e: dono clicou P4-04 e "nada aconteceu" — a prova RODAVA e PASSAVA, mas sem feedback na tela (resultado caía no fim da tabela; toasts do template não renderizam). Fix v0.0.27→0.0.29: banner fixo verde/vermelho na própria página com esperado×obtido (React puro, sem componente de toast). Bug real achado no teste: P4-05 gravava a ligação com data "agora" (UTC já era 14/10) e o corte procurava ligação em 13/10 — fix v0.0.30 (5e25a8c): registrarLigacao aceita feita_em e a prova grava 2026-10-13T10:00:00Z.
+- 13/10/2026 · [executor] · DEBUG task a9f9e30e: dono clicou P4-04 e "nada aconteceu" — a prova RODAVA e PASSAVA, mas sem feedback na tela (resultado caía no fim da tabela; toasts do template Skip não renderizam). Fix v0.0.27→0.0.29: banner fixo verde/vermelho na própria página com esperado×obtido (React puro, sem componente de toast). Bug real achado no teste: P4-05 gravava a ligação com data "agora" (UTC já era 14/10) e o corte procurava ligação em 13/10 — fix v0.0.30 (5e25a8c): registrarLigacao aceita feita_em e a prova grava 2026-10-13T10:00:00Z.
 - TESTE HUMANO APROVADO (13/10 ~21h40, admin@lai.local, produção v0.0.30): P4-04 ✓ PASSOU, P4-05 ✓ PASSOU, P4-07 ✓ PASSOU — banners verdes na tela, execuções registradas.
 
-- 13/10/2026 · [executor] · Task 097ff6ce CONCLUÍDA: teste humano aprovado pelo dono ("Bateu, pode concluir", 22h42 — tempos do COMBO bateram com a tabela: Leonel 30, Ana Clara 60; casos sem regra registrados); verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU, tabela v2 ativa) e o caso do dono por API; 2 bugs reais pegos no teste (tela branca: campo JSON parseado quebrava o React; dropdown sem "COMBO 4 SISOS": rótulo agora une os nomes do grupo) + 2 na implementação (JSVM: função top-level no callback dá 500; tabela de teste sem campo teste); fase.md 9/49 cards [x].
+- 13/10/2026 · [executor] · Task 097ff6ce CONCLUÍDA: teste humano aprovado pelo dono ("Bateu, pode concluir", 22h42 — tempos do COMBO bateram com a tabela: Leonel 30, Ana Clara 60; casos sem regra registrados); verificação independente reexecutou P2-01..04 do zero (4/4 PASSOU, tabela v2 ativa) e o caso do dono (COMBO 4 SISOS = 40 min); 2 bugs reais pegos no teste (tela branca: campo JSON parseado quebrava o React; dropdown sem "COMBO 4 SISOS": rótulo agora une os nomes do grupo) + 2 na implementação (JSVM: função top-level no callback dá 500; tabela de teste sem campo teste); fase.md 9/49 cards [x].
 
 ## 2026-10-14 — task 5b3fe9b6 (SPEC-1-001, CA-1-05)
 - Tela /horarios (gestão): horários por dentista (dia/início/fim, almoço = 2 blocos), importação CSV com prévia/rejeições, cadeiras da unidade (nome/tipo, apagar com confirmação).
 - Menu "Horários" e rota registrados (SomenteGestao). Sem migration nova (coleções já existiam).
-- Seed real: 67 horários dos 7 dentistas cadastrados (fonte: db_horarios_profissionais da planilha CL-001; Leonel ITA QUA 16:00 fim aberto assumido 18:00 — conferir) + 11 cadeiras (ALC 1–6, ITA 1–5).
+- Seed real: 67 horários dos 7 dentistas (fonte: db_horarios_profissionais da planilha CL-001; Leonel ITA QUA 16h fim aberto assumido 18:00 — conferir) + 11 cadeiras (ALC 1–6, ITA 1–5).
 - Publicado v0.0.37 (e43abd9) 02:29 UTC; QA verde 1ª tentativa.
-- 14/10/2026 · [executor] · Task 5b3fe9b6 CONCLUÍDA: teste humano aprovado pelo dono ("testei e tudo funciona", 23h38 — /horarios conferida, vagas reais na /agenda, visão por cadeira); verificação independente 7/7 PASSOU (versão no ar = testada e43abd9; 67 horários; 11 cadeiras; CA-1-05 provado por API com EVENT/ASSIGN; banco limpo; anônimo e sem-função 0 registros); fase.md 12/49 cards [x] — 3 fechados nesta task.
+- 14/10/2026 · [executor] · Task 5b3fe9b6 CONCLUÍDA: teste humano aprovado pelo dono ("testei e tudo funciona", 23h38 — /horarios conferida, vagas reais na /agenda, visão por cadeira); verificação independente 7/7 PASSOU (versão no ar = testada e43abd9; 67 horários; 11 cadeiras; CA-1-05 provado por API com EVENT/ASSIGN; banco limpo; anônimo e sem-função 0 registros); fase.md 12/49 cards [x] — 3 fechados.
 
 ## 2026-10-14 — task 8d76cea5 (SPEC-1-003, CA-1-12/13)
-- Coleções: campanhas (codigo único), origens_manuais (seed Indicação/Outra), leads (origem_tipo/etapa/motivo), pacientes (ficha mínima), eventos append-only. Relações cruzadas leads↔pacientes na migration 0010 (QA pegou referência circular na 0009).
-- Hook leads_regras.js (regra NO SERVIDOR): /leads/criar (RN-01/02/03: código casa exato em campanha ATIVA senão desconhecida+aviso; duplicado por telefone em leads+pacientes devolve aviso SEM criar; cria só com confirmação; nunca funde), /leads/etapa (desqualificar exige motivo; evento append-only), /leads/importar-app-crc (rejeita linha sem telefone com motivo; dedup por id_app_crc/telefone; origem = casamento exato de código).
-- Tela /leads (SomenteGestao): novo lead com fluxo de duplicado (banner âmbar), etapas, desqualificar com confirmação, importação CSV do APP CRC com prévia, seção de campanhas/origens para a gestão.
-- Provas P3-01..03 na tela Provas (SPEC-1-003). QA verde (v0.0.39, 3297f6a); E2E por API 100% (P3-01/02/03, etapa, desqualificação, importação+dedup, acesso, append-only, regressão 67/11); banco limpo.
+- Coleções: campanhas (codigo único), origens_manuais (seed Indicação/Outra), leads/pacientes/eventos append-only. Relações cruzadas leads↔pacientes na migration 0010 (QA pegou referência circular na 0009).
+- Hook leads_regras.js (regra NO SERVIDOR): /leads/criar (RN-01/02/03), /leads/etapa (desqualificar exige motivo), /leads/importar-app-crc (rejeita linha sem telefone com motivo; dedup id_app_crc/telefone).
+- Tela /leads (SomenteGestao): novo lead com fluxo de duplicado (banner âmbar), etapas, desqualificar com confirmação, importação CSV do APP CRC com prévia, seção de campanhas/origens.
+- Provas P3-01..03 na tela Provas (SPEC-1-003). QA verde (v0.0.39, 3297f6a); E2E por API 100%; banco limpo.
+- DEBUG (teste humano 11h26): tela Leads com "criarLead is not defined" — import faltando em Leads.tsx (TS não pega import ausente de função usada em closure; build passou). Fix v0.0.40 (414e0e6); fluxo real provado no navegador: criar com origem desconhecida, banner duplicado apareceu, cancelou, etapa em_atendimento; lead de teste apagado do banco.

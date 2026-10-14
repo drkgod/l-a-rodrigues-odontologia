@@ -14,11 +14,11 @@
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 3297f6a (v0.0.39)
-- skip_publicacao: publicada:3297f6a em 2026-10-14T02:53:16Z
+- skip_versao: 414e0e6 (v0.0.40) — fix do teste humano: import criarLead faltava na tela
+- skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
 - pendente_github: nao (conclusão enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
 - espelho: completo (10/10 anteriores + 4 novos desta task: horarios.ts, Horarios.tsx, App.tsx, Layout.tsx — fontes lidas do Skip v0.0.37)
-- ultima_acao: task 8d76cea5 implementada e publicada v0.0.39 (campanhas/origens/leads/pacientes/eventos + hook 3 rotas + tela Leads + provas P3-01..03)
-- proxima_acao: aguardar teste humano do dono
-- atualizado_em: 2026-10-14T01:00:00-03:00
+- ultima_acao: bug do teste humano corrigido (criarLead is not defined → import faltando em Leads.tsx); fluxo provado no navegador: criar com origem desconhecida, banner duplicado, cancelar, etapa em_atendimento
+- proxima_acao: aguardar re-teste do dono
+- atualizado_em: 2026-10-14T11:35:00-03:00

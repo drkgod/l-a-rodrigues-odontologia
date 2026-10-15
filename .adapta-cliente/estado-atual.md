@@ -4,21 +4,20 @@
 - task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 (próxima) — 8d76cea5 CONCLUÍDA
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-ficha.md
-- analise: .adapta-cliente/analises/8d76cea5-leads-origem-campanha.md
-- etapa: bloqueada (task 6d5de2f5 autorizada 22h30; servidor Skip MCP desconectou da sessão ANTES da 1ª escrita — 15+ buscas de rediscovery sem sucesso; nada alterado no Skip)
-- autorizacao_implementacao: CONFIRMADA 14/10 23h48 ("Pode implementar este plano")
+- spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
+- analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
+- etapa: aguardando_autorizacao→implementando BLOQUEADA POR CONEXAO: mcp_skip ausente da sessão (2 tentativas: 22h30 e 23h16; conector "applying" aguardando conclusão pelo dono em Conectores). RASCUNHOS PRONTOS em .adapta-cliente/rascunhos/6d5de2f5/ (migration 0011, adições do serviço, prova P2-05, patch da tela, teste de mesa) — execução no ar = aplicar e publicar
+- autorizacao_implementacao: CONFIRMADA 14/10 21h38 ("pode seguir") e reiterada 23h16
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: APROVADO pelo dono 14/10 11h55 ("testei pode seguir") — fluxo real: criar com origem, duplicado, etapa
-- verificacao_automatica: passou — reexecução independente do zero por API (P3-01/02/03 PASSOU na versão 414e0e6 no ar); resíduos de teste apagados (3: 2 da 1ª rodada API sem teste=true + 1 do dono); banco final 0 leads/0 campanhas teste
+- teste_humano: pendente (task 6d5de2f5 ainda não implementada)
+- verificacao_automatica: passou na task anterior (8d76cea5, P3-01/02/03 na 414e0e6)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: 414e0e6 (v0.0.40)
 - skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
-- pendente_github: nao (conclusão enviada ao remoto neste commit)
-- github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
-- espelho: completo
-- ultima_acao: tentativa de implementar 6d5de2f5 às 22h30 parou no impedimento de ferramenta (mcp_skip ausente da descoberta); skills construir-codigo/executar-task/ui-ux/publicar lidas; plano e análise prontos
-- proxima_acao: quando o conector Skip voltar (reconexão da plataforma na sessão), implementar em lote: migration 0011 (planejamentos +validado_por/validado_em) → seção agrupada "Sem regra" na tela → prova P2-05 → QA/publicar → E2E → espelho/GitHub
-- atualizado_em: 2026-10-14T22:55:00-03:00
+- pendente_github: nao (rascunhos e registros enviados neste commit)
+- espelho: completo (TabelaDuracao.tsx NÃO está no espelho — ler do Skip antes de qualquer patch)
+- ultima_acao: implementação 6d5de2f5 pré-construída em rascunho local revisado (5 arquivos, teste de mesa 9 casos); Skip segue v0.0.40 intocado
+- proxima_acao: quando o conector Skip voltar: skip_file_read TabelaDuracao.tsx (fonte verdade) → aplicar rascunhos (migration 0011 → serviço → prova P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub
+- atualizado_em: 2026-10-14T23:25:00-03:00

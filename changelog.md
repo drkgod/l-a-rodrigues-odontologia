@@ -3,3 +3,5 @@
 - Plano pronto em .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md: agrupamento por combinação+dentista com contagem, botão validar com confirmação, migration 0011 (validado_por/em), prova P2-05.
 - Heartbeat indevido enviado ao GitHub por erro de chamada e REMOVIDO (commits 6f50189→0bc9ff4). Lição: nunca usar push_files para teste de conexão.
 - 22h30 BLOQUEIO: "pode seguir" recebido, mas o conector Skip (mcp_skip) desconectou da sessão antes da 1ª escrita — 15+ rediscovery sem sucesso; nada alterado no Skip (v0.0.40 no ar). Estado bloqueada; implementação da 6d5de2f5 retoma quando o conector voltar.
+- 23h16: 2ª tentativa após novo "pode seguir" — mcp_skip AINDA ausente; conector em "applying" aguardando conclusão pelo dono na tela Conectores. Nada alterado no Skip.
+- 23h25: rascunhos completos da 6d5de2f5 salvos em .adapta-cliente/rascunhos/6d5de2f5/ (migration 0011_planejamentos_validacao, adições planejamento.ts com agruparSemRegra/validarCombinacao, prova P2-05, patch Planejar.tsx, teste de mesa 9 casos). Skip ainda sem conexão; v0.0.40 intacta.

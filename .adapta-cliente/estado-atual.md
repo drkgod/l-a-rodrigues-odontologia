@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
 - analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: bloqueada POR SESSAO (nao por conexao): dono reconectou o Skip (print 23h32: CONECTADOS 10, Skip verde/OAuth on), mas a sessão atual do assistente carregou a descoberta de ferramentas com o Skip fora e NÃO recarrega (30+ buscas). RASCUNHOS PRONTOS em .adapta-cliente/rascunhos/6d5de2f5/. Fix: sessão nova do assistente (novo chat ou após hibernar) carrega o mcp_skip já conectado
+- etapa: bloqueada NO RUNTIME (nao por conexao nem sessao): dono reconectou o Skip (print 23h32: CONECTADOS 10, Skip verde/OAuth on), mas o runtime do assistente carregou o registro de conectores com o Skip fora e NÃO recarrega — PROVADO: subagente com descoberta do zero TAMBÉM não achou mcp_skip (02h41). Fix: reinício completo do app/assistente reescaneia os conectores
 - autorizacao_implementacao: CONFIRMADA 14/10 21h38 ("pode seguir") e reiterada 23h16 e 23h32
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
 - teste_humano: pendente (task 6d5de2f5 ainda não implementada)
@@ -16,8 +16,8 @@
 - skip_projeto: 65741
 - skip_versao: 414e0e6 (v0.0.40)
 - skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
-- pendente_github: nao (diagnóstico enviado neste commit)
+- pendente_github: nao (diagnóstico final enviado neste commit)
 - espelho: completo (TabelaDuracao.tsx NÃO está no espelho — ler do Skip antes de qualquer patch)
-- ultima_acao: diagnóstico fechado 23h40 — conexão ok no lado do dono; sessão atual não expõe mcp_skip; rascunhos 6d5de2f5 íntegros no GitHub 0e3d888; Skip v0.0.40 intocado
-- proxima_acao: em SESSÃO NOVA, dono manda "pode seguir": ler TabelaDuracao.tsx do Skip → aplicar rascunhos (0011 → serviço → P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub → roteiro de teste humano
-- atualizado_em: 2026-10-14T23:40:00-03:00
+- ultima_acao: diagnóstico final 02h45 — subagente novo falhou igual (SKIP_TOOLS_INDISPONIVEIS_NA_DESCOBERTA); problema é do runtime ETHOS, não do dono nem da sessão; rascunhos íntegros no GitHub; Skip v0.0.40 intocado
+- proxima_acao: dono REINICIA o app ETHOS (fechar e abrir) → manda "pode seguir" → conferir descoberta → aplicar rascunhos (0011 → serviço → P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub → roteiro de teste humano
+- atualizado_em: 2026-10-15T02:45:00-03:00

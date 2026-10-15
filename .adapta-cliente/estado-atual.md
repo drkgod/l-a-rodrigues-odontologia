@@ -1,12 +1,12 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 8d76cea5-87db-4604-9180-148613b0a5d1
+- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 (próxima) — 8d76cea5 CONCLUÍDA
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-ficha.md
 - analise: .adapta-cliente/analises/8d76cea5-leads-origem-campanha.md
-- etapa: concluida
+- etapa: aguardando_implementacao (task 6d5de2f5 autorizada 14/10 21h38 — orçamento da sessão esgotou ANTES de escrever código; nada foi alterado no Skip)
 - autorizacao_implementacao: CONFIRMADA 14/10 23h48 ("Pode implementar este plano")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
 - teste_humano: APROVADO pelo dono 14/10 11h55 ("testei pode seguir") — fluxo real: criar com origem, duplicado, etapa
@@ -19,6 +19,6 @@
 - pendente_github: nao (conclusão enviada ao remoto neste commit)
 - github_analise_pendente: nao (análise e estado já no remoto — commit d6a03fd)
 - espelho: completo
-- ultima_acao: task 8d76cea5 CONCLUÍDA (teste humano aprovado + verificação independente 4/4 + fase.md 15/49)
-- proxima_acao: apresentar próxima task ao dono
-- atualizado_em: 2026-10-14T11:58:00-03:00
+- ultima_acao: sessão 14/10 21h38-22h: análise da 6d5de2f5 feita (Planejar.tsx já tem lista básica "Casos sem regra" da 097ff6ce; falta agrupar por combinação+dentista com contagem + botão validar + campos validado_por/em na migration 0011); TabelaDuracao.tsx NÃO está no espelho GitHub/local — ler do Skip antes de patch
+- proxima_acao: nova sessão — ler TabelaDuracao.tsx do Skip, migration 0011 (planejamentos +validado_por/validado_em), hook ou patch de validação, seção agrupada na tela, prova P2-05, QA/publicar/E2E/espelho
+- atualizado_em: 2026-10-14T22:00:00-03:00

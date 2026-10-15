@@ -1,3 +1,11 @@
+## 2026-10-15 — task 6d5de2f5 (SPEC-1-002, CA-1-09) — IMPLEMENTADA E PUBLICADA
+- Migration 0011_planejamentos_validacao: campos validado_por (text) e validado_em (date) em planejamentos; aditiva, down remove os 2. Aplicada na nuvem (21:29 UTC).
+- Serviço planejamento.ts: descreverItens movida da tela (fonte única), agruparSemRegra (agrupa pendentes por combinação+profissional, ordena por repetição e depois mais recente) e validarCombinacao (grava validado_por = e-mail da sessão + validado_em em todos os ids do grupo).
+- Tela Planejar: card "Casos sem regra" agora AGRUPADO — descrição, dentista, badge de contagem ("N ocorrências"), data da última ocorrência e botão "Marcar como validado" (só gestão, com confirmação explicando o efeito). Lista carrega ao abrir a tela (antes só após consultar).
+- Prova P2-05 na tela Provas (SPEC-1-002): 2 ocorrências iguais → 1 grupo com contagem 2; validar → sai dos pendentes com autoria gravada; combinação diferente segue pendente. Massa de teste apagada no fim.
+- Publicado v0.0.41 (e442ea4) 21:29 UTC; QA verde 1ª tentativa (setup/static/build/integrations ok). Produção provada: lastPublishedRef = e442ea4, HTTP 200. Migration 0011 aplicada na nuvem. Nada foi alterado no motor (duracao_sugerir.js intocado — caso validado continua "sem regra" até existir regra cadastrada).
+- Conector Skip ficou indisponível no runtime de 14/10 22h30 a 15/10 18h20 (5 buscas + subagente sem sucesso; reinício do app não reescaneou). Resolvido com novo pedido de conexão ao dono — reconexão concluída pelo dono e descoberta refeita nesta sessão.
+
 ## 2026-10-14 — task 6d5de2f5 (SPEC-1-002, CA-1-09)
 - Autorizada ("pode seguir" 21h38) e analisada; implementação NÃO iniciada — orçamento da sessão esgotou na exploração (TabelaDuracao.tsx não está no espelho; busca no git consumiu os passos). Nada alterado no Skip (v0.0.40 segue no ar, task 8d76cea5 concluída 15/49).
 - Plano pronto em .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md: agrupamento por combinação+dentista com contagem, botão validar com confirmação, migration 0011 (validado_por/em), prova P2-05.

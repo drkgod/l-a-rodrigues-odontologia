@@ -1,23 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 (próxima) — 8d76cea5 CONCLUÍDA
+- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
 - analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: bloqueada NO RUNTIME (nao por conexao nem sessao): dono reconectou o Skip (print 23h32: CONECTADOS 10, Skip verde/OAuth on), mas o runtime do assistente carregou o registro de conectores com o Skip fora e NÃO recarrega — PROVADO: subagente com descoberta do zero TAMBÉM não achou mcp_skip (02h41). Fix: reinício completo do app/assistente reescaneia os conectores
-- autorizacao_implementacao: CONFIRMADA 14/10 21h38 ("pode seguir") e reiterada 23h16 e 23h32
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada 14/10 21h38 ("pode seguir") e reiterada 15/10 ("pode seguir" / "vamos continuar de onde paramos")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: pendente (task 6d5de2f5 ainda não implementada)
-- verificacao_automatica: passou na task anterior (8d76cea5, P3-01/02/03 na 414e0e6)
+- teste_humano: pendente (roteiro entregue 15/10: prova P2-05 na tela Provas + lista agrupada com botão validar na tela Planejar)
+- verificacao_automatica: passou (QA verde 1ª tentativa: setup/static/build/integrations ok; migration 0011 aplicada na nuvem; produção HTTP 200)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 414e0e6 (v0.0.40)
-- skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
-- pendente_github: nao (diagnóstico final enviado neste commit)
-- espelho: completo (TabelaDuracao.tsx NÃO está no espelho — ler do Skip antes de qualquer patch)
-- ultima_acao: 00h05 (15/10) — dono pediu 'continuar'; sessão NOVA (chat 00h01) re-testada: 8 buscas na descoberta (nomes exatos, solto, PT/EN) e mcp_skip AUSENTE — lista de MCPs do runtime não tem skip. Sessão nova NÃO resolve (hipótese descartada); resta só reinício completo do app. Rascunhos íntegros no GitHub; Skip v0.0.40 intocado
-- proxima_acao: dono REINICIA o app ETHOS (fechar e abrir) → manda "pode seguir" → conferir descoberta → aplicar rascunhos (0011 → serviço → P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub → roteiro de teste humano
-- atualizado_em: 2026-10-15T00:05:00-03:00
+- skip_versao: e442ea4 (v0.0.41)
+- skip_publicacao: publicada:e442ea4 em 2026-10-15T21:29:14Z
+- pendente_github: nao
+- espelho: atualizado (migration 0011, planejamento.ts, Planejar.tsx, provas.ts, Provas.tsx)
+- ultima_acao: 15/10 18h35 — task 6d5de2f5 implementada e publicada (v0.0.41, e442ea4): lista "Casos sem regra" agrupada por combinação+dentista com contagem e data da última, botão "Marcar como validado" (só gestão, com confirmação, grava validado_por/validado_em), prova P2-05 na tela Provas; fase.md 13/54; GitHub commit desta resposta
+- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata o que falhou
+- atualizado_em: 2026-10-15T18:40:00-03:00

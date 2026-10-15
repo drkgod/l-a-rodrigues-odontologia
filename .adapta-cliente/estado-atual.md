@@ -6,8 +6,8 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
 - analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: aguardando_autorizacao→implementando BLOQUEADA POR CONEXAO: mcp_skip ausente da sessão (2 tentativas: 22h30 e 23h16; conector "applying" aguardando conclusão pelo dono em Conectores). RASCUNHOS PRONTOS em .adapta-cliente/rascunhos/6d5de2f5/ (migration 0011, adições do serviço, prova P2-05, patch da tela, teste de mesa) — execução no ar = aplicar e publicar
-- autorizacao_implementacao: CONFIRMADA 14/10 21h38 ("pode seguir") e reiterada 23h16
+- etapa: bloqueada POR SESSAO (nao por conexao): dono reconectou o Skip (print 23h32: CONECTADOS 10, Skip verde/OAuth on), mas a sessão atual do assistente carregou a descoberta de ferramentas com o Skip fora e NÃO recarrega (30+ buscas). RASCUNHOS PRONTOS em .adapta-cliente/rascunhos/6d5de2f5/. Fix: sessão nova do assistente (novo chat ou após hibernar) carrega o mcp_skip já conectado
+- autorizacao_implementacao: CONFIRMADA 14/10 21h38 ("pode seguir") e reiterada 23h16 e 23h32
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
 - teste_humano: pendente (task 6d5de2f5 ainda não implementada)
 - verificacao_automatica: passou na task anterior (8d76cea5, P3-01/02/03 na 414e0e6)
@@ -16,8 +16,8 @@
 - skip_projeto: 65741
 - skip_versao: 414e0e6 (v0.0.40)
 - skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
-- pendente_github: nao (rascunhos e registros enviados neste commit)
+- pendente_github: nao (diagnóstico enviado neste commit)
 - espelho: completo (TabelaDuracao.tsx NÃO está no espelho — ler do Skip antes de qualquer patch)
-- ultima_acao: implementação 6d5de2f5 pré-construída em rascunho local revisado (5 arquivos, teste de mesa 9 casos); Skip segue v0.0.40 intocado
-- proxima_acao: quando o conector Skip voltar: skip_file_read TabelaDuracao.tsx (fonte verdade) → aplicar rascunhos (migration 0011 → serviço → prova P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub
-- atualizado_em: 2026-10-14T23:25:00-03:00
+- ultima_acao: diagnóstico fechado 23h40 — conexão ok no lado do dono; sessão atual não expõe mcp_skip; rascunhos 6d5de2f5 íntegros no GitHub 0e3d888; Skip v0.0.40 intocado
+- proxima_acao: em SESSÃO NOVA, dono manda "pode seguir": ler TabelaDuracao.tsx do Skip → aplicar rascunhos (0011 → serviço → P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub → roteiro de teste humano
+- atualizado_em: 2026-10-14T23:40:00-03:00

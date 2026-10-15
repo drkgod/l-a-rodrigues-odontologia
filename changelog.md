@@ -5,3 +5,4 @@
 - 22h30 BLOQUEIO: "pode seguir" recebido, mas o conector Skip (mcp_skip) desconectou da sessão antes da 1ª escrita — 15+ rediscovery sem sucesso; nada alterado no Skip (v0.0.40 no ar). Estado bloqueada; implementação da 6d5de2f5 retoma quando o conector voltar.
 - 23h16: 2ª tentativa após novo "pode seguir" — mcp_skip AINDA ausente; conector em "applying" aguardando conclusão pelo dono na tela Conectores. Nada alterado no Skip.
 - 23h25: rascunhos completos da 6d5de2f5 salvos em .adapta-cliente/rascunhos/6d5de2f5/ (migration 0011_planejamentos_validacao, adições planejamento.ts com agruparSemRegra/validarCombinacao, prova P2-05, patch Planejar.tsx, teste de mesa 9 casos). Skip ainda sem conexão; v0.0.40 intacta.
+- 23h32: dono reconectou o Skip (print: CONECTADOS 10, Skip verde). Sessão atual do assistente segue SEM expor mcp_skip (descoberta carregada com servidor fora não recarrega). Diagnóstico: sessão nova resolve. Rascunhos prontos no GitHub 0e3d888.

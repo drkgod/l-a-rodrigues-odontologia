@@ -18,6 +18,6 @@
 - skip_publicacao: publicada:414e0e6 em 2026-10-14T14:27:43Z
 - pendente_github: nao (diagnóstico final enviado neste commit)
 - espelho: completo (TabelaDuracao.tsx NÃO está no espelho — ler do Skip antes de qualquer patch)
-- ultima_acao: diagnóstico final 02h45 — subagente novo falhou igual (SKIP_TOOLS_INDISPONIVEIS_NA_DESCOBERTA); problema é do runtime ETHOS, não do dono nem da sessão; rascunhos íntegros no GitHub; Skip v0.0.40 intocado
+- ultima_acao: 00h05 (15/10) — dono pediu 'continuar'; sessão NOVA (chat 00h01) re-testada: 8 buscas na descoberta (nomes exatos, solto, PT/EN) e mcp_skip AUSENTE — lista de MCPs do runtime não tem skip. Sessão nova NÃO resolve (hipótese descartada); resta só reinício completo do app. Rascunhos íntegros no GitHub; Skip v0.0.40 intocado
 - proxima_acao: dono REINICIA o app ETHOS (fechar e abrir) → manda "pode seguir" → conferir descoberta → aplicar rascunhos (0011 → serviço → P2-05 → tela) → QA apply → publish → E2E → espelho+GitHub → roteiro de teste humano
-- atualizado_em: 2026-10-15T02:45:00-03:00
+- atualizado_em: 2026-10-15T00:05:00-03:00

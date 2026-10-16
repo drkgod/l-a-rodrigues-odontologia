@@ -2,7 +2,6 @@
 // Rotas server-side: importar CSV (linha a linha, rejeita com motivo),
 // mudar estado (executada/aguardando_condicao) e verificar agendamento futuro.
 // Toda lógica INLINE no callback (lição JSVM).
-// eslint-disable-next-line
 routerAdd(
   'POST',
   '/backend/v1/pendencias/importar',
@@ -40,6 +39,7 @@ routerAdd(
         rejeitadas.push({ linha: i + 1, motivos: motivos })
         continue
       }
+      // dedup: mesmo paciente + procedimento + profissional já importado do MESMO arquivo
       const filtro =
         'paciente_nome = "' +
         paciente.replace(/"/g, '') +
@@ -118,10 +118,33 @@ routerAdd(
     const hoje = new Date().toISOString().slice(0, 10)
     const nome = String(registro.getString('paciente_nome') || '').trim()
     const prof = String(registro.getString('profissional') || '').trim()
+    // cruza com a agenda: mesmo paciente (nome) com item futuro não cancelado;
+    // quando a pendência indica profissional, exige o mesmo profissional
     let filtro =
-      'paciente_nome = "' + nome.replace(/"/g, '') + '" && data > "' + hoje + '" && cancelado != true'
+      'paciente_nome = "' +
+      nome.replace(/"/g, '') +
+      '" && data > "' +
+      hoje +
+      '" && cancelado != true'
     if (prof) {
-      filtro = filtro + ' && profissional = "' + prof.replace(/"/g, '') + '"'
+      // BUG FIX (teste humano P3-05, 16/10): pendencias.profissional é TEXTO (nome)
+      // e agenda_itens.profissional é RELAÇÃO (id) — comparar nome com id nunca casa.
+      // Resolve o nome para ids; nome que não casa com ninguém NÃO esconde horário
+      // futuro: verifica só pelo paciente (grafia do CSV não pode esconder agenda).
+      const pros = $app.findRecordsByFilter(
+        'profissionais',
+        'nome = "' + prof.replace(/"/g, '') + '"',
+        '',
+        20,
+        0,
+      )
+      if (pros.length > 0) {
+        const partes = []
+        for (let i = 0; i < pros.length; i++) {
+          partes.push('profissional = "' + pros[i].id + '"')
+        }
+        filtro = filtro + ' && (' + partes.join(' || ') + ')'
+      }
     }
     const itens = $app.findRecordsByFilter('agenda_itens', filtro, 'data', 1, 0)
     const temFuturo = itens.length > 0

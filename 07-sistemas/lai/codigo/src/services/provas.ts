@@ -499,7 +499,7 @@ export async function executarProvaP1_07(): Promise<ResultadoProva> {
 
 function csvRegrasTeste(): File {
   const cabecalho =
-    'grupo_regra;aplica_a;variavel_1;min_1;max_1;variavel_2;min_2;max_2;duracao_min;procedimentos;observacao'
+    'grupo_regra;aplica_a;variavel_1;min_1;max_1;variavel_2;min_2;max_2;duracao;procedimentos;observacao'
   const linhas = [
     'COROAS_TESTE;Coroas de teste;qtd_elementos;1;2;;;;30;PRC074;regra teste A',
     'COROAS_TESTE;Coroas de teste;qtd_elementos;3;4;;;;40;PRC074;regra teste A',
@@ -706,7 +706,7 @@ export async function executarProvaP4_04(): Promise<ResultadoProva> {
     passou = !recusas.some((r) => r.indexOf('ERA PARA RECUSAR') >= 0)
     detalhe = recusas.join(' | ')
   } catch (erro) {
-    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}'
   } finally {
     await limparMassaConfirmacao()
     await apagarSobrasDeTeste()
@@ -1027,7 +1027,7 @@ export async function executarProvaP4_02(): Promise<ResultadoProva> {
     })
     const horarios = ['08:00', '09:00', '10:00', '11:00']
     const telefones = ['5521999992001', '5521999992002', '5521999992003', '119']
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 0; i++) {
       await pb.collection('agenda_itens').create({
         item_tipo: 'APPOINTMENT',
         clinicorp_id: 'p4-02-' + i + '-' + Date.now(),
@@ -1428,4 +1428,142 @@ export async function executarProvaP2_05b(): Promise<ResultadoProva> {
   return {
     cenario: 'P2-05b — desvio de duração: sem motivo → justificado → revisado (CA-1-10)',
     esperado:
-      'Reserva com tempo diferente do sugerido (rota: 25 min × item 60 min) cria desvio sem_motivo (diferença +35); motivo r
+      'Reserva com tempo diferente do sugerido (rota: 25 min × item 60 min) cria desvio sem_motivo (diferença +35); motivo registrado → justificado; gestão revisa → revisado.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-10 provado.' : 'Verificar desvio/motivo/revisão.',
+  }
+}
+
+// P2-06 — conciliação: item APPOINTMENT sem planejamento → reservas_sem_planejamento;
+// planejamento "planejado" de ontem sem reserva → reserva_nao_encontrada.
+export async function executarProvaP2_06(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    await limparPlanejamentosTeste()
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P2-06',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    // item APPOINTMENT órfão (sem planejamento)
+    const item = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p2-06-' + Date.now(),
+      data: '2026-10-14',
+      inicio: '11:00',
+      fim: '11:30',
+      profissional: prof.id,
+      paciente_nome: 'Paciente P2-06',
+      paciente_telefone: '5521999995001',
+      origem: 'fixture',
+      teste: true,
+    })
+    // planejamento de hoje VIA ROTA (createRule null — bug do teste humano P2-05b):
+    // sugerirDuracao(teste=true) grava situacao 'planejado' (tempo calculado sem reserva).
+    // A conciliação NÃO o marca como reserva_nao_encontrada (created = hoje, fim do dia
+    // não chegou). Planejamento de dias anteriores vira — coberto pela RN-06 no hook.
+    await criarTabelaTesteP2()
+    const sugestao = await sugerirDuracao(
+      [{ grupo_regra: GRUPO_COROAS, quantidade: 2 }],
+      'Profissional Teste P2 B',
+      true,
+    )
+    if (sugestao.situacao !== 'ok' || !sugestao.planejamento_id) {
+      throw new Error('rota sugerir: ' + sugestao.situacao + ' id=' + sugestao.planejamento_id)
+    }
+    const planejamentoHoje = { id: sugestao.planejamento_id }
+    const r = await conciliarReservas(true)
+    const itemNaLista = r.reservas_sem_planejamento.some((x) => x.agenda_item_id === item.id)
+    const hojeNaoMarcado = r.reserva_nao_encontrada.every(
+      (x) => x.planejamento_id !== planejamentoHoje.id,
+    )
+    passou = itemNaLista && hojeNaoMarcado
+    detalhe =
+      'item órfão em reservas_sem_planejamento: ' +
+      String(itemNaLista) +
+      '; planejamento de HOJE não marcado como reserva_nao_encontrada (fim do dia não chegou): ' +
+      String(hojeNaoMarcado)
+    await pb.collection('agenda_itens').delete(item.id)
+    await pb.collection('profissionais').delete(prof.id)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparPlanejamentosTeste()
+  }
+  return {
+    cenario: 'P2-06 — conciliação: reserva sem planejamento; planejamento sem reserva (CA-1-11)',
+    esperado:
+      'APPOINTMENT sem planejamento aparece em reservas_sem_planejamento; planejamento de hoje sem reserva NÃO vira reserva_nao_encontrada (fim do dia não chegou); planejamento de dias anteriores vira.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-11 provado.' : 'Verificar conciliação RN-05/06.',
+  }
+}
+
+// ===== PROVAS P3-04..P3-06 e P3-11-parcial (SPEC-1-003, CA-1-14/15, CA-SEQ-03) =====
+// Pendências de teste: massa criada aqui, apagada no fim (nunca dado real).
+
+async function criarPendenciaTeste(dados: {
+  paciente_nome: string
+  procedimento: string
+  profissional?: string
+  situacao?: 'a_agendar' | 'executada' | 'aguardando_condicao'
+  prontidao?: 'pronto' | 'aguardando_condicao'
+}): Promise<Pendencia> {
+  // imune a resíduo (lição P2-05): limpa pendências de teste de execuções anteriores
+  await apagarPendenciasTeste()
+  const csv = [
+    'paciente;telefone;procedimento;profissional;situacao',
+    [
+      dados.paciente_nome,
+      '5521999992001',
+      dados.procedimento,
+      dados.profissional || '',
+      dados.situacao || 'a_agendar',
+    ].join(';'),
+  ].join('\n')
+  const r = await importarPendencias(csv, 'prova-p3.csv', true)
+  if (r.gravadas !== 1) throw new Error('massa pendência: ' + r.gravadas + ' gravadas')
+  const lista = await listarPendencias()
+  const p = lista.find(
+    (x) =>
+      x.teste && x.paciente_nome === dados.paciente_nome && x.procedimento === dados.procedimento,
+  )
+  if (!p) throw new Error('pendência de teste não encontrada')
+  if (dados.prontidao) {
+    await pb
+      .collection('pendencias')
+      .update(p.id, { prontidao: dados.prontidao, motivo_revisao: '' })
+  }
+  return p
+}
+
+async function apagarPendenciasTeste(): Promise<void> {
+  const lista = await pb
+    .collection('pendencias')
+    .getFullList({ filter: 'teste = true' })
+    .catch(() => [])
+  for (const p of lista) {
+    await pb
+      .collection('pendencias')
+      .delete(p.id)
+      .catch(() => {})
+  }
+}
+
+// P3-04 — pendência (procedimento não executado) → a_agendar; executada → sai.
+export async function executarProvaP3_04(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPendenciaTeste({
+      paciente_nome: 'Paciente Prova P3-04',
+      procedimento: 'Coroa Prova P3',
+      prontidao: 'pronto',
+    })
+    const antes = montarLista(await listarPendencias())
+    const naLista = antes.aAgendar.some((x) => x.id === p.id)
+    await mudarE

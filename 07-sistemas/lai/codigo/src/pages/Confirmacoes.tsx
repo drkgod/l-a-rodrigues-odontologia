@@ -18,6 +18,8 @@ import {
   gerarListaDia,
   dividirSaidas,
   exportarXlsx,
+  criarMassaConfirmacao,
+  limparMassaConfirmacaoDia,
   type LinhaConfirmacao,
   type ResultadoListaDia,
 } from '@/services/confirmacao'
@@ -48,6 +50,8 @@ const Confirmacoes = () => {
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState('')
   const [exportando, setExportando] = useState(false)
+  const [criandoMassa, setCriandoMassa] = useState(false)
+  const [limpandoMassa, setLimpandoMassa] = useState(false)
 
   const carregar = useCallback(async (dataAlvo: string) => {
     setCarregando(true)
@@ -79,6 +83,34 @@ const Confirmacoes = () => {
       toast.error(e instanceof Error ? e.message : 'Não foi possível exportar o arquivo.')
     } finally {
       setExportando(false)
+    }
+  }
+
+  const criarMassa = async () => {
+    setCriandoMassa(true)
+    setErro('')
+    try {
+      const r = await criarMassaConfirmacao(data)
+      setResultado(r)
+      toast.success('Massa de teste criada: 4 consultas no dia ' + data + '.')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível criar a massa de teste.')
+    } finally {
+      setCriandoMassa(false)
+    }
+  }
+
+  const limparMassa = async () => {
+    setLimpandoMassa(true)
+    setErro('')
+    try {
+      await limparMassaConfirmacaoDia(data)
+      await carregar(data)
+      toast.success('Massa de teste apagada.')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível limpar a massa de teste.')
+    } finally {
+      setLimpandoMassa(false)
     }
   }
 
@@ -127,6 +159,20 @@ const Confirmacoes = () => {
           <Button onClick={() => void carregar(data)} disabled={carregando}>
             {carregando ? 'Gerando…' : 'Gerar lista'}
           </Button>
+          <Button
+            variant="outline"
+            onClick={() => void criarMassa()}
+            disabled={criandoMassa || carregando}
+          >
+            {criandoMassa ? 'Criando…' : 'Criar massa de teste'}
+          </Button>
+          <Button
+            variant="ghost"
+            onClick={() => void limparMassa()}
+            disabled={limpandoMassa || carregando}
+          >
+            {limpandoMassa ? 'Apagando…' : 'Limpar massa de teste'}
+          </Button>
         </div>
       </div>
 
@@ -158,9 +204,15 @@ const Confirmacoes = () => {
             </CardHeader>
             <CardContent>
               {resultado.total === 0 ? (
-                <p className="text-sm text-muted-foreground">
-                  Nenhuma consulta no dia-alvo. Gere a lista de outro dia ou importe a agenda.
-                </p>
+                <div className="text-sm text-muted-foreground">
+                  <p>
+                    Nenhuma consulta no dia-alvo. Use “Criar massa de teste” para experimentar o
+                    fluxo completo, ou importe a agenda real.
+                  </p>
+                  <p className="mt-1">
+                    A planilha só fica disponível quando a lista tem consultas com telefone válido.
+                  </p>
+                </div>
               ) : (
                 <Table>
                   <TableHeader>
@@ -194,12 +246,18 @@ const Confirmacoes = () => {
                   <Button
                     onClick={() => void exportar()}
                     disabled={exportando || saidas.xlsx.length === 0}
+                    title={
+                      saidas.xlsx.length === 0
+                        ? 'A lista não tem consultas com telefone válido — crie a massa de teste ou importe a agenda.'
+                        : undefined
+                    }
                   >
                     {exportando ? 'Gerando arquivo…' : 'Exportar XLSX'}
                   </Button>
                   {saidas.xlsx.length === 0 && (
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Nada a exportar — sem telefone válido dentro do limite.
+                      Nada a exportar — sem telefone válido dentro do limite. Use “Criar massa de
+                      teste” para experimentar o download.
                     </p>
                   )}
                 </CardContent>

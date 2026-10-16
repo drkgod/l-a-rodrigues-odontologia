@@ -138,7 +138,6 @@ export async function decidirLiberacao(
   }
 }
 
-
 // Task 5bcfa6f1 — lista de confirmação do dia-alvo (RN-01, CA-1-18).
 export interface LinhaConfirmacao {
   contato_id: string
@@ -216,6 +215,54 @@ export async function exportarXlsx(
     observacao: 'RN-15 — registro de exportação (não é prova de envio).',
   })
   return { nomeArquivo: nomeArquivo, totalLinhas: linhas.length }
+}
+
+// Massa de teste na tela (modo demonstrativo da SPEC): 4 consultas fixture no dia-alvo
+// (3 telefone válido, 1 inválido) — o dono testa o fluxo completo sem depender da prova.
+// Tudo com teste=true; limpeza apaga por assinatura.
+export async function criarMassaConfirmacao(data: string): Promise<ResultadoListaDia> {
+  try {
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste Confirmações',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+      teste: true,
+    })
+    const horarios = ['08:00', '09:00', '10:00', '11:00']
+    const telefones = ['5521999993001', '5521999993002', '5521999993003', '119']
+    for (let i = 0; i < 4; i++) {
+      await pb.collection('agenda_itens').create({
+        item_tipo: 'APPOINTMENT',
+        clinicorp_id: 'conf-massa-' + i + '-' + Date.now(),
+        data: data,
+        inicio: horarios[i],
+        fim: horarios[i],
+        profissional: prof.id,
+        paciente_nome: 'Paciente Teste ' + (i + 1),
+        paciente_telefone: telefones[i],
+        origem: 'fixture',
+        teste: true,
+      })
+    }
+    return await gerarListaDia(data, true)
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível criar a massa de teste.')
+  }
+}
+
+// Apaga a massa de teste do dia-alvo (itens + contatos + profissional fixture).
+export async function limparMassaConfirmacaoDia(data: string): Promise<void> {
+  try {
+    const itens = await pb
+      .collection('agenda_itens')
+      .getFullList({ filter: 'origem = "fixture" && teste = true && data = "' + data + '"' })
+      .catch(() => [])
+    for (const item of itens) await pb.collection('agenda_itens').delete(item.id).catch(() => {})
+    await limparMassaConfirmacao()
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível limpar a massa de teste.')
+  }
 }
 
 // Helpers de massa de prova (marca teste=true; limpeza apaga por teste=true).

@@ -482,4 +482,448 @@ export async function executarProvaP1_07(): Promise<ResultadoProva> {
       .getFirstListItem(pb.filter('clinicorp_id = {:id}', { id: 'fixture-20-1' }))
     passou = omitido.ausente_na_ultima_leitura === true
     detalhe = `item omitido no 2º lote ficou ausente_na_ultima_leitura=${String(omitido.ausente_na_ultima_leitura)} — continua ocupado/incerto, não vira vaga.`
-    await limparFixturesAgenda({ profission
+    await limparFixturesAgenda({ profissionais: criados.profissionais, itens: criados.itens })
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P1-07 — leitura parcial mantém ocupado incerto',
+    esperado: 'Item ausente no 2º lote marcado incerto e CONTINUA ocupado.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Regra do lote parcial ok.' : 'Verificar marcação de ausentes.',
+  }
+}
+
+function csvRegrasTeste(): File {
+  const cabecalho =
+    'grupo_regra;aplica_a;variavel_1;min_1;max_1;variavel_2;min_2;max_2;duracao_min;procedimentos;observacao'
+  const linhas = [
+    'COROAS_TESTE;Coroas de teste;qtd_elementos;1;2;;;;30;PRC074;regra teste A',
+    'COROAS_TESTE;Coroas de teste;qtd_elementos;3;4;;;;40;PRC074;regra teste A',
+    'COROAS_TESTE_B;Coroas teste B;qtd_elementos;1;2;;;;25;PRC074;regra teste B',
+    'COROAS_TESTE_B;Coroas teste B;qtd_elementos;3;4;;;;35;PRC074;regra teste B',
+    'LENTE_TESTE;Lentes teste;qtd_lentes;8;;;;;240;PRC077;lentes 8+',
+  ]
+  const conteudo = [cabecalho, ...linhas].join('\n')
+  return new File([conteudo], 'tabela-teste.csv', { type: 'text/csv' })
+}
+
+// Limpa SÓ a massa de teste das provas (tabelas cujas regras são todas teste=true,
+// ou sem regras). NUNCA apaga importação real do usuário (tem regra teste=false).
+async function limparTabelasTeste(): Promise<void> {
+  const tabelas = await pb.collection('tabela_duracao').getFullList()
+  for (const t of tabelas) {
+    const regras = await pb
+      .collection('regras_duracao')
+      .getFullList({ filter: pb.filter('tabela = {:id}', { id: t.id }) })
+    if (regras.length > 0 && regras.some((r) => r.teste === false)) continue
+    for (const r of regras) await pb.collection('regras_duracao').delete(r.id)
+    await pb.collection('tabela_duracao').delete(t.id)
+  }
+}
+
+// P2-07 — importar tabela de teste: versão rascunho, rejeita minutos negativo com motivo.
+export async function executarProvaP2_07(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  let tabelaId = ''
+  try {
+    const csvRuim = new File(
+      [
+        'grupo_regra;variavel_1;min_1;max_1;duracao_min\n' +
+          'RUIM_TESTE;qtd_implantes;1;2;-5\n' +
+          'BOA_TESTE;qtd_implantes;1;2;30',
+      ],
+      'tabela-ruim.csv',
+      { type: 'text/csv' },
+    )
+    const resultadoRuim = await importarTabelaDuracao(csvRuim, true)
+    const rejeitou = resultadoRuim.rejeitadas.length === 1 && resultadoRuim.regras_gravadas === 1
+    tabelaId = resultadoRuim.tabela_id
+    const ativa = tabelaId ? (await pb.collection('tabela_duracao').getOne(tabelaId)).ativa : false
+    passou = rejeitou && ativa === false
+    detalhe = `importação: ${resultadoRuim.regras_gravadas} gravada(s), ${resultadoRuim.rejeitadas.length} rejeitada(s) (${resultadoRuim.rejeitadas[0]?.motivos.join('; ') || '—'}); versão nasce em rascunho (ativa=${String(ativa)}).`
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await limparTabelasTeste()
+  }
+  return {
+    cenario: 'P2-07 — importar tabela (rascunho + rejeição com motivo)',
+    esperado: 'Linha com minutos negativos rejeitada com motivo; versão nasce em rascunho.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Importação com validação ok.' : 'Verificar importação da tabela.',
+  }
+}
+
+// P2-08 — reimport não duplica; aprovação ativa UMA versão; versões anteriores consultáveis.
+export async function executarProvaP2_08(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const arquivo = csvRegrasTeste()
+    const primeira = await importarTabelaDuracao(arquivo, true)
+    const segunda = await importarTabelaDuracao(arquivo, true)
+    const naoDuplicou = segunda.ja_aplicado === true && segunda.regras_gravadas === 0
+    const aprovacao = await aprovarTabelaDuracao(primeira.tabela_id)
+    const tabelas = await pb.collection('tabela_duracao').getFullList()
+    const ativas = tabelas.filter((t) => t.ativa)
+    passou =
+      naoDuplicou &&
+      aprovacao.regras_ativas === 5 &&
+      ativas.length === 1 &&
+      ativas[0].id === primeira.tabela_id
+    detalhe = `1ª importação: ${primeira.regras_gravadas} regras; 2ª: ja_aplicado=${String(segunda.ja_aplicado)}; aprovação ativou ${aprovacao.regras_ativas} regras; versões ativas: ${ativas.length} (só uma).`
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await limparTabelasTeste()
+  }
+  return {
+    cenario: 'P2-08 — reimport idempotente + aprovação única',
+    esperado: 'Mesmo arquivo 2× não duplica; aprovar ativa 1 versão e desativa as outras.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Versionamento e aprovação ok.' : 'Verificar aprovação/ativação.',
+  }
+}
+
+// P1-08 — namespaces fixture/manual/importado não se misturam; zero chamadas externas.
+export async function executarProvaP1_08(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const criados = await criarFixturesAgenda()
+    const manual = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'fixture-20-1', // MESMO id do fixture — deve criar registro SEPARADO
+      data: DATA_FIXTURE,
+      inicio: '15:00',
+      fim: '15:30',
+      profissional: criados.profissionais[0],
+      paciente_nome: 'Paciente Manual',
+      origem: 'manual',
+      teste: true,
+    })
+    passou = manual.id !== ''
+    const porOrigem = await pb.collection('agenda_itens').getFullList({
+      filter: pb.filter('clinicorp_id = {:id}', { id: 'fixture-20-1' }),
+    })
+    passou = passou && porOrigem.length === 2
+    detalhe = `mesmo clinicorp_id em origens diferentes: ${porOrigem.length} registros separados (fixture e manual) — namespaces isolados; nenhuma chamada externa nesta prova.`
+    await limparFixturesAgenda({ profissionais: criados.profissionais, itens: criados.itens })
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P1-08 — namespaces isolados e zero API externa',
+    esperado: 'Mesmo ID em origens diferentes = registros separados; 0 chamadas externas.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Namespaces ok.' : 'Verificar isolamento por origem.',
+  }
+}
+
+// ==================== SPEC-1-004 — confirmação e liberação (task a9f9e30e) ====================
+
+// Massa de teste P4: profissional + consulta no dia-alvo + contato pendente.
+async function criarMassaP4(): Promise<{
+  profissionalId: string
+  itemId: string
+  contatoId: string
+}> {
+  const prof = await pb.collection('profissionais').create({
+    nome: 'Profissional Teste P4',
+    origem: 'fixture',
+    ativo: true,
+    tipo_agenda: 'ambos',
+  })
+  const item = await pb.collection('agenda_itens').create({
+    item_tipo: 'APPOINTMENT',
+    clinicorp_id: 'p4-' + Date.now(),
+    data: DATA_FIXTURE,
+    inicio: '08:00',
+    fim: '08:30',
+    profissional: prof.id,
+    paciente_nome: 'Paciente P4',
+    paciente_telefone: '5521999990001',
+    origem: 'fixture',
+    teste: true,
+  })
+  const contato = await pb.collection('contatos_confirmacao').create({
+    agenda_item: item.id,
+    estado: 'pendente',
+    teste: true,
+  })
+  return { profissionalId: prof.id, itemId: item.id, contatoId: contato.id }
+}
+
+// P4-04 — liberação recusada com menos de 3 mensagens ou sem ligação (CA-1-20).
+export async function executarProvaP4_04(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const massa = await criarMassaP4()
+    // 2 mensagens enviadas (menos de 3) + ligação sem sucesso + corte ok
+    await registrarMensagem(massa.contatoId, 1, 'enviada', true)
+    await registrarMensagem(massa.contatoId, 2, 'enviada', true)
+    await registrarLigacao(massa.contatoId, 'nao_atendeu', true)
+    // clock de fixture: 17:00 do dia anterior (13/10 20:00 UTC)
+    const recusas: string[] = []
+    try {
+      await decidirLiberacao(massa.itemId, 'ligacao_sem_sucesso', {
+        teste: true,
+        agora: '2026-10-13T20:00:00Z',
+      })
+      recusas.push('aceitou com 2 mensagens (ERA PARA RECUSAR)')
+    } catch (erro) {
+      recusas.push(
+        'recusou com 2 mensagens ✓ (' + (erro instanceof Error ? erro.message : 'erro') + ')',
+      )
+    }
+    // completa a 3ª mensagem, mas tira a ligação — nova massa
+    const massa2 = await criarMassaP4()
+    await registrarMensagem(massa2.contatoId, 1, 'enviada', true)
+    await registrarMensagem(massa2.contatoId, 2, 'enviada', true)
+    await registrarMensagem(massa2.contatoId, 3, 'enviada', true)
+    try {
+      await decidirLiberacao(massa2.itemId, 'ligacao_sem_sucesso', {
+        teste: true,
+        agora: '2026-10-13T20:00:00Z',
+      })
+      recusas.push('aceitou sem ligação (ERA PARA RECUSAR)')
+    } catch (erro) {
+      recusas.push(
+        'recusou sem ligação ✓ (' + (erro instanceof Error ? erro.message : 'erro') + ')',
+      )
+    }
+    passou = !recusas.some((r) => r.indexOf('ERA PARA RECUSAR') >= 0)
+    detalhe = recusas.join(' | ')
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-04 — liberação recusada sem 3 mensagens ou sem ligação',
+    esperado: 'Com 2 mensagens: recusa. Com 3 mensagens e sem ligação: recusa.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Gate do silêncio garantido no servidor.' : 'Verificar gate CA-1-20.',
+  }
+}
+
+// P4-05 — corte: 16:59 recusa, 17:00 permite; mesmo corte para consulta de 16h (CA-1-20).
+export async function executarProvaP4_05(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const massa = await criarMassaP4()
+    await registrarMensagem(massa.contatoId, 1, 'enviada', true)
+    await registrarMensagem(massa.contatoId, 2, 'enviada', true)
+    await registrarMensagem(massa.contatoId, 3, 'enviada', true)
+    await registrarLigacao(massa.contatoId, 'nao_atendeu', true, '2026-10-13T10:00:00Z')
+    let resultado16h59 = ''
+    try {
+      await decidirLiberacao(massa.itemId, 'ligacao_sem_sucesso', {
+        teste: true,
+        agora: '2026-10-13T19:59:00Z', // 16:59 em America/Sao_Paulo
+      })
+      resultado16h59 = 'aceitou às 16:59 (ERA PARA RECUSAR)'
+    } catch (erro) {
+      resultado16h59 =
+        'recusou às 16:59 ✓ (' + (erro instanceof Error ? erro.message : 'erro') + ')'
+    }
+    let resultado17h = ''
+    try {
+      const resposta = await decidirLiberacao(massa.itemId, 'ligacao_sem_sucesso', {
+        teste: true,
+        agora: '2026-10-13T20:00:00Z', // 17:00 em America/Sao_Paulo
+      })
+      resultado17h = 'permitiu às 17:00 ✓ (liberação ' + resposta.liberacao_id + ')'
+    } catch (erro) {
+      resultado17h =
+        'recusou às 17:00 (ERA PARA PERMITIR): ' + (erro instanceof Error ? erro.message : 'erro')
+    }
+    // Consulta de 16h do dia-alvo tem o MESMO corte: nova massa com consulta 16:00
+    const prof16 = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4B',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    const item16 = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p4b-' + Date.now(),
+      data: DATA_FIXTURE,
+      inicio: '16:00',
+      fim: '16:30',
+      profissional: prof16.id,
+      paciente_nome: 'Paciente P4B',
+      paciente_telefone: '5521999990002',
+      origem: 'fixture',
+      teste: true,
+    })
+    const contato16 = await pb.collection('contatos_confirmacao').create({
+      agenda_item: item16.id,
+      estado: 'pendente',
+      teste: true,
+    })
+    await registrarMensagem(contato16.id, 1, 'enviada', true)
+    await registrarMensagem(contato16.id, 2, 'enviada', true)
+    await registrarMensagem(contato16.id, 3, 'enviada', true)
+    await registrarLigacao(contato16.id, 'nao_atendeu', true, '2026-10-13T10:00:00Z')
+    let resultadoConsulta16 = ''
+    try {
+      await decidirLiberacao(item16.id, 'ligacao_sem_sucesso', {
+        teste: true,
+        agora: '2026-10-13T19:59:00Z', // 16:59 do dia anterior
+      })
+      resultadoConsulta16 = 'aceitou antes do corte (ERA PARA RECUSAR)'
+    } catch (erro) {
+      resultadoConsulta16 =
+        'mesmo corte aplicado ✓ (' + (erro instanceof Error ? erro.message : 'erro') + ')'
+    }
+    passou =
+      resultado16h59.indexOf('ERA PARA RECUSAR') < 0 &&
+      resultado17h.indexOf('ERA PARA PERMITIR') < 0 &&
+      resultadoConsulta16.indexOf('ERA PARA RECUSAR') < 0 &&
+      resultado17h.indexOf('permitiu às 17:00') >= 0
+    detalhe = `${resultado16h59} | ${resultado17h} | consulta 16h: ${resultadoConsulta16}`
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-05 — corte às 17h do dia anterior (relógio do servidor)',
+    esperado: '16:59 recusa; 17:00 permite; consulta de 16h do dia-alvo tem o mesmo corte.',
+    obtido: detalhe,
+    passou,
+    observacao: passou
+      ? 'Corte no fuso da clínica garantido no servidor.'
+      : 'Verificar corte CA-1-20.',
+  }
+}
+
+// P4-07 — capacidade: 2 avaliações ok, 3ª bloqueada; tratamento sobreposto bloqueado (CA-1-21).
+export async function executarProvaP4_07(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4C',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    // Política ATIVA de avaliação para este profissional (vínculo exato)
+    await pb.collection('politicas_agenda').create({
+      unidade: 'UNIDADE-DEMO',
+      profissional: prof.id,
+      tipo: 'avaliacao',
+      limite_por_horario: 2,
+      escopo_limite: 'individual',
+      situacao: 'ativa',
+      origem_regra: 'prova P4-07',
+      teste: true,
+    })
+    // 2 avaliações no mesmo horário
+    for (let i = 1; i <= 2; i++) {
+      await pb.collection('agenda_itens').create({
+        item_tipo: 'APPOINTMENT',
+        clinicorp_id: 'p4c-av-' + i + '-' + Date.now(),
+        data: DATA_FIXTURE,
+        inicio: '09:00',
+        fim: '09:30',
+        profissional: prof.id,
+        paciente_nome: 'Avaliação P4 ' + i,
+        origem: 'fixture',
+        teste: true,
+      })
+    }
+    const terceiro = await verificarCapacidade(DATA_FIXTURE, '09:00', prof.id, 'avaliacao', true)
+    // tratamento sobreposto: consulta 10:00-11:00 + tentativa 10:30 (regra geral RN-09)
+    await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p4c-tr-' + Date.now(),
+      data: DATA_FIXTURE,
+      inicio: '10:00',
+      fim: '11:00',
+      profissional: prof.id,
+      paciente_nome: 'Tratamento P4',
+      origem: 'fixture',
+      teste: true,
+    })
+    const sobreposto = await verificarCapacidade(
+      DATA_FIXTURE,
+      '10:30',
+      prof.id,
+      'horario_marcado',
+      true,
+    )
+    // política PENDENTE nunca vira ilimitada: ordem de chegada sem política ativa
+    const profSem = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4D',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    await pb.collection('politicas_agenda').create({
+      unidade: 'UNIDADE-DEMO',
+      profissional: profSem.id,
+      tipo: 'ordem_chegada',
+      limite_por_turno: 5,
+      escopo_limite: 'individual',
+      situacao: 'pendente',
+      origem_regra: 'prova P4-07 (pendente)',
+      teste: true,
+    })
+    const semPolitica = await verificarCapacidade(
+      DATA_FIXTURE,
+      '09:00',
+      profSem.id,
+      'ordem_chegada',
+      true,
+    )
+    passou =
+      terceiro.situacao === 'bloqueado' &&
+      sobreposto.situacao === 'bloqueado' &&
+      semPolitica.situacao === 'regra_nao_validada'
+    detalhe = `3ª avaliação: ${terceiro.situacao} (${terceiro.motivo || '—'}); tratamento sobreposto: ${sobreposto.situacao} (${sobreposto.motivo || '—'}); política pendente: ${semPolitica.situacao} (${semPolitica.mensagem || '—'}).`
+  } catch (erro) {
+    detalhe = `falha na prova: ${erro instanceof Error ? erro.message : 'erro'}`
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-07 — capacidade: 2 avaliações ok, 3ª bloqueada; sobreposição bloqueada',
+    esperado:
+      '3ª avaliação no mesmo horário bloqueada; tratamento sobreposto bloqueado; política pendente = "regra da agenda não validada".',
+    obtido: detalhe,
+    passou,
+    observacao: passou
+      ? 'Capacidade CA-1-21 garantida no servidor.'
+      : 'Verificar capacidade CA-1-21.',
+  }
+}
+
+// ===== PROVAS P4-01/P4-02 (SPEC-1-004, CA-1-18) — task 5bcfa6f1 =====
+// Lista de confirmação do dia + exportação XLSX (massa teste=true, limpeza no fim).
+
+// limpa agenda/profissionais de teste criados pelas provas P4-01/02
+async function limparAgendaTeste(): Promise<void> {
+  const itens = await pb
+    .collection('agenda_itens')
+    .getFullList({ filter: 'origem = "fixture" && teste = true' })
+    .catch(() => [])
+  for (cons

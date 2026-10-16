@@ -21,6 +21,9 @@ import {
 import { criarLead } from '@/services/leads'
 import {
   decidirLiberacao,
+  dividirSaidas,
+  exportarXlsx,
+  gerarListaDia,
   limparMassaConfirmacao,
   registrarLigacao,
   registrarMensagem,
@@ -904,8 +907,176 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou
-      ? 'Capacidade CA-1-21 garantido no servidor.'
+      ? 'Capacidade CA-1-21 garantida no servidor.'
       : 'Verificar capacidade CA-1-21.',
+  }
+}
+
+// ===== PROVAS P4-01/P4-02 (SPEC-1-004, CA-1-18) — task 5bcfa6f1 =====
+// Lista de confirmação do dia + exportação XLSX (massa teste=true, limpeza no fim).
+
+// limpa agenda/profissionais de teste criados pelas provas P4-01/02
+async function limparAgendaTeste(): Promise<void> {
+  const itens = await pb
+    .collection('agenda_itens')
+    .getFullList({ filter: 'origem = "fixture" && teste = true' })
+    .catch(() => [])
+  for (const item of itens)
+    await pb
+      .collection('agenda_itens')
+      .delete(item.id)
+      .catch(() => {})
+  const pros = await pb
+    .collection('profissionais')
+    .getFullList({ filter: 'origem = "fixture" && nome ~ "P4-0"' })
+    .catch(() => [])
+  for (const p of pros)
+    await pb
+      .collection('profissionais')
+      .delete(p.id)
+      .catch(() => {})
+}
+
+// P4-01 — lista do dia-alvo: 4 consultas (3 telefone válido, 1 inválida) →
+// contatos pendentes criados, lista em ordem de horário, idempotente na 2ª geração.
+export async function executarProvaP4_01(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const dataAlvo = '2026-10-14'
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4-01',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    const itens = []
+    const horarios = ['08:00', '09:00', '10:00', '11:00']
+    const telefones = ['5521999991001', '5521999991002', '5521999991003', '119'] // último inválido
+    for (let i = 0; i < 4; i++) {
+      itens.push(
+        await pb.collection('agenda_itens').create({
+          item_tipo: 'APPOINTMENT',
+          clinicorp_id: 'p4-01-' + i + '-' + Date.now(),
+          data: dataAlvo,
+          inicio: horarios[i],
+          fim: horarios[i].slice(0, 2) === '08' ? '08:30' : horarios[i],
+          profissional: prof.id,
+          paciente_nome: 'Paciente P4-01-' + i,
+          paciente_telefone: telefones[i],
+          origem: 'fixture',
+          teste: true,
+        }),
+      )
+    }
+    const primeira = await gerarListaDia(dataAlvo, true)
+    const naLista = primeira.lista.filter((l) => itens.some((it) => it.id === l.agenda_item_id))
+    const criadosOk = primeira.contatos_criados >= 4
+    const ordenada = naLista.every((l, idx) => idx === 0 || naLista[idx - 1].hora <= l.hora)
+    const invalidoMarcado = naLista.some((l) => !l.telefone_valido)
+    // idempotência: 2ª geração não duplica contatos
+    const segunda = await gerarListaDia(dataAlvo, true)
+    const criadosSegunda = segunda.contatos_criados
+    passou =
+      criadosOk && naLista.length === 4 && ordenada && invalidoMarcado && criadosSegunda === 0
+    detalhe =
+      '1ª geração: ' +
+      naLista.length +
+      '/4 na lista, contatos criados ' +
+      primeira.contatos_criados +
+      ', ordenada por horário ' +
+      String(ordenada) +
+      ', telefone inválido marcado ' +
+      String(invalidoMarcado) +
+      '; 2ª geração criou ' +
+      criadosSegunda +
+      ' (esperado 0)'
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaConfirmacao()
+    await limparAgendaTeste()
+  }
+  return {
+    cenario: 'P4-01 — lista de confirmação do dia-alvo (RN-01, idempotente)',
+    esperado:
+      'Consultas do dia-alvo entram na lista em ordem de horário com contato pendente criado; telefone inválido marcado; 2ª geração não duplica.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-18 provado (lista).' : 'Verificar rota lista-dia.',
+  }
+}
+
+// P4-02 — exportação: limite de teste 2 → 2 linhas XLSX + 1 envio manual +
+// 1 corrigir telefone; exportar NÃO cria tentativa de mensagem (RN-02).
+export async function executarProvaP4_02(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const dataAlvo = '2026-10-14'
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4-02',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    const horarios = ['08:00', '09:00', '10:00', '11:00']
+    const telefones = ['5521999992001', '5521999992002', '5521999992003', '119']
+    for (let i = 0; i < 4; i++) {
+      await pb.collection('agenda_itens').create({
+        item_tipo: 'APPOINTMENT',
+        clinicorp_id: 'p4-02-' + i + '-' + Date.now(),
+        data: dataAlvo,
+        inicio: horarios[i],
+        fim: horarios[i],
+        profissional: prof.id,
+        paciente_nome: 'Paciente P4-02-' + i,
+        paciente_telefone: telefones[i],
+        origem: 'fixture',
+        teste: true,
+      })
+    }
+    const r = await gerarListaDia(dataAlvo, true)
+    const limiteTeste = 2
+    const saidas = dividirSaidas(r.lista, limiteTeste)
+    const xlsxOk = saidas.xlsx.length === limiteTeste
+    const manualOk = saidas.envioManual.length === 1
+    const corrigirOk = saidas.corrigirTelefone.length === 1
+    // exportar não cria tentativa: mensagens_confirmacao de teste antes/depois
+    const antes = await pb
+      .collection('mensagens_confirmacao')
+      .getFullList({ filter: 'teste = true' })
+      .catch(() => [])
+    await exportarXlsx(saidas.xlsx, 'prova P4-02')
+    const depois = await pb
+      .collection('mensagens_confirmacao')
+      .getFullList({ filter: 'teste = true' })
+      .catch(() => [])
+    const semTentativa = antes.length === depois.length
+    passou = xlsxOk && manualOk && corrigirOk && semTentativa
+    detalhe =
+      'XLSX ' +
+      saidas.xlsx.length +
+      '/2, envio manual ' +
+      saidas.envioManual.length +
+      '/1, corrigir telefone ' +
+      saidas.corrigirTelefone.length +
+      '/1, tentativas criadas pela exportação: ' +
+      String(depois.length - antes.length) +
+      ' (esperado 0)'
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaConfirmacao()
+    await limparAgendaTeste()
+  }
+  return {
+    cenario: 'P4-02 — exportação XLSX com limite (CA-1-18, RN-02)',
+    esperado:
+      'Com limite 2: 2 linhas no XLSX, 1 em envio manual, 1 em corrigir telefone; exportar não cria tentativa.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-18 provado (exportação).' : 'Verificar saídas da exportação.',
   }
 }
 

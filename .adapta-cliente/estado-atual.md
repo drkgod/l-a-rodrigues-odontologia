@@ -6,18 +6,18 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
 - analise: .adapta-cliente/analises/5bcfa6f1-lista-confirmacao-dia.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: confirmada 16/10 14h28 ("sim")
 - decisao_cliente: nenhuma pendente — CL-009 usa fallback da SPEC (nome, telefone, mensagem)
-- teste_humano: pendente (roteiro entregue 16/10: provas P4-01/02 + tela /confirmacoes + XLSX)
-- verificacao_automatica: passou (QA verde; publicado 6e10115; download XLSX provado com a lib local; pendências só .skip.config.json)
-- aprendizado: pendente (triagem ao concluir)
+- teste_humano: aprovado 16/10 15h27 ("testei, pode seguir") na v0.0.50, após debug do download (massa de teste na tela)
+- verificacao_automatica: passou (versão no ar = testada 6e10115; QA verde; segredos limpos; GitHub 7/7 + registros; banco sem resíduo; UI 10/10)
+- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-16-1527-massa-da-prova-auto-apaga-deixa-teste-humano-sem-massa.md
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: 6e10115 (v0.0.50)
 - skip_publicacao: publicada:6e10115 em 2026-10-16T17:47:03Z
 - pendente_github: nao
-- espelho: atualizado (8 arquivos: hook, serviço, tela, App, Layout, provas.ts, Provas.tsx, LEIA-ME)
-- ultima_acao: 16/10 14h50 — debug concluído (v0.0.50): massa de teste na tela + textos de estado; aguardando re-teste
-- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
-- atualizado_em: 2026-10-16T14:40:00-03:00
+- espelho: atualizado (código + registros)
+- ultima_acao: 16/10 15h27 — task 5bcfa6f1 CONCLUÍDA (verificação independente + fechamento)
+- proxima_acao: aguardar pedido do dono para apresentar próxima task (não abrir sem pedido)
+- atualizado_em: 2026-10-16T15:30:00-03:00

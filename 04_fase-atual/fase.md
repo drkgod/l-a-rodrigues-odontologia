@@ -42,7 +42,7 @@
   > Lista com procedimentos pendentes, leads/faltas e disponibilidade/prontidão. Para tratamento, ligar a etapa do plano do paciente e mostrar aguarda sequência/liberação do avaliador quando necessário; avaliação sem execução de tratamento não exige plano. Usar o contrato da emenda, sem importar prontuário inteiro (SPEC-1-003 · CA-1-14/15 · CA-SEQ-03 · P3-04/05/06/11).
   - [x] Trazer do Clinicorp os procedimentos aprovados e não executados @"L A Rodrigues" !13/10/2026  <!-- id:90ad21b0-1692-4994-bdcf-13767f603968 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Procedimentos aprovados e não executados por arquivo autorizado; SPEC-1-003.
-- [ ] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026  <!-- id:5bcfa6f1-3634-485d-8740-49c6ce94df0a -->
+- [x] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026  <!-- id:5bcfa6f1-3634-485d-8740-49c6ce94df0a -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de confirmação do dia para o robô (3 mensagens + 1 ligação, corte 17h); registro da resposta de cada paciente (subtask f124df8f). SPEC-1-004.
   - [ ] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.

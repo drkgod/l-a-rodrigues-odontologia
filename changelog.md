@@ -1,3 +1,4 @@
+- 2026-10-16 · [Luiz] · DEBUG task fdca5fb0 (2ª rodada): P2-05b 500 "Something went wrong" → causa raiz nos logs do Skip: getBoolean não existe no JSVM (TypeError na rota ligar-reserva) → corrigido: getInt('campo') !== 0 nas 5 ocorrências (duracao_sugerir + confirmacao_regras) (skip 3b817d9 v0.0.54).
 - 2026-10-16 · [Luiz] · DEBUG task fdca5fb0: P2-05b "Only superusers can perform this action" → causa raiz: planejamentos.createRule = null (prova criava registro direto) + hook gravava 'sugerido' (fora do select da migration 0013) → corrigido: provas via rota sugerirDuracao(teste=true) + hook grava 'planejado' (skip bc5d3c8 v0.0.53).
 ## 2026-10-16 — task fdca5fb0 (SPEC-1-002, CA-1-10/11) — IMPLEMENTADA E PUBLICADA
 - Migration 0013 (aditiva): coleção desvios_duracao + campos em planejamentos (paciente, agenda_item rel único, minutos_reservados, criado_por) + valores novos de situacao (planejado/reservado/reserva_nao_encontrada/cancelado) preservando os existentes.

@@ -263,7 +263,9 @@ routerAdd(
     } catch (_) {
       throw new BadRequestError('Item da agenda não encontrado.', null)
     }
-    if (item.getBoolean('cancelado') || item.getBoolean('excluido')) {
+    // BUG FIX (teste humano P2-05b 2ª rodada, 16/10): getBoolean NÃO existe nesta
+    // versão do JSVM (TypeError → 500 "Something went wrong"). Usar getInt != 0.
+    if (item.getInt('cancelado') !== 0 || item.getInt('excluido') !== 0) {
       throw new BadRequestError('Este horário está cancelado — escolha outro.', null)
     }
     if (item.getString('item_tipo') !== 'APPOINTMENT') {
@@ -326,7 +328,7 @@ routerAdd(
       desvio.set('diferenca', minutosReservados - minutosSugeridos)
       desvio.set('situacao', 'sem_motivo')
       desvio.set('crc', e.auth ? String(e.auth.getString('email') || '') : '')
-      desvio.set('teste', planejamento.getBoolean('teste') || item.getBoolean('teste'))
+      desvio.set('teste', planejamento.getInt('teste') !== 0 || item.getInt('teste') !== 0)
       $app.save(desvio)
       desvioId = desvio.id
     }
@@ -432,7 +434,7 @@ routerAdd(
           paciente: itens[i].getString('paciente_nome'),
           data: itens[i].getString('data'),
           hora: itens[i].getString('inicio'),
-          teste: itens[i].getBoolean('teste'),
+          teste: itens[i].getInt('teste') !== 0,
         })
       }
     }
@@ -454,7 +456,7 @@ routerAdd(
         atrasados.push({
           planejamento_id: pendentes[i].id,
           criado_em: criadoEm,
-          teste: pendentes[i].getBoolean('teste'),
+          teste: pendentes[i].getInt('teste') !== 0,
         })
       }
     }

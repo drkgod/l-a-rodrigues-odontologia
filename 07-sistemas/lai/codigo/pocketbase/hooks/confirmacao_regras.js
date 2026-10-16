@@ -3,8 +3,8 @@
 // ligação sem sucesso no dia anterior + sem confirmação + corte 17h local) e
 // CA-1-21 (capacidade: avaliação 2/horário 30min; ordem de chegada por turno sob
 // política ATIVA; sem política = "regra da agenda não validada", nunca ilimitado).
-// Padrões JSVM: tudo inline por handler; data zerada '0001-' nunca usada; sem
-// runInTransaction. Fonte executável: Skip 65741 (v0.0.26, ref 45af710).
+// Padrões JSVM: tudo inline por handler (nada de função top-level usada em
+// callback); data zerada '0001-' nunca usada; sem runInTransaction.
 routerAdd(
   'POST',
   '/backend/v1/confirmacao/registrar-mensagem',
@@ -273,7 +273,8 @@ routerAdd(
     const dataUtc = new Date(partes[0] + '-' + partes[1] + '-' + partes[2] + 'T12:00:00Z')
     const dia = dataUtc.getUTCDay()
 
-    // Consultas do dia não canceladas (visitas únicas)
+    // Consultas do dia não canceladas (visitas únicas — dois registros da mesma
+    // visita não consomem dois lugares: namespace única por clinicorp_id)
     const itens = $app.findRecordsByFilter(
       'agenda_itens',
       'data = "' + data + '" && cancelado != true && excluido != true',
@@ -691,8 +692,17 @@ routerAdd(
         hora: item.getString('inicio'),
         dentista: nomeProf,
         estado: contato.getString('estado'),
-        mensagem: mensagem || ('Olá ' + item.getString('paciente_nome') + '! Confirmando sua consulta no dia ' + data + ' às ' + item.getString('inicio') + (nomeProf ? ' com ' + nomeProf : '') + '. Até breve!'),
-        teste: teste || item.getBoolean('teste'),
+        mensagem:
+          mensagem ||
+          'Olá ' +
+            item.getString('paciente_nome') +
+            '! Confirmando sua consulta no dia ' +
+            data +
+            ' às ' +
+            item.getString('inicio') +
+            (nomeProf ? ' com ' + nomeProf : '') +
+            '. Até breve!',
+        teste: teste || item.getInt('teste') !== 0,
       })
     }
 

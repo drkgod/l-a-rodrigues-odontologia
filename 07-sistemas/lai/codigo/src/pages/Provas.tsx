@@ -27,6 +27,7 @@ import {
   executarProvaP2_02,
   executarProvaP2_03,
   executarProvaP2_04,
+  executarProvaP2_05,
   executarProvaP1_01,
   executarProvaP1_02,
   executarProvaP1_03,
@@ -224,6 +225,13 @@ const Provas = () => {
           </Button>
           <Button
             variant="outline"
+            onClick={() => void executar(executarProvaP2_05, 'SPEC-1-002')}
+            disabled={executando}
+          >
+            P2-05 (agrupar/validar)
+          </Button>
+          <Button
+            variant="outline"
             onClick={() => void executar(executarProvaP3_01, 'SPEC-1-003')}
             disabled={executando}
           >
@@ -321,7 +329,7 @@ const Provas = () => {
           <CardTitle className="text-base">Execuções registradas</CardTitle>
           <CardDescription>
             {execucoes.length > 0
-              ? `${execucoes.length} execução(ões) registradas (SPEC-1-001, SPEC-1-002 e SPEC-1-003 e SPEC-1-004).`
+              ? `${execucoes.length} execução(ões) registradas (SPEC-1-001, SPEC-1-002 e SPEC-1-004).`
               : 'Nenhuma execução ainda.'}
           </CardDescription>
         </CardHeader>

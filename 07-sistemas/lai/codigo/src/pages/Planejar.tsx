@@ -11,14 +11,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { listarAgendaDoDia, listarProfissionais, type ItemAgenda } from '@/services/agenda'
 import {
+  agruparSemRegra,
   listarGruposAtivos,
   listarPlanejamentos,
   sugerirDuracao,
+  validarCombinacao,
   type GrupoAtivo,
-  type ItemPlanejamento,
+  type GrupoSemRegra,
   type Planejamento,
   type ResultadoSugestao,
 } from '@/services/planejamento'
@@ -36,7 +50,7 @@ function tempoEmMinutos(inicio: string): number {
 }
 
 const Planejar = () => {
-  const { usuario } = useAuth()
+  const { usuario, eGestao } = useAuth()
   const [profissionais, setProfissionais] = useState<ProfissionalSimples[]>([])
   const [grupos, setGrupos] = useState<GrupoAtivo[]>([])
   const [profissional, setProfissional] = useState('')
@@ -47,6 +61,7 @@ const Planejar = () => {
   const [resultado, setResultado] = useState<ResultadoSugestao | null>(null)
   const [vagas, setVagas] = useState<Array<{ inicio: string; fim: string }>>([])
   const [casosSemRegra, setCasosSemRegra] = useState<Planejamento[]>([])
+  const [validando, setValidando] = useState('')
   const [erro, setErro] = useState('')
   const [carregando, setCarregando] = useState(true)
   const [consultando, setConsultando] = useState(false)
@@ -67,6 +82,16 @@ const Planejar = () => {
   useEffect(() => {
     void carregar()
   }, [carregar])
+
+  const carregarCasosSemRegra = () => {
+    listarPlanejamentos()
+      .then((todos) => setCasosSemRegra(todos.filter((p) => p.situacao === 'sem_regra')))
+      .catch(() => {})
+  }
+
+  useEffect(() => {
+    carregarCasosSemRegra()
+  }, [])
 
   const consultar = async () => {
     setErro('')
@@ -117,13 +142,24 @@ const Planejar = () => {
         setVagas(livres)
       }
       // casos sem regra (lista da gestão) — recarrega silencioso
-      listarPlanejamentos()
-        .then((todos) => setCasosSemRegra(todos.filter((p) => p.situacao === 'sem_regra')))
-        .catch(() => {})
+      carregarCasosSemRegra()
     } catch (e) {
       setErro(e instanceof Error ? e.message : 'Não foi possível consultar. Tente novamente.')
     } finally {
       setConsultando(false)
+    }
+  }
+
+  const validar = async (g: GrupoSemRegra) => {
+    setValidando(g.chave)
+    try {
+      await validarCombinacao(g.ids)
+      toast.success('Combinação marcada como validada.')
+      carregarCasosSemRegra()
+    } catch {
+      toast.error('Não foi possível validar. Tente novamente.')
+    } finally {
+      setValidando('')
     }
   }
 
@@ -132,6 +168,7 @@ const Planejar = () => {
 
   const grupoEscolhido = grupos.find((g) => g.grupo_regra === grupo)
   const temSegundaVariavel = Boolean(grupoEscolhido?.variavel_2)
+  const gruposSemRegra = agruparSemRegra(casosSemRegra)
 
   return (
     <div className="container mx-auto py-8 px-4 space-y-6">
@@ -302,15 +339,46 @@ const Planejar = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {casosSemRegra.length === 0 ? (
+          {gruposSemRegra.length === 0 ? (
             <p className="text-sm text-muted-foreground">Nenhum caso sem regra até agora.</p>
           ) : (
-            <ul className="space-y-1 text-sm">
-              {casosSemRegra.slice(0, 20).map((p) => (
-                <li key={p.id}>
-                  {descreverItens(p.itens)}
-                  {p.profissional ? ` · ${p.profissional}` : ''} ·{' '}
-                  {new Date(p.created).toLocaleString('pt-BR')}
+            <ul className="space-y-2 text-sm">
+              {gruposSemRegra.map((g) => (
+                <li key={g.chave} className="flex flex-wrap items-center justify-between gap-2">
+                  <span>
+                    {g.descricao}
+                    {g.profissional ? ` · ${g.profissional}` : ''} ·{' '}
+                    <Badge variant="secondary">
+                      {g.ocorrencias === 1 ? '1 ocorrência' : `${g.ocorrencias} ocorrências`}
+                    </Badge>{' '}
+                    · última {new Date(g.ultima).toLocaleString('pt-BR')}
+                  </span>
+                  {eGestao && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm" disabled={validando === g.chave}>
+                          {validando === g.chave ? 'Validando…' : 'Marcar como validado'}
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Marcar como validado?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {g.ocorrencias} ocorrência(s) de "{g.descricao}
+                            {g.profissional ? ` · ${g.profissional}` : ''}" saem da lista de
+                            pendentes e ficam no histórico com seu nome e a data. O motor continua
+                            exigindo regra cadastrada.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => void validar(g)}>
+                            Validar
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                 </li>
               ))}
             </ul>
@@ -343,23 +411,6 @@ function rotuloSegunda(v: string | undefined): string {
     protocolo_duplo: 'Protocolo duplo',
   }
   return mapa[v] || v
-}
-
-// PocketBase devolve campo JSON PARSEADO (array de objetos) — aceitar array ou texto.
-function descreverItens(
-  valor: Array<{ grupo_regra: string; quantidade: number }> | string,
-): string {
-  let itens: Array<{ grupo_regra: string; quantidade: number }>
-  if (Array.isArray(valor)) {
-    itens = valor
-  } else {
-    try {
-      itens = JSON.parse(valor) as Array<{ grupo_regra: string; quantidade: number }>
-    } catch {
-      return String(valor)
-    }
-  }
-  return itens.map((i) => `${i.quantidade}× ${i.grupo_regra}`).join(' + ')
 }
 
 export default Planejar

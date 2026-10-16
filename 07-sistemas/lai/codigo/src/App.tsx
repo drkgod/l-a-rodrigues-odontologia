@@ -14,6 +14,7 @@ import TabelaDuracao from './pages/TabelaDuracao'
 import Planejar from './pages/Planejar'
 import Horarios from './pages/Horarios'
 import Leads from './pages/Leads'
+import PacientesAgendar from './pages/PacientesAgendar'
 import Layout from './components/Layout'
 import { AuthProvider, Protegido, SomenteGestao } from '@/contexts/AuthContext'
 
@@ -68,6 +69,14 @@ const App = () => (
               element={
                 <SomenteGestao>
                   <Leads />
+                </SomenteGestao>
+              }
+            />
+            <Route
+              path="/pacientes-a-agendar"
+              element={
+                <SomenteGestao>
+                  <PacientesAgendar />
                 </SomenteGestao>
               }
             />

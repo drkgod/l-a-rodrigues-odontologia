@@ -600,3 +600,109 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// Task 5bcfa6f1 — lista de confirmação do dia-alvo (RN-01, CA-1-18).
+// Consultas do dia (não canceladas/excluídas, APPOINTMENT) ganham contato
+// pendente se não tiverem (idempotente); lista volta em ordem de horário com
+// telefone validado e mensagem montada do modelo (fallback SPEC: nome, telefone, mensagem).
+routerAdd(
+  'POST',
+  '/backend/v1/confirmacao/lista-dia',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const data = String(body.data || '').trim()
+    const teste = body.teste === true
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) {
+      throw new BadRequestError('Informe a data do dia-alvo (AAAA-MM-DD).', null)
+    }
+
+    // parâmetros da unidade (fallback da SPEC quando CL-009 não chegou)
+    let limiteLinhas = 80
+    let modeloMensagem = ''
+    let formatoTelefone = ''
+    try {
+      const cfg = $app.findFirstRecordByFilter('config_unidade', 'nome_unidade != ""', '')
+      if (cfg) {
+        if (cfg.get('limite_linhas_robo')) limiteLinhas = cfg.getInt('limite_linhas_robo')
+        modeloMensagem = String(cfg.getString('modelo_mensagem_confirmacao') || '')
+        formatoTelefone = String(cfg.getString('formato_telefone_robo') || '')
+      }
+    } catch (_) {}
+
+    // Consultas do dia-alvo: APPOINTMENT, não canceladas, não excluídas
+    const itens = $app.findRecordsByFilter(
+      'agenda_itens',
+      'data = "' + data + '" && item_tipo = "APPOINTMENT" && cancelado != true && excluido != true',
+      'inicio',
+      500,
+      0,
+    )
+
+    // Nomes dos profissionais (relação → nome)
+    const nomesProf = {}
+    const pros = $app.findRecordsByFilter('profissionais', 'id != ""', '', 200, 0)
+    for (let i = 0; i < pros.length; i++) nomesProf[pros[i].id] = pros[i].getString('nome')
+
+    // Contatos existentes do dia (um por agenda_item)
+    const contatos = $app.findRecordsByFilter(
+      'contatos_confirmacao',
+      'teste = ' + (teste ? 'true' : 'false'),
+      '',
+      500,
+      0,
+    )
+    const contatoPorItem = {}
+    for (let i = 0; i < contatos.length; i++) {
+      contatoPorItem[contatos[i].getString('agenda_item')] = contatos[i]
+    }
+
+    const col = $app.findCollectionByNameOrId('contatos_confirmacao')
+    const criados = []
+    const lista = []
+    for (let i = 0; i < itens.length; i++) {
+      const item = itens[i]
+      let contato = contatoPorItem[item.id]
+      if (!contato) {
+        // RN-01: consulta do dia-alvo sem contato → contato pendente (idempotente)
+        contato = new Record(col)
+        contato.set('agenda_item', item.id)
+        contato.set('estado', 'pendente')
+        contato.set('responsavel', '')
+        contato.set('turno', '')
+        contato.set('versao_contato', 1)
+        contato.set('teste', teste)
+        $app.save(contato)
+        criados.push(contato.id)
+      }
+      const telefone = String(item.getString('paciente_telefone') || '').replace(/\D/g, '')
+      const telefoneOk = telefone.length >= 10 && telefone.length <= 13
+      const nomeProf = nomesProf[item.getString('profissional')] || ''
+      const mensagem = modeloMensagem
+        .replace(/\{nome\}/g, item.getString('paciente_nome'))
+        .replace(/\{data\}/g, data)
+        .replace(/\{hora\}/g, item.getString('inicio'))
+        .replace(/\{profissional\}/g, nomeProf)
+      lista.push({
+        contato_id: contato.id,
+        agenda_item_id: item.id,
+        paciente: item.getString('paciente_nome'),
+        telefone: telefoneOk ? telefone : '',
+        telefone_valido: telefoneOk,
+        hora: item.getString('inicio'),
+        dentista: nomeProf,
+        estado: contato.getString('estado'),
+        mensagem: mensagem || ('Olá ' + item.getString('paciente_nome') + '! Confirmando sua consulta no dia ' + data + ' às ' + item.getString('inicio') + (nomeProf ? ' com ' + nomeProf : '') + '. Até breve!'),
+        teste: teste || item.getBoolean('teste'),
+      })
+    }
+
+    return e.json(200, {
+      data: data,
+      limite_linhas_robo: limiteLinhas,
+      total: lista.length,
+      contatos_criados: criados.length,
+      lista: lista,
+    })
+  },
+  $apis.requireAuth(),
+)

@@ -28,6 +28,8 @@ import {
   executarProvaP2_03,
   executarProvaP2_04,
   executarProvaP2_05,
+  executarProvaP2_05b,
+  executarProvaP2_06,
   executarProvaP1_01,
   executarProvaP1_02,
   executarProvaP1_03,
@@ -235,6 +237,20 @@ const Provas = () => {
             disabled={executando}
           >
             P2-05 (agrupar/validar)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP2_05b, 'SPEC-1-002')}
+            disabled={executando}
+          >
+            P2-05b (desvio/motivo)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP2_06, 'SPEC-1-002')}
+            disabled={executando}
+          >
+            P2-06 (conciliação)
           </Button>
           <Button
             variant="outline"

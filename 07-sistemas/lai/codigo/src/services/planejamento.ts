@@ -142,6 +142,121 @@ export async function listarPlanejamentos(): Promise<Planejamento[]> {
   return pb.collection<Planejamento>('planejamentos').getFullList({ sort: '-created' })
 }
 
+// ===== Task fdca5fb0 — desvios de duração e conciliação (CA-1-10/11) =====
+export interface PlanejamentoReservado extends Planejamento {
+  paciente_nome?: string
+  paciente_telefone?: string
+  agenda_item?: string
+  minutos_reservados?: number
+  criado_por?: string
+  situacao:
+    | Planejamento['situacao']
+    | 'planejado'
+    | 'reservado'
+    | 'reserva_nao_encontrada'
+    | 'cancelado'
+}
+
+export interface DesvioDuracao {
+  id: string
+  planejamento: string
+  minutos_sugeridos: number
+  minutos_reservados: number
+  diferenca: number
+  motivo_tipo: string
+  motivo: string
+  situacao: 'sem_motivo' | 'justificado' | 'revisado'
+  crc: string
+  revisado_por: string
+  revisado_em: string
+  teste: boolean
+  created: string
+  expand?: { planejamento?: PlanejamentoReservado }
+}
+
+export interface ResultadoLigarReserva {
+  ok: boolean
+  situacao: string
+  minutos_reservados: number
+  desvio_id: string
+  demonstracao: boolean
+}
+
+// RN-04 — liga a reserva (item da agenda, mesmo profissional); diferença cria desvio sem_motivo.
+export async function ligarReserva(
+  planejamentoId: string,
+  agendaItemId: string,
+): Promise<ResultadoLigarReserva> {
+  try {
+    return await pb.send('/backend/v1/duracao/ligar-reserva', {
+      method: 'POST',
+      body: { planejamento: planejamentoId, agenda_item: agendaItemId },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível ligar a reserva.')
+  }
+}
+
+// CA-1-10 — CRC registra o motivo → justificado.
+export async function registrarMotivoDesvio(
+  desvioId: string,
+  motivoTipo: 'grade do profissional' | 'outro',
+  motivo: string,
+): Promise<void> {
+  try {
+    await pb.send('/backend/v1/duracao/motivo-desvio', {
+      method: 'POST',
+      body: { desvio: desvioId, motivo_tipo: motivoTipo, motivo },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível registrar o motivo.')
+  }
+}
+
+// Gestão revisa o desvio → revisado.
+export async function revisarDesvio(desvioId: string): Promise<void> {
+  try {
+    await pb.send('/backend/v1/duracao/revisar-desvio', {
+      method: 'POST',
+      body: { desvio: desvioId },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível revisar o desvio.')
+  }
+}
+
+export async function listarDesvios(): Promise<DesvioDuracao[]> {
+  return pb
+    .collection<DesvioDuracao>('desvios_duracao')
+    .getFullList({ sort: '-created', expand: 'planejamento' })
+}
+
+export interface ResultadoConciliacao {
+  hoje: string
+  reservas_sem_planejamento: Array<{
+    agenda_item_id: string
+    paciente: string
+    data: string
+    hora: string
+    teste: boolean
+  }>
+  reserva_nao_encontrada: Array<{ planejamento_id: string; criado_em: string; teste: boolean }>
+  teste: boolean
+}
+
+// CA-1-11 — conciliação on-demand (RN-05/RN-06).
+export async function conciliarReservas(teste = false): Promise<ResultadoConciliacao> {
+  try {
+    return await pb.send('/backend/v1/duracao/conciliar', {
+      method: 'POST',
+      body: { teste },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível conciliar as reservas.')
+  }
+}
+
+
 // Grupos disponíveis na tabela ATIVA (sem as de teste) — alimenta o dropdown.
 export async function listarGruposAtivos(): Promise<GrupoAtivo[]> {
   const tabelas = await pb

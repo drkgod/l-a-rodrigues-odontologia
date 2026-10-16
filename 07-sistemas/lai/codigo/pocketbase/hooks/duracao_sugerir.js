@@ -234,3 +234,234 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// Task fdca5fb0 — ligar reserva ao planejamento (RN-04, CA-1-10).
+// Reserva SIMULADA (modo demonstrativo): item da agenda de teste/arquivo, mesmo
+// profissional. Diferença de tempo cria desvio sem_motivo (pendência da CRC).
+routerAdd(
+  'POST',
+  '/backend/v1/duracao/ligar-reserva',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const planejamentoId = String(body.planejamento || '')
+    const itemId = String(body.agenda_item || '')
+    if (!planejamentoId) throw new BadRequestError('Informe o planejamento.', null)
+    if (!itemId) throw new BadRequestError('Informe o item da agenda (reserva).', null)
+
+    let planejamento
+    try {
+      planejamento = $app.findRecordById('planejamentos', planejamentoId)
+    } catch (_) {
+      throw new BadRequestError('Planejamento não encontrado.', null)
+    }
+    let item
+    try {
+      item = $app.findRecordById('agenda_itens', itemId)
+    } catch (_) {
+      throw new BadRequestError('Item da agenda não encontrado.', null)
+    }
+    if (item.getBoolean('cancelado') || item.getBoolean('excluido')) {
+      throw new BadRequestError('Este horário está cancelado — escolha outro.', null)
+    }
+    if (item.getString('item_tipo') !== 'APPOINTMENT') {
+      throw new BadRequestError('Só consulta (APPOINTMENT) pode ser reservada.', null)
+    }
+    // mesmo profissional (relação id × nome do planejamento)
+    const nomesProf = {}
+    const pros = $app.findRecordsByFilter('profissionais', 'id != ""', '', 200, 0)
+    for (let i = 0; i < pros.length; i++) nomesProf[pros[i].id] = pros[i].getString('nome')
+    const nomeItem = nomesProf[item.getString('profissional')] || ''
+    const nomePlanejamento = planejamento.getString('profissional')
+    if (nomeItem && nomePlanejamento && nomeItem.toLowerCase() !== nomePlanejamento.toLowerCase()) {
+      throw new BadRequestError(
+        'A reserva é de outro profissional (' +
+          nomeItem +
+          ') — escolha um horário do mesmo dentista.',
+        null,
+      )
+    }
+    // item livre: nenhum outro planejamento ligado a ele
+    const ocupados = $app.findRecordsByFilter(
+      'planejamentos',
+      'agenda_item = "' + itemId + '"',
+      '',
+      1,
+      0,
+    )
+    if (ocupados.length > 0) {
+      throw new BadRequestError('Este horário já está ligado a outro planejamento.', null)
+    }
+
+    // minutos reservados = duração do item (fim − início)
+    const paraMin = function (hhmm) {
+      const p = String(hhmm || '0:0').split(':')
+      return Number(p[0]) * 60 + Number(p[1])
+    }
+    const minutosReservados = Math.max(
+      0,
+      paraMin(item.getString('fim')) - paraMin(item.getString('inicio')),
+    )
+    const minutosSugeridos = planejamento.getInt('minutos_sugeridos')
+
+    planejamento.set('agenda_item', itemId)
+    planejamento.set('minutos_reservados', minutosReservados)
+    planejamento.set('situacao', 'reservado')
+    planejamento.set(
+      'criado_por',
+      planejamento.getString('crc') || (e.auth ? String(e.auth.getString('email') || '') : ''),
+    )
+    $app.save(planejamento)
+
+    // RN-04: diferença (usa o tempo sugerido JÁ ARREDONDADO) → desvio sem_motivo
+    let desvioId = ''
+    if (minutosSugeridos > 0 && minutosReservados !== minutosSugeridos) {
+      const col = $app.findCollectionByNameOrId('desvios_duracao')
+      const desvio = new Record(col)
+      desvio.set('planejamento', planejamentoId)
+      desvio.set('minutos_sugeridos', minutosSugeridos)
+      desvio.set('minutos_reservados', minutosReservados)
+      desvio.set('diferenca', minutosReservados - minutosSugeridos)
+      desvio.set('situacao', 'sem_motivo')
+      desvio.set('crc', e.auth ? String(e.auth.getString('email') || '') : '')
+      desvio.set('teste', planejamento.getBoolean('teste') || item.getBoolean('teste'))
+      $app.save(desvio)
+      desvioId = desvio.id
+    }
+
+    return e.json(200, {
+      ok: true,
+      situacao: 'reservado',
+      minutos_reservados: minutosReservados,
+      desvio_id: desvioId,
+      demonstracao: true,
+    })
+  },
+  $apis.requireAuth(),
+)
+
+// CA-1-10 — CRC registra o motivo do desvio → justificado.
+routerAdd(
+  'POST',
+  '/backend/v1/duracao/motivo-desvio',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const desvioId = String(body.desvio || '')
+    const motivoTipo = String(body.motivo_tipo || '').trim()
+    const motivo = String(body.motivo || '').trim()
+    if (!desvioId) throw new BadRequestError('Informe o desvio.', null)
+    if (['grade do profissional', 'outro'].indexOf(motivoTipo) < 0) {
+      throw new BadRequestError('Escolha o tipo de motivo.', null)
+    }
+    if (!motivo) throw new BadRequestError('O motivo é obrigatório para fechar o desvio.', null)
+    let desvio
+    try {
+      desvio = $app.findRecordById('desvios_duracao', desvioId)
+    } catch (_) {
+      throw new BadRequestError('Desvio não encontrado.', null)
+    }
+    if (desvio.getString('situacao') === 'revisado') {
+      throw new BadRequestError('Desvio já revisado pela gestão — não pode ser alterado.', null)
+    }
+    desvio.set('motivo_tipo', motivoTipo)
+    desvio.set('motivo', motivo)
+    desvio.set('situacao', 'justificado')
+    $app.save(desvio)
+    return e.json(200, { ok: true, situacao: 'justificado' })
+  },
+  $apis.requireAuth(),
+)
+
+// Gestão revisa o desvio → revisado (CA-1-10).
+routerAdd(
+  'POST',
+  '/backend/v1/duracao/revisar-desvio',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const desvioId = String(body.desvio || '')
+    if (!desvioId) throw new BadRequestError('Informe o desvio.', null)
+    let desvio
+    try {
+      desvio = $app.findRecordById('desvios_duracao', desvioId)
+    } catch (_) {
+      throw new BadRequestError('Desvio não encontrado.', null)
+    }
+    if (desvio.getString('situacao') !== 'justificado') {
+      throw new BadRequestError('Só desvio com motivo pode ser revisado.', null)
+    }
+    desvio.set('situacao', 'revisado')
+    desvio.set('revisado_por', e.auth ? String(e.auth.getString('email') || '') : '')
+    desvio.set('revisado_em', new Date().toISOString())
+    $app.save(desvio)
+    return e.json(200, { ok: true, situacao: 'revisado' })
+  },
+  $apis.requireAuth(),
+)
+
+// CA-1-11 — conciliação (RN-05/RN-06), on-demand (modo demonstrativo, sem cron).
+// RN-05: APPOINTMENT sem planejamento ligado → reservas_sem_planejamento.
+// RN-06: planejamento "planejado" de dias anteriores sem reserva → reserva_nao_encontrada.
+routerAdd(
+  'POST',
+  '/backend/v1/duracao/conciliar',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const hoje = new Date().toISOString().slice(0, 10)
+    const teste = body.teste === true
+
+    // RN-05: consultas (não canceladas/excluídas) sem planejamento ligado
+    const itens = $app.findRecordsByFilter(
+      'agenda_itens',
+      'item_tipo = "APPOINTMENT" && cancelado != true && excluido != true',
+      '-data',
+      500,
+      0,
+    )
+    const comPlanejamento = {}
+    const pls = $app.findRecordsByFilter('planejamentos', 'agenda_item != ""', '', 500, 0)
+    for (let i = 0; i < pls.length; i++) {
+      comPlanejamento[pls[i].getString('agenda_item')] = true
+    }
+    const semPlanejamento = []
+    for (let i = 0; i < itens.length; i++) {
+      if (!comPlanejamento[itens[i].id]) {
+        semPlanejamento.push({
+          agenda_item_id: itens[i].id,
+          paciente: itens[i].getString('paciente_nome'),
+          data: itens[i].getString('data'),
+          hora: itens[i].getString('inicio'),
+          teste: itens[i].getBoolean('teste'),
+        })
+      }
+    }
+
+    // RN-06: planejamentos "planejado" (sem reserva) criados em dia ANTERIOR a hoje
+    const atrasados = []
+    const pendentes = $app.findRecordsByFilter(
+      'planejamentos',
+      'situacao = "planejado"',
+      '-created',
+      500,
+      0,
+    )
+    for (let i = 0; i < pendentes.length; i++) {
+      const criadoEm = String(pendentes[i].getString('created') || '').slice(0, 10)
+      if (criadoEm && criadoEm < hoje) {
+        pendentes[i].set('situacao', 'reserva_nao_encontrada')
+        $app.save(pendentes[i])
+        atrasados.push({
+          planejamento_id: pendentes[i].id,
+          criado_em: criadoEm,
+          teste: pendentes[i].getBoolean('teste'),
+        })
+      }
+    }
+
+    return e.json(200, {
+      hoje: hoje,
+      reservas_sem_planejamento: semPlanejamento,
+      reserva_nao_encontrada: atrasados,
+      teste: teste,
+    })
+  },
+  $apis.requireAuth(),
+)

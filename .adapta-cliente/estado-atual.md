@@ -6,18 +6,18 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
 - analise: .adapta-cliente/analises/fdca5fb0-motivo-desvio-reserva.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
 - decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
-- teste_humano: pendente (roteiro entregue 16/10: provas P2-05b/06 + fluxo real na tela Planejar)
+- teste_humano: aprovado pelo dono ("pode seguir", 16/10 19h36) na v0.0.55 ff39792
 - verificacao_automatica: passou (QA verde; publicado ff39792; fix ja_aplicado provado no QA)
-- aprendizado: pendente (triagem ao concluir)
+- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-16-1940-prova-massa-dedup-hash.md
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: ff39792 (v0.0.55)
 - skip_publicacao: publicada:ff39792 em 2026-10-16T20:19:17Z
 - pendente_github: sim:provas.ts parcial no remoto (parte 1/3 restaurada; anexos 2-4 pendentes por limite de tempo do subagente) — espelho local correto; reenvio na conclusão
 - espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
-- ultima_acao: 16/10 16h28 — teste humano: P2-05b falhou "Only superusers can perform this action"; em correção
-- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
-- atualizado_em: 2026-10-16T15:56:00-03:00
+- ultima_acao: 16/10 19h40 — task concluída: verificação independente PASSOU (versão no ar = testada, QA, segredos, diff, falhas silenciosas); fase 18/54
+- proxima_acao: aguardar pedido do dono ("próxima task")
+- atualizado_em: 2026-10-16T19:40:00-03:00

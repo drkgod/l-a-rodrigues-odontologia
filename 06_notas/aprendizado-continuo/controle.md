@@ -21,3 +21,4 @@ Padrões e lições capturados durante a execução das tasks. Um padrão = uma 
 - 14/10 (8d76cea5): teste E2E por API deve criar massa com teste=true e limpar por telefone/nome (não só teste=true) — lead criado por rota sem teste=true fica "real" no banco e contamina a próxima prova.
 - 16/10 (6d5de2f5): prova que lê coleção INTEIRA quebra com resíduo de execuções anteriores ("agrupamento inesperado: 3 grupos" com 50 execuções registradas) — a prova deve agrupar EXATAMENTE os ids que ela mesma criou (a rota devolve o id) e limpar resíduo antes de montar a massa. Teste humano pegou o que o QA não viu.
 - 16/10 (6d5de2f5): create_or_update_file no GitHub pode gravar arquivo TRUNCADO sem erro na resposta (22KB de 48KB) — conferir size/blob SHA pós-push e reparar com push_files.
+- 2026-10-16T19:40:00-03:00 · task fdca5fb0 · capturado · 06_notas/aprendizado-continuo/AP-2026-10-16-1940-prova-massa-dedup-hash.md (prova re-executável aceita ja_aplicado do dedup por hash)

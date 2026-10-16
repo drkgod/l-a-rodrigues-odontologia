@@ -46,7 +46,7 @@
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de confirmação do dia para o robô (3 mensagens + 1 ligação, corte 17h); registro da resposta de cada paciente (subtask f124df8f). SPEC-1-004.
   - [ ] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.
-- [ ] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
+- [x] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Desvio com motivo obrigatório quando a reserva difere do sugerido; reservas sem planejamento e planejamento sem reserva no fim do dia (CA-1-11); teste de duas e quatro coroas com dentistas diferentes (subtask c9b95987). SPEC-1-002 · CA-1-10/11 · P2-05/06.
   - [ ] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026  <!-- id:c9b95987-0344-4a5f-b528-b5561c1717ca -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano com 2 CRCs: 2 e 4 coroas com dois dentistas conferindo a tabela; SPEC-1-002.

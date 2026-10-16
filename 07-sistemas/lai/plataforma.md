@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: b6e4f44 (v0.0.52)
-- versao_publicada: b6e4f44 em 2026-10-16T18:38:29Z
-- ultima_task: fdca5fb0 (desvios de duração) — publicada, aguardando teste humano
+- versao_aplicada: ff39792 (v0.0.55)
+- versao_publicada: ff39792 em 2026-10-16T20:19:17Z
+- ultima_task: fdca5fb0 (desvios de duração) — CONCLUÍDA (testada pelo dono "pode seguir" 19h36)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -32,6 +32,9 @@
 | 16/10 | 55a359b0 (lista pacientes a agendar) | 0ce4ea1 (v0.0.46) | migration 0012, hook pendencias_regras.js, service pendencias.ts, tela PacientesAgendar.tsx, App.tsx, Layout.tsx, provas.ts (P3-04/05/06/11), Provas.tsx |
 | 16/10 | 5bcfa6f1 (lista confirmação do dia) | 15579f4 (v0.0.49) | hook confirmacao_regras.js (rota lista-dia), service confirmacao.ts (gerarListaDia/dividirSaidas/exportarXlsx), tela Confirmacoes.tsx, App.tsx, Layout.tsx, provas.ts (P4-01/02), Provas.tsx, package.json (xlsx) |
 | 16/10 | fdca5fb0 (desvios de duração) | b6e4f44 (v0.0.52) | migration 0013, hook duracao_sugerir.js (+4 rotas), service planejamento.ts, tela Planejar.tsx, provas.ts (P2-05b/06), Provas.tsx |
+| 16/10 | fdca5fb0 (debug 1 — provas via rota) | bc5d3c8 (v0.0.53) | hook duracao_sugerir.js (grava planejado), provas.ts (P2-05b/06 via rota) |
+| 16/10 | fdca5fb0 (debug 2 — getBoolean→getInt) | 3b817d9 (v0.0.54) | hooks duracao_sugerir.js e confirmacao_regras.js |
+| 16/10 | fdca5fb0 (debug 3 — dedup por hash aceito) | ff39792 (v0.0.55) | provas.ts (criarTabelaTesteP2 aceita ja_aplicado) |
 
 ## Regras da plataforma
 

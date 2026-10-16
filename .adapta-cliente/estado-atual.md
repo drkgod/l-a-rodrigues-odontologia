@@ -16,7 +16,7 @@
 - skip_projeto: 65741
 - skip_versao: ff39792 (v0.0.55)
 - skip_publicacao: publicada:ff39792 em 2026-10-16T20:19:17Z
-- pendente_github: sim:provas.ts parcial no remoto (parte 1/3 restaurada; anexos 2-4 pendentes por limite de tempo do subagente) — espelho local correto; reenvio na conclusão
+- pendente_github: nao (provas.ts reparado e provado: blob SHA remoto 850c1dfb = local; registros da conclusão em 696146b)
 - espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
 - ultima_acao: 16/10 19h40 — task concluída: verificação independente PASSOU (versão no ar = testada, QA, segredos, diff, falhas silenciosas); fase 18/54
 - proxima_acao: aguardar pedido do dono ("próxima task")

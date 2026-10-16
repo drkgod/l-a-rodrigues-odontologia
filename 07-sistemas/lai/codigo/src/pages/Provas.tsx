@@ -432,4 +432,22 @@ const Provas = () => {
                     <TableCell className="hidden md:table-cell max-w-md">
                       <p className="text-xs text-muted-foreground">Esperado: {execucao.esperado}</p>
                       <p className="text-xs">Obtido: {execucao.obtido}</p>
- blob placeholder removed
+                    </TableCell>
+                    <TableCell className="hidden lg:table-cell text-xs text-muted-foreground">
+                      {execucao.executado_em
+                        ? new Date(execucao.executado_em).toLocaleString('pt-BR')
+                        : '—'}
+                      {usuario?.email ? ` · ${execucao.executado_por || usuario.email}` : ''}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+export default Provas

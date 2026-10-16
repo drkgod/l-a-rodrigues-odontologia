@@ -912,7 +912,7 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou
-      ? 'Capacidade CA-1-21 garantido no servidor.'
+      ? 'Capacidade CA-1-21 garantida no servidor.'
       : 'Verificar capacidade CA-1-21.',
   }
 }
@@ -1251,7 +1251,7 @@ export async function executarProvaP2_04(): Promise<ResultadoProva> {
         { grupo_regra: GRUPO_COROAS, quantidade: 1 },
       ],
       'Profissional Teste P2 A',
-    true,
+      true,
     )
     const casos = await pb
       .collection<{ id: string }>('planejamentos')
@@ -1259,7 +1259,7 @@ export async function executarProvaP2_04(): Promise<ResultadoProva> {
     detalhe = 'combinação → ' + r.situacao + '; casos sem regra: ' + casos.length
     passou = r.situacao === 'sem_regra' && r.minutos === 0 && casos.length >= 1
   } catch (e) {
-    detalhe = e instanceof Error ? e.message
+    detalhe = e instanceof Error ? e.message : 'erro'
   } finally {
     await apagarMassaP2()
   }

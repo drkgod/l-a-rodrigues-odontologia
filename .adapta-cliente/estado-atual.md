@@ -10,14 +10,14 @@
 - autorizacao_implementacao: confirmada 16/10 14h28 ("sim")
 - decisao_cliente: nenhuma pendente — CL-009 usa fallback da SPEC (nome, telefone, mensagem)
 - teste_humano: pendente (roteiro entregue 16/10: provas P4-01/02 + tela /confirmacoes + XLSX)
-- verificacao_automatica: passou (QA verde 1ª tentativa; publicado 15579f4; rota lista-dia provada no ar 401 anônimo; pendências só .skip.config.json)
+- verificacao_automatica: passou (QA verde; publicado 6e10115; download XLSX provado com a lib local; pendências só .skip.config.json)
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 15579f4 (v0.0.49)
-- skip_publicacao: publicada:15579f4 em 2026-10-16T17:31:01Z
+- skip_versao: 6e10115 (v0.0.50)
+- skip_publicacao: publicada:6e10115 em 2026-10-16T17:47:03Z
 - pendente_github: nao
 - espelho: atualizado (8 arquivos: hook, serviço, tela, App, Layout, provas.ts, Provas.tsx, LEIA-ME)
-- ultima_acao: 16/10 14h35 — task 5bcfa6f1 implementada e publicada (v0.0.49); commit GitHub desta resposta
+- ultima_acao: 16/10 14h50 — debug concluído (v0.0.50): massa de teste na tela + textos de estado; aguardando re-teste
 - proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
 - atualizado_em: 2026-10-16T14:40:00-03:00

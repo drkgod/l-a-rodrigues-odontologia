@@ -912,7 +912,7 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou
-      ? 'Capacidade CA-1-21 garantida no servidor.'
+      ? 'Capacidade CA-1-21 garantido no servidor.'
       : 'Verificar capacidade CA-1-21.',
   }
 }

@@ -3,7 +3,13 @@ import PocketBase from 'pocketbase'
 import pb from '@/lib/pocketbase/client'
 import { aplicarLote, validarLote } from '@/services/agenda'
 import { aprovarTabelaDuracao, importarTabelaDuracao } from '@/services/duracao'
-import { limparPlanejamentosTeste, sugerirDuracao } from '@/services/planejamento'
+import {
+  agruparSemRegra,
+  limparPlanejamentosTeste,
+  sugerirDuracao,
+  validarCombinacao,
+  type Planejamento,
+} from '@/services/planejamento'
 import { criarLead } from '@/services/leads'
 import {
   decidirLiberacao,
@@ -1077,6 +1083,61 @@ export async function executarProvaP2_04(): Promise<ResultadoProva> {
   }
 }
 
+// P2-05 — casos sem regra agrupados e validação pela direção (CA-1-09).
+// 2 ocorrências da MESMA combinação viram 1 grupo com contagem; ao validar,
+// saem dos pendentes com validado_por/em gravados; a outra combinação segue.
+export async function executarProvaP2_05(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    await criarTabelaTesteP2()
+    // duas ocorrências da MESMA combinação + uma combinação diferente
+    const combo = [
+      { grupo_regra: 'FACETAS_PROVA_P2', quantidade: 10 },
+      { grupo_regra: GRUPO_COROAS, quantidade: 1 },
+    ]
+    await sugerirDuracao(combo, 'Profissional Teste P2 A', true)
+    await sugerirDuracao(combo, 'Profissional Teste P2 A', true)
+    await sugerirDuracao([{ grupo_regra: GRUPO_COROAS, quantidade: 7 }], 'Profissional Teste P2 A', true)
+
+    const pendentes = await pb
+      .collection<Planejamento>('planejamentos')
+      .getFullList({ filter: 'situacao = "sem_regra" && teste = true' })
+    const grupos = agruparSemRegra(pendentes)
+    const alvo = grupos.find((g) => g.ocorrencias === 2)
+    if (!alvo || grupos.length !== 2) {
+      throw new Error('agrupamento inesperado: ' + grupos.length + ' grupo(s)')
+    }
+
+    await validarCombinacao(alvo.ids)
+
+    const depois = await pb
+      .collection<Planejamento>('planejamentos')
+      .getFullList({ filter: 'situacao = "sem_regra" && teste = true' })
+    const restantes = agruparSemRegra(depois)
+    const marcados = depois.filter((p) => alvo.ids.indexOf(p.id) >= 0)
+    const comAutoria = marcados.every((p) => p.validado_em && p.validado_por)
+    passou =
+      restantes.length === 1 && restantes[0].ocorrencias === 1 && comAutoria && marcados.length === 2
+    detalhe =
+      `antes: ${grupos.length} grupos (repetida com ${alvo.ocorrencias} ocorrências); ` +
+      `depois de validar: ${restantes.length} pendente(s) com ${restantes[0]?.ocorrencias ?? 0}; ` +
+      `validado_por/em gravados nos 2: ${comAutoria}`
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarMassaP2()
+  }
+  return {
+    cenario: 'P2-05 — agrupar sem regra e validar com a direção',
+    esperado:
+      '2 ocorrências iguais viram 1 grupo com contagem 2; ao validar, saem dos pendentes com validado_por/em gravados; a outra combinação segue pendente.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-09 provado (agrupamento + validação).' : 'Verificar agrupamento/validação.',
+  }
+}
+
 // ===== PROVAS P3-01..P3-03 (SPEC-1-003, CA-1-12/13) =====
 // Regras de origem e duplicado NO SERVIDOR (hook leads_regras.js):
 // P3-01: código de campanha ativo → origem campanha.
@@ -1142,7 +1203,13 @@ export async function executarProvaP3_02(): Promise<ResultadoProva> {
   let passou = false
   try {
     const semCodigo = await criarLead('Lead Prova P3-02a', '5521999991002', '', '', false)
-    const codigoRuim = await criarLead('Lead Prova P3-02b', '5521999991003', 'NAO-EXISTE', '', false)
+    const codigoRuim = await criarLead(
+      'Lead Prova P3-02b',
+      '5521999991003',
+      'NAO-EXISTE',
+      '',
+      false,
+    )
     passou =
       semCodigo.criado === true &&
       semCodigo.origem_tipo === 'desconhecida' &&

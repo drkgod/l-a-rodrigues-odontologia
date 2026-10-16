@@ -66,7 +66,7 @@ export interface GrupoSemRegra {
   ids: string[] // planejamentos da combinação (para validar em lote)
 }
 
-// PocketBase devolve campo JSON PARSEADO (array de objetos) — aceitar array ou texto.
+// PocketBase devolve campo JSON parseado (array de objetos) — aceitar array ou texto.
 export function descreverItens(
   valor: Array<{ grupo_regra: string; quantidade: number }> | string,
 ): string {

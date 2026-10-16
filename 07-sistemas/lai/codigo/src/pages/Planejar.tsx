@@ -377,7 +377,7 @@ const Planejar = () => {
                     min={0}
                     value={quantidade2}
                     onChange={(e) => setQuantidade2(e.target.value)}
-                    aria-label={rotuloSegunda(grupoEscolhido?.variavel_2)}
+                    aria-label={rotuloSegunda(grupoEscolhido?.varianta_2)}
                     placeholder="0"
                   />
                 </div>

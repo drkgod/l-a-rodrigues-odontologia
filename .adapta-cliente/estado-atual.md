@@ -6,18 +6,18 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
 - analise: .adapta-cliente/analises/55a359b0-lista-pacientes.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: confirmada 16/10 11h00 ("pode")
 - decisao_cliente: premissas aceitas sem objeção (leads aguardando = em_atendimento/aguardando_retorno; CSV paciente;telefone;procedimento;profissional;situacao; pendencias_desde vazio = mostra tudo)
-- teste_humano: pendente (roteiro entregue 16/10: provas P3-04/05/06/11 + tela /pacientes-a-agendar)
-- verificacao_automatica: passou (QA verde; migration 0012 na nuvem provada; rotas 401 anônimo; coleção anônimo vê 0; lastPublishedRef = 0ce4ea1)
-- aprendizado: pendente (triagem ao concluir)
+- teste_humano: aprovado 16/10 14h20 ("testei, pode seguir") na v0.0.48, após 2 correções (P3-05 hook texto×relação; P3-11 massa da prova)
+- verificacao_automatica: passou (versão no ar = testada a347b1e; QA verde; segredos limpos; diff sem sobra/linha vermelha; GitHub 8/8 código + registros; UI 11/11)
+- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-16-1420-migration-nao-aplica-pod-velho.md + AP-2026-10-16-1421-texto-x-relacao-e-prova-vs-cenario.md
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 0ce4ea1 (v0.0.46)
-- skip_publicacao: publicada:0ce4ea1 em 2026-10-16T14:08:16Z
+- skip_versao: a347b1e (v0.0.48)
+- skip_publicacao: publicada:a347b1e em 2026-10-16T17:18:14Z
 - pendente_github: nao
-- espelho: atualizado (8 arquivos: migration 0012, hook, serviço, tela, App, Layout, provas.ts, Provas.tsx)
-- ultima_acao: 16/10 11h10 — task 55a359b0 implementada e publicada (v0.0.46); commit GitHub desta resposta
-- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
-- atualizado_em: 2026-10-16T11:12:00-03:00
+- espelho: atualizado (código + registros)
+- ultima_acao: 16/10 14h20 — task 55a359b0 CONCLUÍDA (verificação independente + fechamento)
+- proxima_acao: aguardar pedido do dono para apresentar próxima task (não abrir sem pedido)
+- atualizado_em: 2026-10-16T14:25:00-03:00

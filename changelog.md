@@ -1,3 +1,8 @@
+## 2026-10-16 — task 55a359b0 CONCLUÍDA (teste humano aprovado pelo dono)
+- "testei, pode seguir" 14h20 após 2 correções de bugs pegos no teste: P3-05 (hook texto×relação) e P3-11 (prova com massa oposta ao cenário).
+- Verificação independente: versão no ar = testada (v0.0.48, a347b1e, lastPublishedRef igual); QA verde; segredos limpos; diff 100% coberto por CA-1-14/15 + CA-SEQ-03 (sem sobra de escopo, sem linha vermelha); GitHub 8/8 arquivos de código + registros; rotas 401 anônimo; coleção pendencias com regra de acesso provada; checklist de UI 11/11.
+- Aprendizado capturado: AP-2026-10-16-1420 (migration não aplica — pod velho) e AP-2026-10-16-1421 (texto×relação + prova vs cenário).
+
 ## 2026-10-16 — task 55a359b0 (SPEC-1-003, CA-1-14/15, CA-SEQ-03) — IMPLEMENTADA E PUBLICADA
 - Migration 0012: coleção pendencias (paciente, telefone, procedimento, dentista, situação de execução, agendamento futuro verificado, disponibilidade 1/2, prontidão, motivo de revisão, origem, teste) + campo pendencias_desde em config_unidade. Migration aplicou só no 2º apply (pod do backend não recarregou na 1ª publicação — tocada no hook pra forçar reload, v0.0.46).
 - Hook pendencias_regras.js: rotas server-side /pendencias/importar (CSV linha a linha, rejeita com motivo, dedup por paciente+procedimento+profissional+arquivo), /pendencias/estado (executada/aguardando_condicao com motivo) e /pendencias/verificar-agendamento (cruza agenda_itens: mesmo paciente+profissional, data futura, não cancelado).

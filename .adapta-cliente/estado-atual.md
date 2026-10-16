@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
 - analise: .adapta-cliente/analises/fdca5fb0-motivo-desvio-reserva.md
-- etapa: aguardando_teste_humano
+- etapa: em_correcao
 - autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
 - decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
 - teste_humano: pendente (roteiro entregue 16/10: provas P2-05b/06 + fluxo real na tela Planejar)
@@ -18,6 +18,6 @@
 - skip_publicacao: publicada:b6e4f44 em 2026-10-16T18:38:29Z
 - pendente_github: nao
 - espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
-- ultima_acao: 16/10 15h55 — task fdca5fb0 implementada e publicada (v0.0.52); registros reenviados
+- ultima_acao: 16/10 16h28 — teste humano: P2-05b falhou "Only superusers can perform this action"; em correção
 - proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
 - atualizado_em: 2026-10-16T15:56:00-03:00

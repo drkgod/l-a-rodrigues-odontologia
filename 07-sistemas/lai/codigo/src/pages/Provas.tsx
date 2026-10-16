@@ -44,6 +44,10 @@ import {
   executarProvaP3_01,
   executarProvaP3_02,
   executarProvaP3_03,
+  executarProvaP3_04,
+  executarProvaP3_05,
+  executarProvaP3_06,
+  executarProvaP3_11,
   limparExecucoes,
   listarExecucoes,
   type ExecucaoProva,
@@ -250,6 +254,34 @@ const Provas = () => {
             disabled={executando}
           >
             P3-03 (duplicado)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_04, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-04 (pendência)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_05, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-05 (agendado)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_06, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-06 (revisão)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_11, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-11 (sem plano)
           </Button>
           <Button
             variant="outline"

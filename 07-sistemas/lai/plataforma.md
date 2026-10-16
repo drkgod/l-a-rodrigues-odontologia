@@ -6,7 +6,7 @@
 - url_preview: https://projeto-lai-19327--preview.goskip.app
 - versao_aplicada: d9a5e12 (v0.0.42)
 - versao_publicada: d9a5e12 em 2026-10-16T13:45:38Z
-- ultima_task: 6d5de2f5 (agrupar/validar casos sem regra)
+- ultima_task: 6d5de2f5 (agrupar/validar casos sem regra) — CONCLUÍDA com teste humano aprovado 16/10 10h54
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 

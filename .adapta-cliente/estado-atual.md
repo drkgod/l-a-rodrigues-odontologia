@@ -1,23 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71
+- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 — CONCLUÍDA
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
 - analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: em_correcao
-- autorizacao_implementacao: confirmada 14/10 21h38 ("pode seguir") e reiterada 15/10 ("pode seguir" / "vamos continuar de onde paramos")
-- decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
-- teste_humano: pendente (roteiro entregue 15/10: prova P2-05 na tela Provas + lista agrupada com botão validar na tela Planejar)
-- verificacao_automatica: passou (QA verde 1ª tentativa: setup/static/build/integrations ok; migration 0011 aplicada na nuvem; produção HTTP 200)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
+- etapa: concluida
+- autorizacao_implementacao: confirmada 14/10 21h38 ("pode seguir") e reiterada 15/10
+- decisao_cliente: nenhuma pendente nesta task
+- teste_humano: aprovado 16/10 10h54 ("testei, pode seguir") — 1ª rodada falhou (resíduo na asserção da P2-05), corrigido na v0.0.42 e aprovado
+- verificacao_automatica: passou (QA verde nas 2 aplicações; migration 0011 aplicada; produção provada lastPublishedRef = d9a5e12)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (2 padrões novos 16/10)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: d9a5e12 (v0.0.42)
 - skip_publicacao: publicada:d9a5e12 em 2026-10-16T13:45:38Z
 - pendente_github: nao
-- espelho: atualizado (migration 0011, planejamento.ts, Planejar.tsx, provas.ts, Provas.tsx)
-- ultima_acao: 15/10 18h35 — task 6d5de2f5 implementada e publicada (v0.0.41, e442ea4): lista "Casos sem regra" agrupada por combinação+dentista com contagem e data da última, botão "Marcar como validado" (só gestão, com confirmação, grava validado_por/validado_em), prova P2-05 na tela Provas; fase.md 13/54; GitHub commit desta resposta
-- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata o que falhou
-- atualizado_em: 2026-10-15T18:40:00-03:00
+- espelho: atualizado e provado byte a byte (provas.ts) — commits 3bc6345/22e855e/9cea676/429554d/c57e3867/118c7e5/0766a85
+- ultima_acao: 16/10 10h54 — teste humano aprovado pelo dono; task concluída; commit de conclusão no GitHub desta resposta
+- proxima_acao: aguardar o dono pedir a próxima task ("próxima task")
+- atualizado_em: 2026-10-16T10:56:00-03:00

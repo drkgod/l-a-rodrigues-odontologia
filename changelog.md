@@ -1,3 +1,11 @@
+## 2026-10-16 — task fdca5fb0 (SPEC-1-002, CA-1-10/11) — IMPLEMENTADA E PUBLICADA
+- Migration 0013 (aditiva): coleção desvios_duracao + campos em planejamentos (paciente, agenda_item rel único, minutos_reservados, criado_por) + valores novos de situacao (planejado/reservado/reserva_nao_encontrada/cancelado) preservando os existentes.
+- Hook duracao_sugerir.js +4 rotas: ligar-reserva (reserva simulada, mesmo profissional, item livre; diferença usa tempo ARREDONDADO e cria desvio sem_motivo — RN-04), motivo-desvio (obrigatório → justificado), revisar-desvio (gestão → revisado), conciliar (RN-05/06 on-demand, sem cron).
+- Tela Planejar: botão "Ligar reserva" nos badges de vagas, diálogo de motivo, card "Desvios de duração", card "Conciliação de reservas".
+- Provas P2-05b (60×40 → sem_motivo +20 → justificado → revisado) e P2-06 (item órfão; planejamento de HOJE não marcado) na tela Provas.
+- Publicado v0.0.52 (b6e4f44) 18:38 UTC; QA verde (1 erro de migration corrigido: pl.save → app.save); migration na nuvem provada; 4 rotas provadas no ar (401 anônimo).
+- Registro: checkbox da task 8d76cea5 (concluída e testada em 14/10) estava dessincronizado no fase.md — corrigido.
+
 ## 2026-10-16 — task 5bcfa6f1 CONCLUÍDA (teste humano aprovado pelo dono)
 - "testei, pode seguir" 15h27 na v0.0.50, após debug do download (massa de teste na tela + textos de estado).
 - Verificação independente: versão no ar = testada (6e10115, lastPublishedRef igual); QA verde; segredos limpos; GitHub 7/7 código + registros; rotas 401 anônimo; banco sem resíduo de massa (0 itens de teste); checklist de UI 10/10; diff 100% coberto por CA-1-18 + RN-01/02/15.

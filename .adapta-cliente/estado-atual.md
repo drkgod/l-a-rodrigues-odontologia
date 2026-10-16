@@ -1,23 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 5bcfa6f1-3634-485d-8740-49c6ce94df0a
+- task_id: fdca5fb0-379d-4ede-8b73-409508033157
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
-- analise: .adapta-cliente/analises/5bcfa6f1-lista-confirmacao-dia.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada 16/10 14h28 ("sim")
-- decisao_cliente: nenhuma pendente — CL-009 usa fallback da SPEC (nome, telefone, mensagem)
-- teste_humano: aprovado 16/10 15h27 ("testei, pode seguir") na v0.0.50, após debug do download (massa de teste na tela)
-- verificacao_automatica: passou (versão no ar = testada 6e10115; QA verde; segredos limpos; GitHub 7/7 + registros; banco sem resíduo; UI 10/10)
-- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-16-1527-massa-da-prova-auto-apaga-deixa-teste-humano-sem-massa.md
+- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
+- analise: .adapta-cliente/analises/fdca5fb0-motivo-desvio-reserva.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
+- decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
+- teste_humano: pendente (roteiro entregue 16/10: provas P2-05b/06 + fluxo real na tela Planejar)
+- verificacao_automatica: passou (QA verde; publicado b6e4f44; migration 0013 na nuvem provada; 4 rotas 401 anônimo)
+- aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 6e10115 (v0.0.50)
-- skip_publicacao: publicada:6e10115 em 2026-10-16T17:47:03Z
+- skip_versao: b6e4f44 (v0.0.52)
+- skip_publicacao: publicada:b6e4f44 em 2026-10-16T18:38:29Z
 - pendente_github: nao
-- espelho: atualizado (código + registros)
-- ultima_acao: 16/10 15h27 — task 5bcfa6f1 CONCLUÍDA (verificação independente + fechamento)
-- proxima_acao: aguardar pedido do dono para apresentar próxima task (não abrir sem pedido)
-- atualizado_em: 2026-10-16T15:30:00-03:00
+- espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
+- ultima_acao: 16/10 15h55 — task fdca5fb0 implementada e publicada (v0.0.52); registros reenviados
+- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
+- atualizado_em: 2026-10-16T15:56:00-03:00

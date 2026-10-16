@@ -38,6 +38,8 @@ import {
   executarProvaP1_08,
   executarProvaP2_07,
   executarProvaP2_08,
+  executarProvaP4_01,
+  executarProvaP4_02,
   executarProvaP4_04,
   executarProvaP4_05,
   executarProvaP4_07,
@@ -282,6 +284,20 @@ const Provas = () => {
             disabled={executando}
           >
             P3-11 (sem plano)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP4_01, 'SPEC-1-004')}
+            disabled={executando}
+          >
+            P4-01 (lista do dia)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP4_02, 'SPEC-1-004')}
+            disabled={executando}
+          >
+            P4-02 (exportação)
           </Button>
           <Button
             variant="outline"

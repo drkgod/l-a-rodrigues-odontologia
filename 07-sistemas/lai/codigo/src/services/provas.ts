@@ -1343,18 +1343,21 @@ export async function executarProvaP3_11(): Promise<ResultadoProva> {
   let detalhe = ''
   let passou = false
   try {
+    // BUG FIX (teste humano P3-11, 16/10): "sem plano aprovado" = default da
+    // importação (prontidao aguardando_condicao) — a prova marcava 'pronto',
+    // provando o oposto do cenário. Agora cria SEM prontidão confirmada.
     const p = await criarPendenciaTeste({
       paciente_nome: 'Paciente Prova P3-11',
       procedimento: 'Protocolo Prova P3',
-      prontidao: 'pronto',
     })
     const lista = montarLista(await listarPendencias())
+    const foraElegiveis = !lista.aAgendar.some((x) => x.id === p.id)
     const emRevisao = lista.paraRevisao.some((x) => x.id === p.id)
     const motivoEmenda = lista.paraRevisao.some(
       (x) => x.id === p.id && (x.motivo_revisao || '').indexOf('avaliador') >= 0,
     )
-    passou = emRevisao && motivoEmenda
-    detalhe = `tratamento sem plano → em "para revisão": ${String(emRevisao)}; motivo "aguarda sequência/liberação do avaliador": ${String(motivoEmenda)}`
+    passou = foraElegiveis && emRevisao && motivoEmenda
+    detalhe = `fora dos elegíveis: ${String(foraElegiveis)}; em "para revisão": ${String(emRevisao)}; motivo "aguarda sequência/liberação do avaliador": ${String(motivoEmenda)}`
   } catch (e) {
     detalhe = e instanceof Error ? e.message : 'erro'
   } finally {

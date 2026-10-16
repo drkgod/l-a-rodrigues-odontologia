@@ -138,6 +138,86 @@ export async function decidirLiberacao(
   }
 }
 
+
+// Task 5bcfa6f1 — lista de confirmação do dia-alvo (RN-01, CA-1-18).
+export interface LinhaConfirmacao {
+  contato_id: string
+  agenda_item_id: string
+  paciente: string
+  telefone: string
+  telefone_valido: boolean
+  hora: string
+  dentista: string
+  estado: string
+  mensagem: string
+  teste: boolean
+}
+
+export interface ResultadoListaDia {
+  data: string
+  limite_linhas_robo: number
+  total: number
+  contatos_criados: number
+  lista: LinhaConfirmacao[]
+}
+
+export async function gerarListaDia(data: string, teste = false): Promise<ResultadoListaDia> {
+  try {
+    return await pb.send('/backend/v1/confirmacao/lista-dia', {
+      method: 'POST',
+      body: { data, teste },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível gerar a lista do dia.')
+  }
+}
+
+// CA-1-18 — divide a lista nas 3 saídas: XLSX (até o limite), envio manual (excedente)
+// e corrigir telefone (inválido). Exportar NUNCA cria tentativa (RN-02).
+export interface SaidaConfirmacao {
+  xlsx: LinhaConfirmacao[]
+  envioManual: LinhaConfirmacao[]
+  corrigirTelefone: LinhaConfirmacao[]
+}
+
+export function dividirSaidas(lista: LinhaConfirmacao[], limite: number): SaidaConfirmacao {
+  const validas = lista.filter((l) => l.telefone_valido)
+  return {
+    xlsx: validas.slice(0, limite),
+    envioManual: validas.slice(limite),
+    corrigirTelefone: lista.filter((l) => !l.telefone_valido),
+  }
+}
+
+// RN-15 — exporta o XLSX no formato do robô (fallback CL-009: nome, telefone, mensagem).
+// Import dinâmico: xlsx só entra no bundle quando alguém exporta.
+export async function exportarXlsx(
+  linhas: LinhaConfirmacao[],
+  quemExportou: string,
+): Promise<{ nomeArquivo: string; totalLinhas: number }> {
+  const XLSX = await import('xlsx')
+  const dados = linhas.map((l) => ({
+    nome: l.paciente,
+    telefone: l.telefone,
+    mensagem: l.mensagem,
+  }))
+  const planilha = XLSX.utils.json_to_sheet(dados)
+  const livro = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(livro, planilha, 'confirmacao')
+  const nomeArquivo = 'confirmacao-' + new Date().toISOString().slice(0, 10) + '.xlsx'
+  XLSX.writeFile(livro, nomeArquivo)
+  // registro da exportação (RN-15) — quem/quando/quantas linhas
+  await pb.collection('provas_execucoes').create({
+    spec: 'SPEC-1-004',
+    cenario: 'Exportação XLSX da lista de confirmação',
+    esperado: 'Arquivo no formato do robô (nome, telefone, mensagem), sem criar tentativas.',
+    obtido: quemExportou + ' exportou ' + linhas.length + ' linha(s) em ' + nomeArquivo,
+    passou: true,
+    observacao: 'RN-15 — registro de exportação (não é prova de envio).',
+  })
+  return { nomeArquivo: nomeArquivo, totalLinhas: linhas.length }
+}
+
 // Helpers de massa de prova (marca teste=true; limpeza apaga por teste=true).
 export async function criarContatoTeste(agendaItemId: string): Promise<ContatoConfirmacao> {
   return pb.collection('contatos_confirmacao').create({

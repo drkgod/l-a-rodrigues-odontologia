@@ -15,3 +15,7 @@ Arquivos da task 7805f88a (v0.0.4, ref e13e688):
 - src/services/auth.ts
 - src/services/config.ts
 - src/services/provas.ts
+
+## Dependências adicionadas
+
+- Task 5bcfa6f1 (v0.0.49): `xlsx@^0.18.5` (SheetJS) — exportação XLSX da lista de confirmação, import dinâmico. Fonte executável: package.json no Skip.

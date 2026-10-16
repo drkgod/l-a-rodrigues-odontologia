@@ -6,16 +6,16 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
 - analise: .adapta-cliente/analises/fdca5fb0-motivo-desvio-reserva.md
-- etapa: em_correcao
+- etapa: aguardando_teste_humano
 - autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
 - decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
 - teste_humano: pendente (roteiro entregue 16/10: provas P2-05b/06 + fluxo real na tela Planejar)
-- verificacao_automatica: passou (QA verde; publicado b6e4f44; migration 0013 na nuvem provada; 4 rotas 401 anônimo)
+- verificacao_automatica: passou (QA verde; publicado bc5d3c8; provas via rota provadas no QA; lastPublishedRef = atual)
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: b6e4f44 (v0.0.52)
-- skip_publicacao: publicada:b6e4f44 em 2026-10-16T18:38:29Z
+- skip_versao: bc5d3c8 (v0.0.53)
+- skip_publicacao: publicada:bc5d3c8 em 2026-10-16T19:30:19Z
 - pendente_github: nao
 - espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
 - ultima_acao: 16/10 16h28 — teste humano: P2-05b falhou "Only superusers can perform this action"; em correção

@@ -1,3 +1,4 @@
+- 2026-10-16 · [Luiz] · DEBUG task fdca5fb0: P2-05b "Only superusers can perform this action" → causa raiz: planejamentos.createRule = null (prova criava registro direto) + hook gravava 'sugerido' (fora do select da migration 0013) → corrigido: provas via rota sugerirDuracao(teste=true) + hook grava 'planejado' (skip bc5d3c8 v0.0.53).
 ## 2026-10-16 — task fdca5fb0 (SPEC-1-002, CA-1-10/11) — IMPLEMENTADA E PUBLICADA
 - Migration 0013 (aditiva): coleção desvios_duracao + campos em planejamentos (paciente, agenda_item rel único, minutos_reservados, criado_por) + valores novos de situacao (planejado/reservado/reserva_nao_encontrada/cancelado) preservando os existentes.
 - Hook duracao_sugerir.js +4 rotas: ligar-reserva (reserva simulada, mesmo profissional, item livre; diferença usa tempo ARREDONDADO e cria desvio sem_motivo — RN-04), motivo-desvio (obrigatório → justificado), revisar-desvio (gestão → revisado), conciliar (RN-05/06 on-demand, sem cron).

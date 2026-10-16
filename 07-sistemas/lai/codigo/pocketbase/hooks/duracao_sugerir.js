@@ -210,7 +210,10 @@ routerAdd(
       )
       registro.set('minutos_sugeridos', minutos)
       registro.set('minutos_brutos', minutosBrutos)
-      registro.set('situacao', situacao === 'ok' ? 'sugerido' : 'sem_regra')
+      // BUG FIX (teste humano P2-05b, 16/10): 'sugerido' não existe mais no select
+      // (migration 0013: planejado/reservado/reserva_nao_encontrada/cancelado) e a
+      // conciliação RN-06 marca 'planejado'. Tempo calculado sem reserva = 'planejado'.
+      registro.set('situacao', situacao === 'ok' ? 'planejado' : 'sem_regra')
       registro.set('regra_aplicada', regraAplicada ? JSON.stringify(regraAplicada) : '')
       registro.set('crc', e.auth ? String(e.auth.getString('email') || '') : '')
       registro.set('teste', teste)

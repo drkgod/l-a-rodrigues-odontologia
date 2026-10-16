@@ -839,8 +839,7 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
         profissional: prof.id,
         paciente_nome: 'Avaliação P4 ' + i,
         origem: 'fixture',
-        teste:
-true,
+        teste: true,
       })
     }
     const terceiro = await verificarCapacidade(DATA_FIXTURE, '09:00', prof.id, 'avaliacao', true)
@@ -905,7 +904,7 @@ true,
     obtido: detalhe,
     passou,
     observacao: passou
-      ? 'Capacidade CA-1-21 garantida no servidor.'
+      ? 'Capacidade CA-1-21 garantido no servidor.'
       : 'Verificar capacidade CA-1-21.',
   }
 }

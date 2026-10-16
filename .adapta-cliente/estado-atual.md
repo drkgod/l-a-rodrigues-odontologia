@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
 - analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: aguardando_teste_humano
+- etapa: em_correcao
 - autorizacao_implementacao: confirmada 14/10 21h38 ("pode seguir") e reiterada 15/10 ("pode seguir" / "vamos continuar de onde paramos")
 - decisao_cliente: nenhuma pendente nesta task (arredondamento 5 em config; específica prevalece — decisão 18h16; tabela v2 ativa)
 - teste_humano: pendente (roteiro entregue 15/10: prova P2-05 na tela Provas + lista agrupada com botão validar na tela Planejar)
@@ -14,8 +14,8 @@
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (5 padrões JSVM/PocketBase/UX)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: e442ea4 (v0.0.41)
-- skip_publicacao: publicada:e442ea4 em 2026-10-15T21:29:14Z
+- skip_versao: d9a5e12 (v0.0.42)
+- skip_publicacao: publicada:d9a5e12 em 2026-10-16T13:45:38Z
 - pendente_github: nao
 - espelho: atualizado (migration 0011, planejamento.ts, Planejar.tsx, provas.ts, Provas.tsx)
 - ultima_acao: 15/10 18h35 — task 6d5de2f5 implementada e publicada (v0.0.41, e442ea4): lista "Casos sem regra" agrupada por combinação+dentista com contagem e data da última, botão "Marcar como validado" (só gestão, com confirmação, grava validado_por/validado_em), prova P2-05 na tela Provas; fase.md 13/54; GitHub commit desta resposta

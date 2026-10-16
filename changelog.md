@@ -1,3 +1,8 @@
+## 2026-10-16 — task 6d5de2f5 (debug teste humano)
+- Teste do dono pegou bug real: P2-05 falhou com "agrupamento inesperado: 3 grupo(s)" — a asserção lia a coleção INTEIRA de planejamentos de teste; resíduo de execuções anteriores contaminou a contagem (50 execuções registradas).
+- Correção (v0.0.42, d9a5e12, QA verde, publicado 13:45 UTC): a prova agora agrupa EXATAMENTE os 3 planejamentos que ela mesma criou (ids devolvidos pela rota) e limpa resíduo de planejamentos de teste antes de montar a massa. Mensagem de erro enriquecida com os grupos encontrados.
+- Motor, tela e validação intocados — bug era da prova, não do produto.
+
 ## 2026-10-15 — task 6d5de2f5 (SPEC-1-002, CA-1-09) — IMPLEMENTADA E PUBLICADA
 - Migration 0011_planejamentos_validacao: campos validado_por (text) e validado_em (date) em planejamentos; aditiva, down remove os 2. Aplicada na nuvem (21:29 UTC).
 - Serviço planejamento.ts: descreverItens movida da tela (fonte única), agruparSemRegra (agrupa pendentes por combinação+profissional, ordena por repetição e depois mais recente) e validarCombinacao (grava validado_por = e-mail da sessão + validado_em em todos os ids do grupo).

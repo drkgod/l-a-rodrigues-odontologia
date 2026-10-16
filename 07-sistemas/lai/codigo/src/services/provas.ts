@@ -1303,4 +1303,129 @@ export async function executarProvaP2_05(): Promise<ResultadoProva> {
       regs.push(await pb.collection<Planejamento>('planejamentos').getOne(id))
     }
     const grupos = agruparSemRegra(regs)
-    const
+    const alvo = grupos.find((g) => g.ocorrencias === 2)
+    if (!alvo || grupos.length !== 2) {
+      throw new Error(
+        'agrupamento inesperado: ' +
+          grupos.length +
+          ' grupo(s) — ' +
+          grupos.map((g) => g.descricao + ' x' + g.ocorrencias).join(' | '),
+      )
+    }
+
+    await validarCombinacao(alvo.ids)
+
+    const depois: Planejamento[] = []
+    for (const id of idsProva) {
+      depois.push(await pb.collection<Planejamento>('planejamentos').getOne(id))
+    }
+    const restantes = agruparSemRegra(depois)
+    const marcados = depois.filter((p) => alvo.ids.indexOf(p.id) >= 0)
+    const comAutoria = marcados.every((p) => p.validado_em && p.validado_por)
+    passou =
+      restantes.length === 1 &&
+      restantes[0].ocorrencias === 1 &&
+      comAutoria &&
+      marcados.length === 2
+    detalhe =
+      `antes: ${grupos.length} grupos (repetida com ${alvo.ocorrencias} ocorrências); ` +
+      `depois de validar: ${restantes.length} pendente(s) com ${restantes[0]?.ocorrencias ?? 0}; ` +
+      `validado_por/em gravados nos 2: ${comAutoria}`
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarMassaP2()
+  }
+  return {
+    cenario: 'P2-05 — agrupar sem regra e validar com a direção',
+    esperado:
+      '2 ocorrências iguais viram 1 grupo com contagem 2; ao validar, saem dos pendentes com validado_por/em gravados; a outra combinação segue pendente.',
+    obtido: detalhe,
+    passou,
+    observacao: passou
+      ? 'CA-1-09 provado (agrupamento + validação).'
+      : 'Verificar agrupamento/validação.',
+  }
+}
+
+// ===== PROVAS P2-05b/P2-06 (SPEC-1-002, CA-1-10/11) — task fdca5fb0 =====
+// Desvio de duração (RN-04) e conciliação de reservas (RN-05/06).
+// Massa fixture teste=true, apagada no fim (nunca dado real).
+
+// P2-05b — desvio: planejamento (via rota, createRule null) ligado a item de 60 min
+// → sem_motivo; registrar motivo → justificado; gestão revisa → revisado.
+// BUG FIX (teste humano 16/10): planejamentos.createRule = null (só o hook cria) —
+// criar direto dava "Only superusers can perform this action". A prova usa a rota
+// sugerirDuracao(teste=true) com a tabela de teste (coroa 2 = 30 min) e um item de
+// 60 min → desvio com diferença +30 (a regra é reservado ≠ sugerido, não o exemplo 40×60).
+export async function executarProvaP2_05b(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    await limparPlanejamentosTeste()
+    await criarTabelaTesteP2()
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P2 B',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    // planejamento de teste VIA ROTA (coroa 2 com o dentista B = 25 min na tabela de teste)
+    const sugestao = await sugerirDuracao(
+      [{ grupo_regra: GRUPO_COROAS, quantidade: 2 }],
+      'Profissional Teste P2 B',
+      true,
+    )
+    if (sugestao.situacao !== 'ok' || !sugestao.planejamento_id) {
+      throw new Error('rota sugerir: ' + sugestao.situacao + ' id=' + sugestao.planejamento_id)
+    }
+    const sugeridos = sugestao.minutos // 25 (regra específica do dentista B)
+    // item de agenda de 60 min (diferença +35)
+    const item = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p2-05b-' + Date.now(),
+      data: '2026-10-14',
+      inicio: '09:00',
+      fim: '10:00',
+      profissional: prof.id,
+      paciente_nome: 'Paciente P2-05b',
+      paciente_telefone: '5521999994001',
+      origem: 'fixture',
+      teste: true,
+    })
+    const r = await ligarReserva(sugestao.planejamento_id, item.id)
+    const desvioCriado = r.desvio_id !== ''
+    const desvios = await listarDesvios()
+    const desvio = desvios.find((d) => d.id === r.desvio_id)
+    const semMotivo = desvio?.situacao === 'sem_motivo' && desvio.diferenca === 60 - sugeridos
+    await registrarMotivoDesvio(r.desvio_id, 'grade do profissional', 'agenda só tem bloco de 60')
+    const desvios2 = await listarDesvios()
+    const justificado = desvios2.find((d) => d.id === r.desvio_id)?.situacao === 'justificado'
+    await revisarDesvio(r.desvio_id)
+    const desvios3 = await listarDesvios()
+    const revisado = desvios3.find((d) => d.id === r.desvio_id)?.situacao === 'revisado'
+    passou = desvioCriado && semMotivo && justificado && revisado
+    detalhe =
+      'sugeridos ' +
+      sugeridos +
+      ' min (rota, tabela de teste); desvio criado: ' +
+      String(desvioCriado) +
+      '; sem_motivo com diferença ' +
+      (60 - sugeridos) +
+      ': ' +
+      String(semMotivo) +
+      '; motivo → justificado: ' +
+      String(justificado) +
+      '; revisar → revisado: ' +
+      String(revisado)
+    await pb.collection('agenda_itens').delete(item.id)
+    await pb.collection('profissionais').delete(prof.id)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparPlanejamentosTeste()
+  }
+  return {
+    cenario: 'P2-05b — desvio de duração: sem motivo → justificado → revisado (CA-1-10)',
+    esperado:
+      'Reserva com tempo diferente do sugerido (rota: 25 min × item 60 min) cria desvio sem_motivo (diferença +35); motivo r

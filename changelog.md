@@ -1,3 +1,11 @@
+## 2026-10-16 — task 5bcfa6f1 (SPEC-1-004, CA-1-18) — IMPLEMENTADA E PUBLICADA
+- Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_regras.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
+- Serviço confirmacao.ts: gerarListaDia, dividirSaidas (XLSX até limite / envio manual / corrigir telefone) e exportarXlsx (SheetJS import dinâmico; registro RN-15 em provas_execucoes; exportar NUNCA cria tentativa — RN-02).
+- Tela nova /confirmacoes (SomenteGestao): dia-alvo (default amanhã), tabela em ordem de horário com estado do contato, 3 blocos de saída, exportação com prévia/toast, banner "a central não envia mensagens nesta fase". Estados: carregando, vazio, erro role=alert.
+- package.json: dependência xlsx@^0.18.5 (import dinâmico — só carrega na exportação).
+- Provas P4-01 (lista do dia: 4 consultas, 3 válidas + 1 inválida, idempotência na 2ª geração) e P4-02 (limite 2 → 2 XLSX + 1 manual + 1 corrigir; exportação cria 0 tentativas) na tela Provas.
+- Publicado v0.0.49 (15579f4) 17:31 UTC; QA verde na 1ª tentativa; rota provada no ar (401 anônimo); pendências só .skip.config.json.
+
 ## 2026-10-16 — task 55a359b0 CONCLUÍDA (teste humano aprovado pelo dono)
 - "testei, pode seguir" 14h20 após 2 correções de bugs pegos no teste: P3-05 (hook texto×relação) e P3-11 (prova com massa oposta ao cenário).
 - Verificação independente: versão no ar = testada (v0.0.48, a347b1e, lastPublishedRef igual); QA verde; segredos limpos; diff 100% coberto por CA-1-14/15 + CA-SEQ-03 (sem sobra de escopo, sem linha vermelha); GitHub 8/8 arquivos de código + registros; rotas 401 anônimo; coleção pendencias com regra de acesso provada; checklist de UI 11/11.

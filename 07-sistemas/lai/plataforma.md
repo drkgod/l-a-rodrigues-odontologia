@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 0ce4ea1 (v0.0.46)
-- versao_publicada: 0ce4ea1 em 2026-10-16T14:08:16Z
-- ultima_task: 55a359b0 (lista de pacientes a agendar) — publicada, aguardando teste humano
+- versao_aplicada: 15579f4 (v0.0.49)
+- versao_publicada: 15579f4 em 2026-10-16T17:31:01Z
+- ultima_task: 5bcfa6f1 (lista de confirmação do dia) — publicada, aguardando teste humano
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -30,3 +30,11 @@
 | 15/10 | 6d5de2f5 (agrupar/validar sem regra) | e442ea4 (v0.0.41) | migration 0011, service planejamento.ts, tela Planejar.tsx, service provas.ts (P2-05), tela Provas.tsx |
 | 16/10 | 6d5de2f5 (debug teste humano — P2-05 imune a resíduo) | d9a5e12 (v0.0.42) | service provas.ts (asserção por ids da própria prova) |
 | 16/10 | 55a359b0 (lista pacientes a agendar) | 0ce4ea1 (v0.0.46) | migration 0012, hook pendencias_regras.js, service pendencias.ts, tela PacientesAgendar.tsx, App.tsx, Layout.tsx, provas.ts (P3-04/05/06/11), Provas.tsx |
+| 16/10 | 5bcfa6f1 (lista confirmação do dia) | 15579f4 (v0.0.49) | hook confirmacao_regras.js (rota lista-dia), service confirmacao.ts (gerarListaDia/dividirSaidas/exportarXlsx), tela Confirmacoes.tsx, App.tsx, Layout.tsx, provas.ts (P4-01/02), Provas.tsx, package.json (xlsx) |
+
+## Regras da plataforma
+
+- Fonte executável: Skip (projeto 65741). O espelho `codigo/` é cópia de consulta — nunca editar o espelho para mudar o sistema.
+- Todo commit no GitHub lista a versão Skip publicada correspondente (coluna "Versão publicada").
+- Provas executam contra o sistema real e gravam resultado em provas_execucoes; massa de teste sempre teste=true e apagada no fim.
+- Nada de segredos/credenciais nos arquivos do repositório.

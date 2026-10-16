@@ -10,6 +10,14 @@ import {
   validarCombinacao,
   type Planejamento,
 } from '@/services/planejamento'
+import {
+  importarPendencias,
+  listarPendencias,
+  montarLista,
+  mudarEstadoPendencia,
+  verificarAgendamentoFuturo,
+  type Pendencia,
+} from '@/services/pendencias'
 import { criarLead } from '@/services/leads'
 import {
   decidirLiberacao,
@@ -831,7 +839,8 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
         profissional: prof.id,
         paciente_nome: 'Avaliação P4 ' + i,
         origem: 'fixture',
-        teste: true,
+        teste:
+true,
       })
     }
     const terceiro = await verificarCapacidade(DATA_FIXTURE, '09:00', prof.id, 'avaliacao', true)
@@ -1156,6 +1165,209 @@ export async function executarProvaP2_05(): Promise<ResultadoProva> {
     observacao: passou
       ? 'CA-1-09 provado (agrupamento + validação).'
       : 'Verificar agrupamento/validação.',
+  }
+}
+
+// ===== PROVAS P3-04..P3-06 e P3-11-parcial (SPEC-1-003, CA-1-14/15, CA-SEQ-03) =====
+// Pendências de teste: massa criada aqui, apagada no fim (nunca dado real).
+
+async function criarPendenciaTeste(dados: {
+  paciente_nome: string
+  procedimento: string
+  profissional?: string
+  situacao?: 'a_agendar' | 'executada' | 'aguardando_condicao'
+  prontidao?: 'pronto' | 'aguardando_condicao'
+}): Promise<Pendencia> {
+  // imune a resíduo (lição P2-05): limpa pendências de teste de execuções anteriores
+  await apagarPendenciasTeste()
+  const csv = [
+    'paciente;telefone;procedimento;profissional;situacao',
+    [
+      dados.paciente_nome,
+      '5521999992001',
+      dados.procedimento,
+      dados.profissional || '',
+      dados.situacao || 'a_agendar',
+    ].join(';'),
+  ].join('\n')
+  const r = await importarPendencias(csv, 'prova-p3.csv', true)
+  if (r.gravadas !== 1) throw new Error('massa pendência: ' + r.gravadas + ' gravadas')
+  const lista = await listarPendencias()
+  const p = lista.find(
+    (x) =>
+      x.teste && x.paciente_nome === dados.paciente_nome && x.procedimento === dados.procedimento,
+  )
+  if (!p) throw new Error('pendência de teste não encontrada')
+  if (dados.prontidao) {
+    await pb
+      .collection('pendencias')
+      .update(p.id, { prontidao: dados.prontidao, motivo_revisao: '' })
+  }
+  return p
+}
+
+async function apagarPendenciasTeste(): Promise<void> {
+  const lista = await pb
+    .collection('pendencias')
+    .getFullList({ filter: 'teste = true' })
+    .catch(() => [])
+  for (const p of lista) {
+    await pb
+      .collection('pendencias')
+      .delete(p.id)
+      .catch(() => {})
+  }
+}
+
+// P3-04 — pendência (procedimento não executado) → a_agendar; executada → sai.
+export async function executarProvaP3_04(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPendenciaTeste({
+      paciente_nome: 'Paciente Prova P3-04',
+      procedimento: 'Coroa Prova P3',
+      prontidao: 'pronto',
+    })
+    const antes = montarLista(await listarPendencias())
+    const naLista = antes.aAgendar.some((x) => x.id === p.id)
+    await mudarEstadoPendencia(p.id, 'executada')
+    const depois = montarLista(await listarPendencias())
+    const saiu =
+      !depois.aAgendar.some((x) => x.id === p.id) && !depois.paraRevisao.some((x) => x.id === p.id)
+    passou = naLista && saiu
+    detalhe = `pendência pronta → a_agendar: ${String(naLista)}; após executada → sai da lista: ${String(saiu)}`
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarPendenciasTeste()
+  }
+  return {
+    cenario: 'P3-04 — pendência entra em a_agendar e sai quando executada',
+    esperado: 'Pendência pronta aparece em "A agendar"; marcada executada, sai da lista.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-14 provado (pendência).' : 'Verificar lista de pendências.',
+  }
+}
+
+// P3-05 — pendência com agendamento futuro verificado do mesmo profissional → agendado.
+export async function executarProvaP3_05(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P3-05',
+      origem: 'fixture',
+      ativo: true,
+    })
+    const p = await criarPendenciaTeste({
+      paciente_nome: 'Paciente Prova P3-05',
+      procedimento: 'Implante Prova P3',
+      profissional: 'Profissional Teste P3-05',
+      prontidao: 'pronto',
+    })
+    // agendamento FUTURO de teste do mesmo paciente + mesmo profissional
+    const futuro = new Date()
+    futuro.setDate(futuro.getDate() + 7)
+    const dataFutura = futuro.toISOString().slice(0, 10)
+    const item = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p3-05-' + Date.now(),
+      data: dataFutura,
+      inicio: '10:00',
+      fim: '10:30',
+      profissional: prof.id,
+      paciente_nome: 'Paciente Prova P3-05',
+      origem: 'fixture',
+      teste: true,
+    })
+    const temFuturo = await verificarAgendamentoFuturo(p.id)
+    const lista = montarLista(await listarPendencias())
+    const emAgendado = lista.agendado.some((x) => x.id === p.id)
+    passou = temFuturo && emAgendado
+    detalhe = `agendamento futuro ${dataFutura} verificado: ${String(temFuturo)}; item em "Agendado": ${String(emAgendado)}`
+    await pb.collection('agenda_itens').delete(item.id)
+    await pb.collection('profissionais').delete(prof.id)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarSobrasDeTeste()
+    await apagarPendenciasTeste()
+  }
+  return {
+    cenario: 'P3-05 — pendência com agendamento futuro verificado → agendado',
+    esperado:
+      'Pendência do mesmo profissional com horário futuro verificado sai dos pendentes e vai para "Agendado".',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-14 provado (sai da lista).' : 'Verificar verificação de agenda.',
+  }
+}
+
+// P3-06 — item aguardando_condicao → fora dos elegíveis e em "para revisão".
+export async function executarProvaP3_06(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPendenciaTeste({
+      paciente_nome: 'Paciente Prova P3-06',
+      procedimento: 'Lente Prova P3',
+      prontidao: 'pronto',
+    })
+    await mudarEstadoPendencia(p.id, 'aguardando_condicao', 'aguardando consolidação')
+    const lista = montarLista(await listarPendencias())
+    const foraElegiveis = !lista.aAgendar.some((x) => x.id === p.id)
+    const emRevisao = lista.paraRevisao.some(
+      (x) => x.id === p.id && (x.motivo_revisao || '').indexOf('consolidação') >= 0,
+    )
+    passou = foraElegiveis && emRevisao
+    detalhe = `fora dos elegíveis: ${String(foraElegiveis)}; em "para revisão" com motivo: ${String(emRevisao)}`
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarPendenciasTeste()
+  }
+  return {
+    cenario: 'P3-06 — aguardando condição → para revisão, fora dos elegíveis',
+    esperado:
+      'Item com aguardando_condicao não é elegível de encaixe e aparece em "para revisão" com o motivo.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-15 provado.' : 'Verificar prontidão/revisão.',
+  }
+}
+
+// P3-11 (parcial) — tratamento sem plano/liberação → em revisão com o motivo da emenda.
+// A parte plena (dependências A→B do plano) fica para o editor de etapas.
+export async function executarProvaP3_11(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPendenciaTeste({
+      paciente_nome: 'Paciente Prova P3-11',
+      procedimento: 'Protocolo Prova P3',
+      prontidao: 'pronto',
+    })
+    const lista = montarLista(await listarPendencias())
+    const emRevisao = lista.paraRevisao.some((x) => x.id === p.id)
+    const motivoEmenda = lista.paraRevisao.some(
+      (x) => x.id === p.id && (x.motivo_revisao || '').indexOf('avaliador') >= 0,
+    )
+    passou = emRevisao && motivoEmenda
+    detalhe = `tratamento sem plano → em "para revisão": ${String(emRevisao)}; motivo "aguarda sequência/liberação do avaliador": ${String(motivoEmenda)}`
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await apagarPendenciasTeste()
+  }
+  return {
+    cenario: 'P3-11 (parcial) — tratamento sem plano aguarda sequência/liberação do avaliador',
+    esperado:
+      'Pendência de tratamento sem plano aprovado fica em "para revisão" com o motivo da emenda; não é elegível de encaixe.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-SEQ-03 provado (sem plano).' : 'Verificar emenda CA-SEQ-03.',
   }
 }
 

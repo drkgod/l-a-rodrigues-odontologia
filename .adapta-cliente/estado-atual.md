@@ -10,13 +10,13 @@
 - autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
 - decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
 - teste_humano: pendente (roteiro entregue 16/10: provas P2-05b/06 + fluxo real na tela Planejar)
-- verificacao_automatica: passou (QA verde; publicado 3b817d9; getBoolean eliminado dos hooks; lastPublishedRef = atual)
+- verificacao_automatica: passou (QA verde; publicado ff39792; fix ja_aplicado provado no QA)
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 3b817d9 (v0.0.54)
-- skip_publicacao: publicada:3b817d9 em 2026-10-16T20:13:24Z
-- pendente_github: nao
+- skip_versao: ff39792 (v0.0.55)
+- skip_publicacao: publicada:ff39792 em 2026-10-16T20:19:17Z
+- pendente_github: sim:provas.ts parcial no remoto (parte 1/3 restaurada; anexos 2-4 pendentes por limite de tempo do subagente) — espelho local correto; reenvio na conclusão
 - espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
 - ultima_acao: 16/10 16h28 — teste humano: P2-05b falhou "Only superusers can perform this action"; em correção
 - proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha

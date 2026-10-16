@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: d9a5e12 (v0.0.42)
-- versao_publicada: d9a5e12 em 2026-10-16T13:45:38Z
-- ultima_task: 6d5de2f5 (agrupar/validar casos sem regra) — CONCLUÍDA com teste humano aprovado 16/10 10h54
+- versao_aplicada: 0ce4ea1 (v0.0.46)
+- versao_publicada: 0ce4ea1 em 2026-10-16T14:08:16Z
+- ultima_task: 55a359b0 (lista de pacientes a agendar) — publicada, aguardando teste humano
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -29,3 +29,4 @@
 | 14/10 | 8d76cea5 (debug teste humano) | 414e0e6 (v0.0.40) | src/pages/Leads.tsx (import criarLead) |
 | 15/10 | 6d5de2f5 (agrupar/validar sem regra) | e442ea4 (v0.0.41) | migration 0011, service planejamento.ts, tela Planejar.tsx, service provas.ts (P2-05), tela Provas.tsx |
 | 16/10 | 6d5de2f5 (debug teste humano — P2-05 imune a resíduo) | d9a5e12 (v0.0.42) | service provas.ts (asserção por ids da própria prova) |
+| 16/10 | 55a359b0 (lista pacientes a agendar) | 0ce4ea1 (v0.0.46) | migration 0012, hook pendencias_regras.js, service pendencias.ts, tela PacientesAgendar.tsx, App.tsx, Layout.tsx, provas.ts (P3-04/05/06/11), Provas.tsx |

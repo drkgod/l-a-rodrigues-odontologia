@@ -1,23 +1,23 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: 6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 — CONCLUÍDA
+- task_id: 55a359b0-bb52-4a85-8648-77d323dc1620 (+90ad21b0)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-002-tabela-duracao.md
-- analise: .adapta-cliente/analises/6d5de2f5-lista-sem-regra.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada 14/10 21h38 ("pode seguir") e reiterada 15/10
-- decisao_cliente: nenhuma pendente nesta task
-- teste_humano: aprovado 16/10 10h54 ("testei, pode seguir") — 1ª rodada falhou (resíduo na asserção da P2-05), corrigido na v0.0.42 e aprovado
-- verificacao_automatica: passou (QA verde nas 2 aplicações; migration 0011 aplicada; produção provada lastPublishedRef = d9a5e12)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (2 padrões novos 16/10)
+- spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
+- analise: .adapta-cliente/analises/55a359b0-lista-pacientes.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada 16/10 11h00 ("pode")
+- decisao_cliente: premissas aceitas sem objeção (leads aguardando = em_atendimento/aguardando_retorno; CSV paciente;telefone;procedimento;profissional;situacao; pendencias_desde vazio = mostra tudo)
+- teste_humano: pendente (roteiro entregue 16/10: provas P3-04/05/06/11 + tela /pacientes-a-agendar)
+- verificacao_automatica: passou (QA verde; migration 0012 na nuvem provada; rotas 401 anônimo; coleção anônimo vê 0; lastPublishedRef = 0ce4ea1)
+- aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: d9a5e12 (v0.0.42)
-- skip_publicacao: publicada:d9a5e12 em 2026-10-16T13:45:38Z
+- skip_versao: 0ce4ea1 (v0.0.46)
+- skip_publicacao: publicada:0ce4ea1 em 2026-10-16T14:08:16Z
 - pendente_github: nao
-- espelho: atualizado e provado byte a byte (provas.ts) — commits 3bc6345/22e855e/9cea676/429554d/c57e3867/118c7e5/0766a85
-- ultima_acao: 16/10 10h54 — teste humano aprovado pelo dono; task concluída; commit de conclusão no GitHub desta resposta
-- proxima_acao: aguardar o dono pedir a próxima task ("próxima task")
-- atualizado_em: 2026-10-16T10:56:00-03:00
+- espelho: atualizado (8 arquivos: migration 0012, hook, serviço, tela, App, Layout, provas.ts, Provas.tsx)
+- ultima_acao: 16/10 11h10 — task 55a359b0 implementada e publicada (v0.0.46); commit GitHub desta resposta
+- proxima_acao: dono testa na produção (roteiro enviado) e responde "testei, pode seguir" ou relata falha
+- atualizado_em: 2026-10-16T11:12:00-03:00

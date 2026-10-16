@@ -1,3 +1,11 @@
+## 2026-10-16 — task 55a359b0 (SPEC-1-003, CA-1-14/15, CA-SEQ-03) — IMPLEMENTADA E PUBLICADA
+- Migration 0012: coleção pendencias (paciente, telefone, procedimento, dentista, situação de execução, agendamento futuro verificado, disponibilidade 1/2, prontidão, motivo de revisão, origem, teste) + campo pendencias_desde em config_unidade. Migration aplicou só no 2º apply (pod do backend não recarregou na 1ª publicação — tocada no hook pra forçar reload, v0.0.46).
+- Hook pendencias_regras.js: rotas server-side /pendencias/importar (CSV linha a linha, rejeita com motivo, dedup por paciente+procedimento+profissional+arquivo), /pendencias/estado (executada/aguardando_condicao com motivo) e /pendencias/verificar-agendamento (cruza agenda_itens: mesmo paciente+profissional, data futura, não cancelado).
+- Serviço pendencias.ts + tela /pacientes-a-agendar (SomenteGestao): 3 seções — A agendar (pendências prontas + leads em_atendimento/aguardando_retorno + faltas a reagendar), Agendado (verificado) e Para revisão (com motivo); importação CSV com prévia; disponibilidade e prontidão editáveis; marcar executada com confirmação.
+- Emenda CA-SEQ-03: pendência de tratamento sem plano aprovado vai para "para revisão" com motivo "aguarda sequência/liberação do avaliador" — não é elegível de encaixe.
+- Provas P3-04 (pendência entra/sai), P3-05 (agendamento futuro verificado → agendado), P3-06 (aguardando_condicao → revisão) e P3-11 parcial (sem plano → revisão) na tela Provas; regressão P3-01..03 e P2-01..05 intocada.
+- Publicado v0.0.46 (0ce4ea1) 14:08 UTC; QA verde (1 erro meu de </CardBody> corrigido no 2º apply). Produção provada: lastPublishedRef = 0ce4ea1; coleção pendencias na nuvem (anônimo vê 0); rotas anônimo = 401 (regras de acesso ok). E2E completo por API fica para o teste humano (login do dono).
+
 - 16/10 10h54: teste humano APROVADO pelo dono ("testei, pode seguir"). Task 6d5de2f5 CONCLUÍDA (v0.0.42, d9a5e12 no ar). fase.md 13/54 cards. Aprendizado capturado (2 padrões: prova imune a resíduo; push truncado no GitHub).
 
 ## 2026-10-16 — task 6d5de2f5 (debug teste humano)

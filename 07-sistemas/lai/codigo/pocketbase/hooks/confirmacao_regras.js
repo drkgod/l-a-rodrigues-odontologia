@@ -644,10 +644,13 @@ routerAdd(
     const pros = $app.findRecordsByFilter('profissionais', 'id != ""', '', 200, 0)
     for (let i = 0; i < pros.length; i++) nomesProf[pros[i].id] = pros[i].getString('nome')
 
-    // Contatos existentes do dia (um por agenda_item)
+    // Contatos existentes (um por agenda_item, idempotente entre massas teste e reais):
+    // NÃO filtrar por teste — senão uma 2ª geração com flag diferente tenta criar um
+    // novo contato para o mesmo item e estoura o índice único agenda_item
+    // ("Value must be unique" — bug do teste humano 16/10, f124df8f).
     const contatos = $app.findRecordsByFilter(
       'contatos_confirmacao',
-      'teste = ' + (teste ? 'true' : 'false'),
+      'agenda_item != ""',
       '',
       500,
       0,

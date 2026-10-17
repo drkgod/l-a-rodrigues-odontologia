@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
 - analise: .adapta-cliente/analises/f124df8f-registrar-resposta.md
-- etapa: aguardando_teste_humano
+- etapa: em_correcao
 - autorizacao_implementacao: CONFIRMADA 16/10 20h43 ("Pode implementar")
 - decisao_cliente: nenhuma pendente — backend da CA-1-19 já existe (a9f9e30e); recorte desta task é tela + coleção de cobertura + provas
 - teste_humano: pendente (roteiro na análise: respostas na linha, mover não respondentes, cobertura por turno, provas P4-03/03b)
@@ -16,9 +16,9 @@
 - skip_projeto: 65741
 - skip_versao: ced239c (v0.0.56)
 - skip_publicacao: publicada:ced239c em 2026-10-17T00:37:34Z
-- pendente_github: nao
+- pendente_github: sim:debug f124df8f v0.0.57 f3996b8 (fix Value must be unique) publicado; falta enviar espelho+registros ao GitHub
 - espelho: atualizado (7 arquivos da fdca5fb0; provas.ts íntegro por blob SHA)
 - housekeeping: 16/10 — card 8d76cea5 + subtask ac46ef6d marcados [x] na fase (concluídos 14/10, checkbox faltava); subtask eec75533 (importar leads APP CRC) segue aberta aguardando exportação (CL-PEND-001)
-- ultima_acao: 16/10 21h45 — entrega no ar (v0.0.56): resposta na linha, mover não respondentes, cobertura por turno, provas P4-03/03b; aguardando teste humano
+- ultima_acao: 16/10 22h08 — teste humano pegou "Value must be unique": lista-dia não achava contato da massa por filtro de teste e duplicava agenda_item. Fix v0.0.57 f3996b8 (busca sem filtro teste); aguardando re-teste
 - proxima_acao: aguardar autorização para implementar ("pode")
-- atualizado_em: 2026-10-16T21:45:00-03:00
+- atualizado_em: 2026-10-16T22:08:00-03:00

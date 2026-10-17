@@ -53,6 +53,8 @@ import {
   executarProvaP3_04,
   executarProvaP3_05,
   executarProvaP3_06,
+  executarProvaP3_09a,
+  executarProvaP3_09b,
   executarProvaP3_11,
   limparExecucoes,
   listarExecucoes,
@@ -302,6 +304,20 @@ const Provas = () => {
             disabled={executando}
           >
             P3-11 (sem plano)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_09a, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-09a (ficha: evento + prazo)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_09b, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-09b (dentista sem acesso)
           </Button>
           <Button
             variant="outline"

@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: f4d3b7b (v0.0.59)
-- versao_publicada: f4d3b7b em 2026-10-17T01:39:24Z
-- ultima_task: f124df8f (resposta do paciente + cobertura de ligação) — CONCLUÍDA (teste do dono aprovado 17/10 00h27)
+- versao_aplicada: eb44acb (v0.0.60)
+- versao_publicada: eb44acb em 2026-10-17T14:08:50Z
+- ultima_task: 35bff70c (ficha do paciente) — publicada, aguardando teste humano
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -37,6 +37,7 @@
 | 16/10 | fdca5fb0 (debug 3 — dedup por hash aceito) | ff39792 (v0.0.55) | provas.ts (criarTabelaTesteP2 aceita ja_aplicado) |
 | 16/10 | f124df8f (resposta + cobertura de ligação) | ced239c (v0.0.56) | migration 0014 (config_turno_ligacao), hook confirmacao_regras.js (turno/responsavel na lista-dia), confirmacao.ts (ConfigTurno), Confirmacoes.tsx (ações + cards), provas.ts (P4-03/03b), Provas.tsx |
 | 17/10 | f124df8f (debug 1-3: Value must be unique, massa idempotente, getString) | f3996b8 (v0.0.57) / 1595728 (v0.0.58) / f4d3b7b (v0.0.59) | hook confirmacao_regras.js (lista-dia sem filtro teste), confirmacao.ts (massa idempotente), provas.ts (campos diretos) |
+| 17/10 | 35bff70c (ficha do paciente) | eb44acb (v0.0.60) | hook ficha_regras.js (evento + próxima ação), service ficha.ts, tela Ficha.tsx, App.tsx (rotas /ficha), Layout.tsx (menu Fichas), provas.ts (P3-09a/b), Provas.tsx |
 
 ## Regras da plataforma
 

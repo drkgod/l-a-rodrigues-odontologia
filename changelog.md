@@ -1,3 +1,4 @@
+- 2026-10-17 · [Luiz] · DEBUG2 35bff70c: P3-09b falhou ("error validating submitted data") — a prova criava usuário dentista com campo teste:true, mas a coleção users NÃO tem campo teste (schema correto; bug da prova). Fix: sem teste no create + limpeza de usuários prova-dentista-* no finally (skip 8ce1ebd v0.0.64).
 - 2026-10-17 · [Luiz] · ITER 35bff70c: lista de fichas vazia no teste humano — nada no produto criava ficha de paciente (cadastrar lead criava só lead; tela Fichas lista só pacientes). Corrigido conforme SPEC-1-003 "ficha única": cadastrar lead (manual ou APP CRC) cria a ficha vinculada (lead.paciente + paciente.lead) e eventos de lead gravam as relações (aparecem no histórico); botão "Nova ficha" na tela Fichas (rota /backend/v1/ficha/criar, gestão/CRC, RN-03 duplicado) (skip b208f3c v0.0.62).
 - 2026-10-17 · [Luiz] · DEBUG 35bff70c: P3-09a falhou no teste humano ("Something went wrong") — causa raiz nos logs do Skip: listarEventos filtrava paciente/lead (TEXTO) mas a migration 0010 trocou por relações paciente_rel/lead_rel (filtro por texto = 500 no PocketBase v0.36); hook agora grava a relação junto; limpeza da massa de teste virou rota do servidor (eventos é append-only até pra gestão) (skip 8dc1046 v0.0.61).
 - 2026-10-17 · [Luiz] · Task 35bff70c entregue: ficha do paciente — tela /ficha com busca, histórico em ordem (eventos append-only com autor/hora), próxima ação com prazo (vencido destacado), acesso por função (dentista sem acesso), hook ficha_regras (evento + próxima ação com autor da sessão), provas P3-09a/b (skip eb44acb v0.0.60).
@@ -51,7 +52,7 @@
 
 ## 2026-10-16 — task 6d5de2f5 (debug teste humano)
 - Teste do dono pegou bug real: P2-05 falhou com "agrupamento inesperado: 3 grupo(s)" — a asserção lia a coleção INTEIRA de planejamentos de teste; resíduo de execuções anteriores contaminou a contagem (50 execuções registradas).
-- Correção (v0.0.42, d9a5e12, QA verde, publicado 13:45 UTC): a prova agora agrupa EXATAMENTE os 3 planejamentos que ela mesma criou (ids devolvidos pela rota) e limpa resíduo de planejamentos de teste antes de montar a massa. Mensagem de erro enriquecida com os grupos encontrados.
+- Correção (v0.0.42, d9a5e12, QA verde, publicado 13:45 UTC): a prova agora agrupa EXATAMENTE os 3 planejamentos que ela mesma criou (ids devolvidos pela rota) — limpa resíduo de planejamentos de teste antes de montar a massa. Mensagem de erro enriquecida com os grupos encontrados.
 - Motor, tela e validação intocados — bug era da prova, não do produto.
 
 ## 2026-10-15 — task 6d5de2f5 (SPEC-1-002, CA-1-09) — IMPLEMENTADA E PUBLICADA

@@ -1,3 +1,5 @@
+- 2026-10-17 · [Luiz] · Task c9b95987 concluída: teste humano aprovado pelo dono ("testei, pode seguir" 09h46) — 2 e 4 coroas com dois dentistas conferindo a tabela; tempo sugerido = regra específica de cada dentista (v0.0.59 f4d3b7b, sem alteração de código).
+- 2026-10-17 · [Luiz] · Registro: checkboxes de 8d76cea5 + ac46ef6d re-marcar [x] (concluídos e testados 14/10 — correção de 16/10 não foi gravada em commit e se perdeu no reset; lição: housekeeping vai no commit imediatamente).
 - 2026-10-17 · [Luiz] · Task f124df8f concluída: resposta do paciente + cobertura de ligação — botões por linha, mover não respondentes com responsável do turno, cobertura editável pela gestão (migration 0014), provas P4-03/03b; testado pelo dono ("pode seguir" 00h27) na v0.0.59 f4d3b7b (https://projeto-lai-19327.goskip.app).
 - 2026-10-16 · [Luiz] · DEBUG3 f124df8f: P4-03b falhou no teste humano — "getString is not a function": o SDK JS do PocketBase devolve record como objeto (campo direto), não Record do servidor. Provas P4-03/03b usavam getString/getBool; corrigido para campos diretos (skip f4d3b7b v0.0.59).
 - 2026-10-16 · [Luiz] · DEBUG2 f124df8f: massa de teste 2× acumulava 8 consultas — criarMassaConfirmacao agora é idempotente (reusa se o dia já tem fixture) (skip 1595728 v0.0.58).
@@ -22,7 +24,7 @@
 
 - 2026-10-16 · [Luiz] · DEBUG task 5bcfa6f1: "não consegui baixar a planilha" (lista vazia) → causa raiz: sem consultas no dia-alvo (massa da prova se auto-apaga; agenda real não importada) + UX sem orientação → corrigido: botão "Criar massa de teste" na tela + textos de estado (skip 6e10115 v0.0.50).
 ## 2026-10-16 — task 5bcfa6f1 (SPEC-1-004, CA-1-18) — IMPLEMENTADA E PUBLICADA
-- Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_rejs.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
+- Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_regras.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
 - Serviço confirmacao.ts: gerarListaDia, dividirSaidas (XLSX até limite / envio manual / corrigir telefone) e exportarXlsx (SheetJS import dinâmico; registro RN-15 em provas_execucoes; exportar NUNCA cria tentativa — RN-02).
 - Tela nova /confirmacoes (SomenteGestao): dia-alvo (default amanhã), tabela em ordem de horário com estado do contato, 3 blocos de saída, exportação com prévia/toast, banner "a central não envia mensagens nesta fase". Estados: carregando, vazio, erro role=alert.
 - package.json: dependência xlsx@^0.18.5 (import dinâmico — só carrega na exportação).

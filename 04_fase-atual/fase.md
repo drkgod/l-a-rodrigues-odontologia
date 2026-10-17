@@ -28,9 +28,9 @@
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Horários por dia da semana a partir da tabela enviada (CL-001); dentista sem horário mostra "horário não cadastrado" (SPEC-1-001).
   - [x] Testar a agenda de um dia real com a equipe @"L A Rodrigues" !09/10/2026  <!-- id:b1b67130-339f-4348-bfd5-db6bb5a12f0c -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Roteiro do teste humano da SPEC-1-001: conferir horários, trocar para a visão por cadeira, ver uma desmarcação de teste liberar o horário e entrar com usuário sem função. Responder "testei, pode seguir" no card (CL-008).
-- [ ] Cadastrar leads com a origem da campanha @"L A Rodrigues" !09/10/2026  <!-- id:8d76cea5-87db-4604-9180-148613b0a5d1 -->
+- [x] Cadastrar leads com a origem da campanha @"L A Rodrigues" !09/10/2026  <!-- id:8d76cea5-87db-4604-9180-148613b0a5d1 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lead com origem campanha (código), manual ou desconhecida, nunca preenchida por suposição; telefone repetido mostra o possível duplicado sem juntar fichas (SPEC-1-003 · CA-1-12 e CA-1-13). Provas P3-01 a P3-03.
-  - [ ] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
+  - [x] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Código de campanha combinado com a agência para atribuição de origem dos leads; SPEC-1-003.
   - [ ] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026  <!-- id:eec75533-0163-4b64-a7d3-cb2bc6e91a31 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Leads em aberto do APP CRC importados por arquivo; SPEC-1-003.
@@ -48,7 +48,7 @@
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.
 - [x] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Desvio com motivo obrigatório quando a reserva difere do sugerido; reservas sem planejamento e planejamento sem reserva no fim do dia (CA-1-11); teste de duas e quatro coroas com dentistas diferentes (subtask c9b95987). SPEC-1-002 · CA-1-10/11 · P2-05/06.
-  - [ ] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026  <!-- id:c9b95987-0344-4a5f-b528-b5561c1717ca -->
+  - [x] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026  <!-- id:c9b95987-0344-4a5f-b528-b5561c1717ca -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano com 2 CRCs: 2 e 4 coroas com dois dentistas conferindo a tabela; SPEC-1-002.
 - [ ] Montar a ficha do paciente com histórico e próxima ação @"L A Rodrigues" !14/10/2026  <!-- id:35bff70c-73f2-40e5-96cf-c17bd68d1499 -->
   > Construir ficha com histórico, responsável/próxima ação e acesso por função; aba Etapas do tratamento consome as tasks novas de modelo/plano, sem CRC alterar decisão clínica. Dados do planejamento mínimo apenas para avaliador habilitado atribuído e equipe operacional autorizada (SPEC-1-003 · CA-1-16 · CA-SEQ-01 · P3-09).

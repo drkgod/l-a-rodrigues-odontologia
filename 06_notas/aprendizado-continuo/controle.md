@@ -23,3 +23,4 @@ Padrões e lições capturados durante a execução das tasks. Um padrão = uma 
 - 16/10 (6d5de2f5): create_or_update_file no GitHub pode gravar arquivo TRUNCADO sem erro na resposta (22KB de 48KB) — conferir size/blob SHA pós-push e reparar com push_files.
 - 2026-10-16T19:40:00-03:00 · task fdca5fb0 · capturado · 06_notas/aprendizado-continuo/AP-2026-10-16-1940-prova-massa-dedup-hash.md (prova re-executável aceita ja_aplicado do dedup por hash)
 - 17/10 (f124df8f): record do SDK JS do PocketBase é objeto plano — no navegador leia campo direto (contato.estado), nunca .getString()/.getBool() (API do servidor); QA/TS não pega (objeto any) — teste humano pegou.
+- 17/10 (c9b95987): housekeeping de fase/estado só existe depois do commit — correção gravada só no disco se perde no reset do clone; toda alteração de registro sai no próximo commit do fluxo.

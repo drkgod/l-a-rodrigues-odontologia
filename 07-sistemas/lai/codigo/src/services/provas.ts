@@ -1117,15 +1117,15 @@ export async function executarProvaP4_03(): Promise<ResultadoProva> {
     const antes = await pb.collection('agenda_itens').getOne(massa.itemId)
     const resposta = await registrarResposta(massa.contatoId, 'confirmou', true)
     const contatoDepois = await pb.collection('contatos_confirmacao').getOne(massa.contatoId)
-    const estadoMudou = contatoDepois.getString('estado') === 'confirmou'
+    const estadoMudou = contatoDepois.estado === 'confirmou'
     // régua interrompida: registrar outra mensagem NÃO muda o estado (não é pendente)
     await registrarMensagem(massa.contatoId, 2, 'enviada', true)
     const contatoFinal = await pb.collection('contatos_confirmacao').getOne(massa.contatoId)
-    const reguaInterrompida = contatoFinal.getString('estado') === 'confirmou'
+    const reguaInterrompida = contatoFinal.estado === 'confirmou'
     // consulta continua agendada: agenda_itens intacto (mesmo item, mesmo início)
     const depois = await pb.collection('agenda_itens').getOne(massa.itemId)
     const consultaIntacta =
-      depois.getString('inicio') === antes.getString('inicio') && !depois.getBool('cancelado')
+      depois.inicio === antes.inicio && !depois.cancelado
     passou = contagemDistinta && semDuplicar && estadoMudou && reguaInterrompida && consultaIntacta
     detalhe =
       'mensagens: ' +
@@ -1139,7 +1139,7 @@ export async function executarProvaP4_03(): Promise<ResultadoProva> {
       '); resposta situação ' +
       resposta.situacao +
       ' → estado ' +
-      contatoDepois.getString('estado') +
+      contatoDepois.estado +
       '; régua interrompida: ' +
       String(reguaInterrompida) +
       '; consulta segue agendada: ' +
@@ -1231,30 +1231,30 @@ export async function executarProvaP4_03b(): Promise<ResultadoProva> {
       .getOne(contatoConfirmou.id)
     passou =
       r.movidos === 2 &&
-      contatoManhaDepois.getString('estado') === 'em_lista_ligacao' &&
-      contatoManhaDepois.getString('turno') === 'manha' &&
-      contatoManhaDepois.getString('responsavel') === respManha &&
-      contatoTardeDepois.getString('estado') === 'em_lista_ligacao' &&
-      contatoTardeDepois.getString('turno') === 'tarde' &&
-      contatoTardeDepois.getString('responsavel') === respTarde &&
-      contatoConfirmouDepois.getString('estado') === 'confirmou'
+      contatoManhaDepois.estado === 'em_lista_ligacao' &&
+      contatoManhaDepois.turno === 'manha' &&
+      contatoManhaDepois.responsavel === respManha &&
+      contatoTardeDepois.estado === 'em_lista_ligacao' &&
+      contatoTardeDepois.turno === 'tarde' &&
+      contatoTardeDepois.responsavel === respTarde &&
+      contatoConfirmouDepois.estado === 'confirmou'
     detalhe =
       'movidos ' +
       r.movidos +
       '; manhã: ' +
-      contatoManhaDepois.getString('estado') +
+      contatoManhaDepois.estado +
       ' (' +
-      contatoManhaDepois.getString('turno') +
+      contatoManhaDepois.turno +
       ' → ' +
-      contatoManhaDepois.getString('responsavel') +
+      contatoManhaDepois.responsavel +
       '); tarde: ' +
-      contatoTardeDepois.getString('estado') +
+      contatoTardeDepois.estado +
       ' (' +
-      contatoTardeDepois.getString('turno') +
+      contatoTardeDepois.turno +
       ' → ' +
-      contatoTardeDepois.getString('responsavel') +
+      contatoTardeDepois.responsavel +
       '); confirmou permanece: ' +
-      contatoConfirmouDepois.getString('estado')
+      contatoConfirmouDepois.estado
     await pb.collection('agenda_itens').delete(manha.id)
     await pb.collection('agenda_itens').delete(tarde.id)
     await pb.collection('profissionais').delete(prof.id)

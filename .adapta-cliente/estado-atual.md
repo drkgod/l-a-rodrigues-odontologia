@@ -6,19 +6,19 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
 - analise: .adapta-cliente/analises/f124df8f-registrar-resposta.md
-- etapa: aguardando_teste_humano
+- etapa: concluida
 - autorizacao_implementacao: CONFIRMADA 16/10 20h43 ("Pode implementar")
 - decisao_cliente: nenhuma pendente — backend da CA-1-19 já existe (a9f9e30e); recorte desta task é tela + coleção de cobertura + provas
-- teste_humano: pendente (roteiro na análise: respostas na linha, mover não respondentes, cobertura por turno, provas P4-03/03b)
-- verificacao_automatica: passou (QA verde; v0.0.56 ced239c publicado; migration 0014 aplicada na nuvem; coleção config_turno_ligacao criada)
-- aprendizado: pendente (triagem ao concluir)
+- teste_humano: APROVADO 17/10 00h27 ("pode seguir" — dono) na v0.0.59 f4d3b7b
+- verificacao_automatica: passou (revalidação do zero na conclusão: versão no ar = testada f4d3b7b; espelho íntegro 0 getString; massa idempotente; lista-dia sem filtro teste; QA verde 56→59; 0 segredos; diff de escopo limpo; GitHub íntegro)
+- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-17-0027-sdk-js-record-plano.md
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: f4d3b7b (v0.0.59)
 - skip_publicacao: publicada:f4d3b7b em 2026-10-17T01:39:24Z
-- pendente_github: nao (debug2 8fb5e5f + debug3 a0b4511/1be6cdd no GitHub)
+- pendente_github: nao (conclusão enviada no commit do fechamento)
 - espelho: atualizado (7 arquivos da fdca5fb0; provas.ts íntegro por blob SHA)
 - housekeeping: 16/10 — card 8d76cea5 + subtask ac46ef6d marcados [x] na fase (concluídos 14/10, checkbox faltava); subtask eec75533 (importar leads APP CRC) segue aberta aguardando exportação (CL-PEND-001)
-- ultima_acao: 16/10 22h30 — re-teste: erro sumiu porém massa ficou com 8 consultas (2×). Fix v0.0.58 1595728: massa idempotente. 16/10 22h40 — re-teste: P4-03b falhou "getString is not a function". Fix v0.0.59 f4d3b7b: provas usam campos diretos do record; aguardando re-teste
-- proxima_acao: aguardar autorização para implementar ("pode")
-- atualizado_em: 2026-10-16T23:00:00-03:00
+- ultima_acao: 17/10 00h27 — teste humano aprovado ("pode seguir"); conclusão: fase 19/54 (35%), STATUS/changelog/fase atualizados, aprendizado capturado, GitHub enviado
+- proxima_acao: nenhuma — task concluída; próxima task exige pedido do dono ("próxima task")
+- atualizado_em: 2026-10-17T00:30:00-03:00

@@ -39,11 +39,12 @@ export async function registrarLigacao(
   contatoId: string,
   resultado: string,
   teste = false,
+  feitaEm?: string,
 ): Promise<ResultadoRegistro> {
   try {
     return await pb.send('/backend/v1/ligacao/registrar', {
       method: 'POST',
-      body: { contato: contatoId, resultado, teste },
+      body: { contato: contatoId, resultado, teste, feita_em: feitaEm || '' },
     })
   } catch (erro) {
     throw new Error(getErrorMessage(erro) || 'Não foi possível registrar a ligação.')
@@ -80,6 +81,60 @@ export async function moverNaoRespondentes(data: string): Promise<ResultadoMover
     })
   } catch (erro) {
     throw new Error(getErrorMessage(erro) || 'Não foi possível mover os não respondentes.')
+  }
+}
+
+// Task f124df8f — cobertura de ligação por turno (CA-1-19: responsável do turno).
+export interface ConfigTurno {
+  id: string
+  turno: 'manha' | 'tarde'
+  responsavel: string
+  atualizado_por: string
+  teste: boolean
+}
+
+export async function listarTurnos(): Promise<ConfigTurno[]> {
+  try {
+    return await pb.collection('config_turno_ligacao').getFullList({ sort: 'created' })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível carregar a cobertura de ligação.')
+  }
+}
+
+// Gestão define o responsável do turno (coleção nova — migration 0014).
+export async function salvarTurno(
+  id: string,
+  responsavel: string,
+  autor: string,
+): Promise<ConfigTurno> {
+  try {
+    return await pb.collection('config_turno_ligacao').update(id, {
+      responsavel,
+      atualizado_por: autor,
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível salvar a cobertura de ligação.')
+  }
+}
+
+// Cria os 2 registros padrão (manhã/tarde) se a coleção ainda não tiver —
+// a tela chama ao abrir (primeira edição); sem isso o hook vira "a definir".
+export async function garantirTurnosPadrao(autor: string): Promise<ConfigTurno[]> {
+  try {
+    const atuais = await listarTurnos()
+    const turnos = ['manha', 'tarde'] as const
+    for (const turno of turnos) {
+      if (!atuais.some((t) => t.turno === turno)) {
+        await pb.collection('config_turno_ligacao').create({
+          turno,
+          responsavel: '',
+          atualizado_por: autor,
+        })
+      }
+    }
+    return listarTurnos()
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível preparar a cobertura de ligação.')
   }
 }
 
@@ -149,6 +204,8 @@ export interface LinhaConfirmacao {
   dentista: string
   estado: string
   mensagem: string
+  turno: string
+  responsavel: string
   teste: boolean
 }
 
@@ -258,7 +315,11 @@ export async function limparMassaConfirmacaoDia(data: string): Promise<void> {
       .collection('agenda_itens')
       .getFullList({ filter: 'origem = "fixture" && teste = true && data = "' + data + '"' })
       .catch(() => [])
-    for (const item of itens) await pb.collection('agenda_itens').delete(item.id).catch(() => {})
+    for (const item of itens)
+      await pb
+        .collection('agenda_itens')
+        .delete(item.id)
+        .catch(() => {})
     await limparMassaConfirmacao()
   } catch (erro) {
     throw new Error(getErrorMessage(erro) || 'Não foi possível limpar a massa de teste.')

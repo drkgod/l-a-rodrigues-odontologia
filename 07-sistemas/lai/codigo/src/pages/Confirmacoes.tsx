@@ -12,6 +12,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import {
@@ -20,8 +31,13 @@ import {
   exportarXlsx,
   criarMassaConfirmacao,
   limparMassaConfirmacaoDia,
+  registrarResposta,
+  moverNaoRespondentes,
+  garantirTurnosPadrao,
+  salvarTurno,
   type LinhaConfirmacao,
   type ResultadoListaDia,
+  type ConfigTurno,
 } from '@/services/confirmacao'
 
 // Padrão da data local (input date) — data civil do dia-alvo
@@ -43,6 +59,8 @@ const rotuloEstado: Record<string, string> = {
   ligacao_sem_sucesso: 'Ligação — sem sucesso',
 }
 
+const turnoLabel = (turno: string) => (turno === 'manha' ? 'manhã' : 'tarde')
+
 const Confirmacoes = () => {
   const { usuario } = useAuth()
   const [data, setData] = useState(hoje())
@@ -52,6 +70,9 @@ const Confirmacoes = () => {
   const [exportando, setExportando] = useState(false)
   const [criandoMassa, setCriandoMassa] = useState(false)
   const [limpandoMassa, setLimpandoMassa] = useState(false)
+  const [movendo, setMovendo] = useState(false)
+  const [respondendoId, setRespondendoId] = useState('')
+  const [turnos, setTurnos] = useState<ConfigTurno[]>([])
 
   const carregar = useCallback(async (dataAlvo: string) => {
     setCarregando(true)
@@ -114,6 +135,64 @@ const Confirmacoes = () => {
     }
   }
 
+  const mover = async () => {
+    setMovendo(true)
+    setErro('')
+    try {
+      const r = await moverNaoRespondentes(data)
+      if (r.alerta_gestao) toast.warning(r.alerta_gestao)
+      await carregar(data)
+      await carregarTurnos()
+      toast.success('Não respondentes movidos para a lista de ligação (' + r.movidos + ').')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível mover os não respondentes.')
+    } finally {
+      setMovendo(false)
+    }
+  }
+
+  // Resposta do contato (CA-1-19) — a consulta continua agendada; muda só o estado.
+  const responder = async (
+    contatoId: string,
+    resposta: 'confirmou' | 'pediu_remarcacao' | 'cancelou' | 'sem_resposta',
+  ) => {
+    setRespondendoId(contatoId)
+    setErro('')
+    try {
+      await registrarResposta(contatoId, resposta)
+      await carregar(data)
+      toast.success('Resposta registrada: ' + rotuloEstado[resposta] + '.')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível registrar a resposta.')
+    } finally {
+      setRespondendoId('')
+    }
+  }
+
+  const carregarTurnos = useCallback(async () => {
+    try {
+      // Cria os 2 registros padrão na 1ª vez (gestão) — sem isso o hook vira "a definir".
+      const turnos = await garantirTurnosPadrao(usuario?.email || 'gestão')
+      setTurnos(turnos)
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível carregar a cobertura.')
+    }
+  }, [usuario?.email])
+
+  const salvarTurnoRow = async (turnoId: string, responsavel: string) => {
+    try {
+      await salvarTurno(turnoId, responsavel, usuario?.email || 'gestão')
+      await carregarTurnos()
+      toast.success('Responsável da ' + turnoLabel(responsavel) + ' salvo.')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível salvar o responsável.')
+    }
+  }
+
+  useEffect(() => {
+    void carregarTurnos()
+  }, [carregarTurnos])
+
   const linha = (l: LinhaConfirmacao) => (
     <TableRow key={l.contato_id}>
       <TableCell className="font-medium">
@@ -131,6 +210,78 @@ const Confirmacoes = () => {
       </TableCell>
       <TableCell className="hidden lg:table-cell max-w-xs">
         <span className="text-xs text-muted-foreground line-clamp-2">{l.mensagem}</span>
+      </TableCell>
+      <TableCell>
+        {l.estado === 'mensagem_enviada' || l.estado === 'pendente' ? (
+          <div className="flex flex-wrap gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => void responder(l.contato_id, 'confirmou')}
+              disabled={respondendoId === l.contato_id}
+            >
+              Confirmou
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => void responder(l.contato_id, 'sem_resposta')}
+              disabled={respondendoId === l.contato_id}
+            >
+              Sem resposta
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="outline" disabled={respondendoId === l.contato_id}>
+                  Cancelou
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Registrar cancelamento?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    A resposta "cancelou" será registrada. A consulta continua agendada — o
+                    cancelamento da vaga exige confirmação no Clinicorp (fase 4).
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Voltar</AlertDialogCancel>
+                  <AlertDialogAction onClick={() => void responder(l.contato_id, 'cancelou')}>
+                    Confirmar cancelamento
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="outline" disabled={respondendoId === l.contato_id}>
+                  Remarcar
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Registrar pedido de remarcação?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    A resposta "pediu_remarcação" será registrada. A consulta continua agendada — a
+                    remarcação é tratada pela CRC.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Voltar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => void responder(l.contato_id, 'pediu_remarcacao')}
+                  >
+                    Confirmar remarcação
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        ) : (
+          <span className="text-xs text-muted-foreground">
+            {rotuloEstado[l.estado] || l.estado}
+          </span>
+        )}
       </TableCell>
     </TableRow>
   )
@@ -172,6 +323,14 @@ const Confirmacoes = () => {
             disabled={limpandoMassa || carregando}
           >
             {limpandoMassa ? 'Apagando…' : 'Limpar massa de teste'}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => void mover()}
+            disabled={movendo || carregando}
+            title="Move os contatos 'Mensagem enviada' do dia-alvo para a lista de ligação, com o responsável do turno."
+          >
+            {movendo ? 'Movendo…' : 'Mover não respondentes'}
           </Button>
         </div>
       </div>
@@ -310,6 +469,78 @@ const Confirmacoes = () => {
               </Card>
             </div>
           )}
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Lista de ligação</CardTitle>
+                <CardDescription>
+                  Quem não respondeu vai para cá, com o responsável do turno (manhã &lt; 12h, tarde
+                  ≥ 12h).
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {resultado.lista.filter((l) => l.estado === 'em_lista_ligacao').length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    Ninguém em lista de ligação. Use “Mover não respondentes” depois das mensagens.
+                  </p>
+                ) : (
+                  <ul className="space-y-1 text-sm">
+                    {resultado.lista
+                      .filter((l) => l.estado === 'em_lista_ligacao')
+                      .map((l) => (
+                        <li key={l.contato_id}>
+                          <span className="font-medium">{l.paciente}</span> · {l.hora} ·{' '}
+                          <Badge variant="secondary">{l.turno ? turnoLabel(l.turno) : '—'}</Badge>{' '}
+                          <span className="text-muted-foreground">
+                            {l.responsavel || 'a definir'}
+                          </span>
+                        </li>
+                      ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Cobertura de ligação</CardTitle>
+                <CardDescription>
+                  Responsável por ligar em cada turno — só a gestão edita; sem cadastro, o sistema
+                  marca “a definir” e alerta.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {turnos.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Carregando cobertura…</p>
+                ) : (
+                  turnos.map((t) => (
+                    <div key={t.id} className="flex items-center gap-2">
+                      <Label htmlFor={'resp-' + t.id} className="w-24">
+                        {turnoLabel(t.turno)}
+                      </Label>
+                      <Input
+                        id={'resp-' + t.id}
+                        defaultValue={t.responsavel}
+                        placeholder="Quem liga?"
+                        className="flex-1"
+                        onBlur={(e) => {
+                          if (e.target.value !== t.responsavel) {
+                            void salvarTurnoRow(t.id, e.target.value)
+                          }
+                        }}
+                      />
+                    </div>
+                  ))
+                )}
+                {turnos.length > 0 && turnos.some((t) => !t.responsavel) && (
+                  <p className="text-xs text-muted-foreground">
+                    Turno sem responsável aparece como “a definir” na lista de ligação.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
         </>
       )}
     </div>

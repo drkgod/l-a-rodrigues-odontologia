@@ -692,6 +692,8 @@ routerAdd(
         hora: item.getString('inicio'),
         dentista: nomeProf,
         estado: contato.getString('estado'),
+        turno: contato.getString('turno'),
+        responsavel: contato.getString('responsavel'),
         mensagem:
           mensagem ||
           'Olá ' +

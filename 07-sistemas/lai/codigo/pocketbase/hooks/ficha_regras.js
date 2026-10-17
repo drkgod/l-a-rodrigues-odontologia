@@ -4,6 +4,10 @@
 // com autor derivado da SESSÃO (nunca do payload). Papel exigido: gestão ou CRC
 // (mesma escrita de leads/fichas da matriz da SPEC-1-001). Toda lógica INLINE no
 // callback (lição JSVM: função top-level não carrega no pod).
+// DEBUG 1 (teste humano 17/10): evento grava TAMBÉM paciente_rel/lead_rel (relações
+// da migration 0010) — o filtro de leitura usa as relações; texto puro não casa.
+// DEBUG 1: rota limpar-massa-teste (gestão) — eventos é append-only até pra gestão,
+// então a limpeza da massa de teste das provas é do SERVIDOR.
 routerAdd(
   'POST',
   '/backend/v1/ficha/evento',
@@ -65,8 +69,14 @@ routerAdd(
 
     const colEv = $app.findCollectionByNameOrId('eventos')
     const ev = new Record(colEv)
-    if (paciente) ev.set('paciente', paciente.id)
-    if (lead) ev.set('lead', lead.id)
+    if (paciente) {
+      ev.set('paciente', paciente.id)
+      ev.set('paciente_rel', paciente.id)
+    }
+    if (lead) {
+      ev.set('lead', lead.id)
+      ev.set('lead_rel', lead.id)
+    }
     ev.set('tipo', tipo)
     ev.set('descricao', descricao)
     ev.set(
@@ -126,6 +136,7 @@ routerAdd(
     const colEv = $app.findCollectionByNameOrId('eventos')
     const ev = new Record(colEv)
     ev.set('paciente', paciente.id)
+    ev.set('paciente_rel', paciente.id)
     ev.set('tipo', 'nota')
     ev.set(
       'descricao',
@@ -136,6 +147,105 @@ routerAdd(
     $app.save(ev)
 
     return e.json(200, { ok: true, paciente_id: paciente.id })
+  },
+  $apis.requireAuth(),
+)
+
+// Limpeza da massa de teste (provas P3-09a/b): apaga pacientes+eventos teste=true.
+// eventos tem deleteRule null (append-only) — a limpeza é do SERVIDOR, nunca do cliente.
+routerAdd(
+  'POST',
+  '/backend/v1/ficha/limpar-massa-teste',
+  (e) => {
+    const papel = e.auth ? String(e.auth.getString('papel') || '') : ''
+    if (papel !== 'gestao') {
+      throw new ForbiddenError('Somente gestão pode limpar massa de teste.', null)
+    }
+    let pacientesApagados = 0
+    let eventosApagados = 0
+    const pacientes = $app.findRecordsByFilter('pacientes', 'teste = true', '', 0, 0)
+    for (const p of pacientes) {
+      $app.delete(p)
+      pacientesApagados++
+    }
+    const eventos = $app.findRecordsByFilter('eventos', 'teste = true', '', 0, 0)
+    for (const ev of eventos) {
+      $app.delete(ev)
+      eventosApagados++
+    }
+    return e.json(200, { ok: true, pacientes: pacientesApagados, eventos: eventosApagados })
+  },
+  $apis.requireAuth(),
+)
+
+// Cria ficha direta de paciente (SPEC-1-003: "cadastrar/localizar a ficha").
+// Papel gestão/CRC; telefone duplicado devolve aviso (RN-03) sem criar.
+routerAdd(
+  'POST',
+  '/backend/v1/ficha/criar',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const nome = String(body.nome || '').trim()
+    let telefone = String(body.telefone || '').trim()
+    const confirmar = body.confirmar_duplicado === true
+
+    if (!nome) throw new BadRequestError('Informe o nome do paciente.', null)
+    const digitos = telefone.replace(/\D/g, '')
+    if (digitos.length < 10) {
+      throw new BadRequestError('Telefone inválido — informe DDD + número.', null)
+    }
+    telefone = '+' + digitos
+
+    const papel = e.auth ? String(e.auth.getString('papel') || '') : ''
+    const pode =
+      papel === 'gestao' ||
+      papel === 'crc_agendamento' ||
+      papel === 'crc_confirmacao' ||
+      papel === 'crc_comercial'
+    if (!pode) {
+      throw new ForbiddenError('Seu perfil não pode criar ficha.', null)
+    }
+
+    if (!confirmar) {
+      try {
+        const dup = $app.findRecordsByFilter('pacientes', 'telefone = "' + telefone + '"', '', 1, 0)
+        if (dup.length > 0) {
+          return e.json(200, {
+            criado: false,
+            aviso_duplicado: true,
+            mensagem: 'Telefone já cadastrado em outra ficha. Confirme se quer criar outra.',
+          })
+        }
+      } catch (_) {}
+    }
+
+    const col = $app.findCollectionByNameOrId('pacientes')
+    const p = new Record(col)
+    p.set('nome', nome)
+    p.set('telefone', telefone)
+    p.set(
+      'responsavel',
+      e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '',
+    )
+    p.set('teste', body.teste === true)
+    $app.save(p)
+
+    try {
+      const colEv = $app.findCollectionByNameOrId('eventos')
+      const ev = new Record(colEv)
+      ev.set('paciente', p.id)
+      ev.set('paciente_rel', p.id)
+      ev.set('tipo', 'nota')
+      ev.set('descricao', 'Ficha criada')
+      ev.set(
+        'autor',
+        e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '',
+      )
+      ev.set('teste', body.teste === true)
+      $app.save(ev)
+    } catch (_) {}
+
+    return e.json(200, { criado: true, paciente_id: p.id })
   },
   $apis.requireAuth(),
 )

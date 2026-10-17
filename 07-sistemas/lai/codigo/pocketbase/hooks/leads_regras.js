@@ -105,11 +105,35 @@ routerAdd(
     lead.set('teste', body.teste === true)
     $app.save(lead)
 
+    // ficha única (SPEC-1-003): todo lead ganha ficha de paciente vinculada
+    let pacienteId = ''
+    try {
+      const colPac = $app.findCollectionByNameOrId('pacientes')
+      const pac = new Record(colPac)
+      pac.set('nome', nome)
+      pac.set('telefone', telefone)
+      pac.set('lead', lead.id)
+      pac.set(
+        'responsavel',
+        e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '',
+      )
+      pac.set('teste', body.teste === true)
+      $app.save(pac)
+      pacienteId = pac.id
+      lead.set('paciente', pacienteId)
+      $app.save(lead)
+    } catch (_) {}
+
     // evento append-only do cadastro
     try {
       const colEv = $app.findCollectionByNameOrId('eventos')
       const ev = new Record(colEv)
       ev.set('lead', lead.id)
+      ev.set('lead_rel', lead.id)
+      if (pacienteId) {
+        ev.set('paciente', pacienteId)
+        ev.set('paciente_rel', pacienteId)
+      }
       ev.set('tipo', 'contato')
       ev.set(
         'descricao',
@@ -179,6 +203,14 @@ routerAdd(
       const colEv = $app.findCollectionByNameOrId('eventos')
       const ev = new Record(colEv)
       ev.set('lead', lead.id)
+      ev.set('lead_rel', lead.id)
+      try {
+        const pid = lead.getString('paciente') || ''
+        if (pid) {
+          ev.set('paciente', pid)
+          ev.set('paciente_rel', pid)
+        }
+      } catch (_) {}
       ev.set('tipo', 'mudanca_etapa')
       ev.set(
         'descricao',
@@ -290,6 +322,23 @@ routerAdd(
       lead.set('teste', body.teste === true)
       $app.save(lead)
       gravados++
+
+      // ficha única: lead importado do APP CRC também ganha ficha vinculada
+      try {
+        const colPac = $app.findCollectionByNameOrId('pacientes')
+        const pac = new Record(colPac)
+        pac.set('nome', v.nome)
+        pac.set('telefone', v.telefone)
+        pac.set('lead', lead.id)
+        pac.set(
+          'responsavel',
+          e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '',
+        )
+        pac.set('teste', body.teste === true)
+        $app.save(pac)
+        lead.set('paciente', pac.id)
+        $app.save(lead)
+      } catch (_) {}
     }
 
     return e.json(200, {

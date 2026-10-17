@@ -29,6 +29,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import {
   ROTULO_EVENTO,
   buscarPaciente,
+  criarFicha,
   listarEventos,
   listarPacientes,
   podeGravarFicha,
@@ -80,6 +81,11 @@ const Ficha = () => {
   const [prazo, setPrazo] = useState('')
   const [respAcao, setRespAcao] = useState('')
   const [dialogAcao, setDialogAcao] = useState(false)
+  const [dialogNova, setDialogNova] = useState(false)
+  const [novaNome, setNovaNome] = useState('')
+  const [novaTelefone, setNovaTelefone] = useState('')
+  const [novaAviso, setNovaAviso] = useState('')
+  const [novaSalvando, setNovaSalvando] = useState(false)
 
   const carregarLista = useCallback(async (q: string) => {
     setCarregando(true)
@@ -92,6 +98,29 @@ const Ficha = () => {
       setCarregando(false)
     }
   }, [])
+
+  const criarNovaFicha = useCallback(
+    async (confirmar: boolean) => {
+      setNovaSalvando(true)
+      setNovaAviso('')
+      try {
+        const r = await criarFicha(novaNome, novaTelefone, confirmar)
+        if (r.aviso_duplicado) {
+          setNovaAviso(r.mensagem || 'Telefone já cadastrado em outra ficha.')
+          return
+        }
+        setDialogNova(false)
+        setNovaNome('')
+        setNovaTelefone('')
+        await carregarLista(novaNome)
+      } catch (e) {
+        setNovaAviso(e instanceof Error ? e.message : 'Não foi possível criar a ficha.')
+      } finally {
+        setNovaSalvando(false)
+      }
+    },
+    [novaNome, novaTelefone, carregarLista],
+  )
 
   const carregarFicha = useCallback(async (pacienteId: string) => {
     setErro('')
@@ -199,13 +228,73 @@ const Ficha = () => {
               <Button onClick={() => void carregarLista(busca)} disabled={carregando}>
                 Buscar
               </Button>
+              <Button variant="outline" onClick={() => setDialogNova(true)}>
+                Nova ficha
+              </Button>
             </div>
+            <Dialog open={dialogNova} onOpenChange={(aberto) => { setDialogNova(aberto); if (!aberto) setNovaAviso('') }}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Nova ficha de paciente</DialogTitle>
+                  <DialogDescription>Cria a ficha com nome e telefone (DDD + número).</DialogDescription>
+                </DialogHeader>
+                {novaAviso && (
+                  <div className="rounded-md border border-amber-500 bg-amber-50 p-3 text-sm text-amber-800">
+                    {novaAviso}
+                  </div>
+                )}
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <Label htmlFor="nova-nome">Nome</Label>
+                    <Input
+                      id="nova-nome"
+                      value={novaNome}
+                      onChange={(e) => setNovaNome(e.target.value)}
+                      placeholder="nome do paciente"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="nova-telefone">Telefone</Label>
+                    <Input
+                      id="nova-telefone"
+                      value={novaTelefone}
+                      onChange={(e) => setNovaTelefone(e.target.value)}
+                      placeholder="DDD + número"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  {novaAviso ? (
+                    <>
+                      <Button onClick={() => void criarNovaFicha(true)} disabled={novaSalvando}>
+                        Criar outra ficha
+                      </Button>
+                      <Button variant="outline" onClick={() => setDialogNova(false)}>
+                        Cancelar
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => void criarNovaFicha(false)}
+                        disabled={novaSalvando || !novaNome.trim()}
+                      >
+                        Criar ficha
+                      </Button>
+                      <Button variant="outline" onClick={() => setDialogNova(false)}>
+                        Cancelar
+                      </Button>
+                    </>
+                  )}
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             {carregando ? (
               <p className="text-sm text-muted-foreground">Carregando…</p>
             ) : pacientes.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Nenhuma ficha encontrada. Fichas são criadas ao cadastrar um lead ou importar
-                pacientes.
+                Nenhuma ficha encontrada. Use “Nova ficha” para cadastrar — ou cadastre um
+                lead na tela Leads: a ficha do paciente é criada junto.
               </p>
             ) : (
               <ul className="space-y-2 text-sm">

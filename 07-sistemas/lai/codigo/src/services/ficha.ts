@@ -78,8 +78,10 @@ export async function buscarPaciente(id: string): Promise<PacienteFicha> {
 export async function listarEventos(pacienteId: string): Promise<EventoFicha[]> {
   try {
     return await pb.collection<EventoFicha>('eventos').getFullList({
-      filter: pb.filter('paciente = {:p} || lead = {:p}', { p: pacienteId }),
-      sort: '-created',
+      // Campos de RELAÇÃO (paciente_rel/lead_rel, migration 0010) — filtro por
+      // paciente/lead (texto) devolve 500 no PocketBase v0.36 (bug do teste humano).
+      filter: pb.filter('paciente_rel = {:p} || lead_rel = {:p}', { p: pacienteId }),
+      sort: '-criado_em',
     })
   } catch (erro) {
     throw new Error(getErrorMessage(erro) || 'Não foi possível carregar o histórico.')
@@ -118,6 +120,22 @@ export async function salvarProximaAcao(
     })
   } catch (erro) {
     throw new Error(getErrorMessage(erro) || 'Não foi possível salvar a próxima ação.')
+  }
+}
+
+// Cria ficha direta (SPEC-1-003: "cadastrar/localizar a ficha") — regra real no hook.
+export async function criarFicha(
+  nome: string,
+  telefone: string,
+  confirmarDuplicado = false,
+): Promise<{ criado: boolean; paciente_id?: string; aviso_duplicado?: boolean; mensagem?: string }> {
+  try {
+    return await pb.send('/backend/v1/ficha/criar', {
+      method: 'POST',
+      body: { nome, telefone, confirmar_duplicado: confirmarDuplicado },
+    })
+  } catch (erro) {
+    throw new Error(getErrorMessage(erro) || 'Não foi possível criar a ficha.')
   }
 }
 

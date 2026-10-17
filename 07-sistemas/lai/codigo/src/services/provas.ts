@@ -25,13 +25,17 @@ import {
 } from '@/services/pendencias'
 import { criarLead } from '@/services/leads'
 import {
+  criarContatoTeste,
   decidirLiberacao,
   dividirSaidas,
   exportarXlsx,
+  garantirTurnosPadrao,
   gerarListaDia,
   limparMassaConfirmacao,
+  moverNaoRespondentes,
   registrarLigacao,
   registrarMensagem,
+  registrarResposta,
   verificarCapacidade,
 } from '@/services/confirmacao'
 
@@ -1082,6 +1086,193 @@ export async function executarProvaP4_02(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou ? 'CA-1-18 provado (exportação).' : 'Verificar saídas da exportação.',
+  }
+}
+
+// ===== PROVAS P4-03/P4-03b (SPEC-1-004, CA-1-19) — task f124df8f =====
+// Registro da resposta do paciente: contagem distinta, chave repetida não duplica,
+// resposta muda SÓ o estado do contato (interrompe a régua) e a consulta continua
+// agendada; mover não respondentes leva mensagem_enviada com responsável do turno.
+
+// P4-03 — registrar mensagens (contagem distinta), repetir chave (não duplica),
+// resposta confirmada (estado muda, régua interrompida, agenda_itens intacto).
+export async function executarProvaP4_03(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const massa = await criarMassaP4()
+    // 3 mensagens enviadas (tentativas 1/2/3) — contagem distinta
+    await registrarMensagem(massa.contatoId, 1, 'enviada', true)
+    await registrarMensagem(massa.contatoId, 2, 'enviada', true)
+    await registrarMensagem(massa.contatoId, 3, 'enviada', true)
+    const msgs = await pb
+      .collection('mensagens_confirmacao')
+      .getFullList({ filter: 'teste = true' })
+      .catch(() => [])
+    const contagemDistinta = msgs.length === 3
+    // repetir a tentativa 1 → ja_registrada (idempotente)
+    const repetida = await registrarMensagem(massa.contatoId, 1, 'enviada', true)
+    const semDuplicar = repetida.situacao === 'ja_registrada'
+    // resposta confirmada
+    const antes = await pb.collection('agenda_itens').getOne(massa.itemId)
+    const resposta = await registrarResposta(massa.contatoId, 'confirmou', true)
+    const contatoDepois = await pb.collection('contatos_confirmacao').getOne(massa.contatoId)
+    const estadoMudou = contatoDepois.getString('estado') === 'confirmou'
+    // régua interrompida: registrar outra mensagem NÃO muda o estado (não é pendente)
+    await registrarMensagem(massa.contatoId, 2, 'enviada', true)
+    const contatoFinal = await pb.collection('contatos_confirmacao').getOne(massa.contatoId)
+    const reguaInterrompida = contatoFinal.getString('estado') === 'confirmou'
+    // consulta continua agendada: agenda_itens intacto (mesmo item, mesmo início)
+    const depois = await pb.collection('agenda_itens').getOne(massa.itemId)
+    const consultaIntacta =
+      depois.getString('inicio') === antes.getString('inicio') && !depois.getBool('cancelado')
+    passou = contagemDistinta && semDuplicar && estadoMudou && reguaInterrompida && consultaIntacta
+    detalhe =
+      'mensagens: ' +
+      msgs.length +
+      ' (distinta=' +
+      String(contagemDistinta) +
+      '), repetida: ' +
+      repetida.situacao +
+      ' (semDuplicar=' +
+      String(semDuplicar) +
+      '); resposta situação ' +
+      resposta.situacao +
+      ' → estado ' +
+      contatoDepois.getString('estado') +
+      '; régua interrompida: ' +
+      String(reguaInterrompida) +
+      '; consulta segue agendada: ' +
+      String(consultaIntacta)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-03 — resposta muda só o contato; régua interrompida; consulta intacta',
+    esperado:
+      '3 mensagens distintas (repetida → ja_registrada); confirmou muda o estado e interrompe a régua; agenda_itens intacto.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-19 provado (resposta).' : 'Verificar resposta CA-1-19.',
+  }
+}
+
+// P4-03b — mover não respondentes: mensagem_enviada do dia-alvo vai para a lista de
+// ligação com responsável do turno; quem confirmou NÃO é movido.
+export async function executarProvaP4_03b(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const dataAlvo = '2026-10-14'
+    const prof = await pb.collection('profissionais').create({
+      nome: 'Profissional Teste P4-03b',
+      origem: 'fixture',
+      ativo: true,
+      tipo_agenda: 'ambos',
+    })
+    const manha = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p4-03b-m-' + Date.now(),
+      data: dataAlvo,
+      inicio: '08:30',
+      fim: '09:00',
+      profissional: prof.id,
+      paciente_nome: 'Paciente P4-03b Manhã',
+      paciente_telefone: '5521999997001',
+      origem: 'fixture',
+      teste: true,
+    })
+    const tarde = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p4-03b-t-' + Date.now(),
+      data: dataAlvo,
+      inicio: '13:30',
+      fim: '14:00',
+      profissional: prof.id,
+      paciente_nome: 'Paciente P4-03b Tarde',
+      paciente_telefone: '5521999997002',
+      origem: 'fixture',
+      teste: true,
+    })
+    const itemConfirmou = await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p4-03b-c-' + Date.now(),
+      data: dataAlvo,
+      inicio: '15:30',
+      fim: '16:00',
+      profissional: prof.id,
+      paciente_nome: 'Paciente P4-03b Confirmou',
+      paciente_telefone: '5521999997003',
+      origem: 'fixture',
+      teste: true,
+    })
+    const contatoManha = await criarContatoTeste(manha.id)
+    const contatoTarde = await criarContatoTeste(tarde.id)
+    const contatoConfirmou = await criarContatoTeste(itemConfirmou.id)
+    // manhã e tarde: mensagem enviada; o terceiro: resposta confirmada
+    await registrarMensagem(contatoManha.id, 1, 'enviada', true)
+    await registrarMensagem(contatoTarde.id, 1, 'enviada', true)
+    await registrarResposta(contatoConfirmou.id, 'confirmou', true)
+    // cobertura do turno: usa o cadastrado; sem cadastro o hook marca "a definir"
+    const configs = await pb
+      .collection('config_turno_ligacao')
+      .getFullList()
+      .catch(() => [])
+    const respManha = configs.find((t) => t.turno === 'manha')?.responsavel || 'a definir'
+    const respTarde = configs.find((t) => t.turno === 'tarde')?.responsavel || 'a definir'
+    const r = await moverNaoRespondentes(dataAlvo)
+    const contatoManhaDepois = await pb.collection('contatos_confirmacao').getOne(contatoManha.id)
+    const contatoTardeDepois = await pb.collection('contatos_confirmacao').getOne(contatoTarde.id)
+    const contatoConfirmouDepois = await pb
+      .collection('contatos_confirmacao')
+      .getOne(contatoConfirmou.id)
+    passou =
+      r.movidos === 2 &&
+      contatoManhaDepois.getString('estado') === 'em_lista_ligacao' &&
+      contatoManhaDepois.getString('turno') === 'manha' &&
+      contatoManhaDepois.getString('responsavel') === respManha &&
+      contatoTardeDepois.getString('estado') === 'em_lista_ligacao' &&
+      contatoTardeDepois.getString('turno') === 'tarde' &&
+      contatoTardeDepois.getString('responsavel') === respTarde &&
+      contatoConfirmouDepois.getString('estado') === 'confirmou'
+    detalhe =
+      'movidos ' +
+      r.movidos +
+      '; manhã: ' +
+      contatoManhaDepois.getString('estado') +
+      ' (' +
+      contatoManhaDepois.getString('turno') +
+      ' → ' +
+      contatoManhaDepois.getString('responsavel') +
+      '); tarde: ' +
+      contatoTardeDepois.getString('estado') +
+      ' (' +
+      contatoTardeDepois.getString('turno') +
+      ' → ' +
+      contatoTardeDepois.getString('responsavel') +
+      '); confirmou permanece: ' +
+      contatoConfirmouDepois.getString('estado')
+    await pb.collection('agenda_itens').delete(manha.id)
+    await pb.collection('agenda_itens').delete(tarde.id)
+    await pb.collection('profissionais').delete(prof.id)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-03b — não respondentes vão para a lista de ligação com responsável do turno',
+    esperado:
+      'Mensagem_enviada movidos para em_lista_ligacao com turno/responsável (manhã/tarde); quem confirmou não é movido.',
+    obtido: detalhe,
+    passou,
+    observacao: passou
+      ? 'CA-1-19 provado (lista de ligação).'
+      : 'Verificar mover não respondentes.',
   }
 }
 

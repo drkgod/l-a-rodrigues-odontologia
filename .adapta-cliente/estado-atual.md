@@ -14,11 +14,11 @@
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 1595728 (v0.0.58)
-- skip_publicacao: publicada:1595728 em 2026-10-17T01:32:42Z
-- pendente_github: sim:debug2 v0.0.58 1595728 (massa idempotente); falta push do confirmacao.ts
+- skip_versao: f4d3b7b (v0.0.59)
+- skip_publicacao: publicada:f4d3b7b em 2026-10-17T01:39:24Z
+- pendente_github: sim:debug2 v0.0.58 (massa idempotente, confirmacao.ts) + debug3 v0.0.59 (provas getString, provas.ts); push pendente
 - espelho: atualizado (7 arquivos da fdca5fb0; provas.ts íntegro por blob SHA)
 - housekeeping: 16/10 — card 8d76cea5 + subtask ac46ef6d marcados [x] na fase (concluídos 14/10, checkbox faltava); subtask eec75533 (importar leads APP CRC) segue aberta aguardando exportação (CL-PEND-001)
-- ultima_acao: 16/10 22h30 — re-teste: erro sumiu porém massa ficou com 8 consultas (botão criado 2×). Fix v0.0.58 1595728: criarMassaConfirmacao idempotente; aguardando re-teste
+- ultima_acao: 16/10 22h30 — re-teste: erro sumiu porém massa ficou com 8 consultas (2×). Fix v0.0.58 1595728: massa idempotente. 16/10 22h40 — re-teste: P4-03b falhou "getString is not a function". Fix v0.0.59 f4d3b7b: provas usam campos diretos do record; aguardando re-teste
 - proxima_acao: aguardar autorização para implementar ("pode")
-- atualizado_em: 2026-10-16T22:32:00-03:00
+- atualizado_em: 2026-10-16T22:42:00-03:00

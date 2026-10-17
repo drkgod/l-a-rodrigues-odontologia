@@ -1,3 +1,4 @@
+- 2026-10-16 · [Luiz] · DEBUG3 f124df8f: P4-03b falhou no teste humano — "getString is not a function": o SDK JS do PocketBase devolve record como objeto (campo direto), não Record do servidor. Provas P4-03/03b usavam getString/getBool; corrigido para campos diretos (skip f4d3b7b v0.0.59).
 - 2026-10-16 · [Luiz] · DEBUG2 f124df8f: massa de teste 2× acumulava 8 consultas — criarMassaConfirmacao agora é idempotente (reusa se o dia já tem fixture) (skip 1595728 v0.0.58).
 - 2026-10-16 · [Luiz] · DEBUG f124df8f: "Value must be unique" na lista-dia — rota não achava contato da massa (filtro teste) e duplicava agenda_item; fix: busca sem filtrar teste (skip f3996b8 v0.0.57).
 - 2026-10-16 · [Luiz] · Task f124df8f entregue: resposta do paciente na tela Confirmações (confirmou/remarcação/cancelou/sem resposta), mover não respondentes p/ lista de ligação com responsável do turno, cobertura de ligação (migration 0014), provas P4-03/P4-03b (skip ced239c v0.0.56).

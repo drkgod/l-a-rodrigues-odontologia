@@ -279,13 +279,28 @@ export async function exportarXlsx(
 // Tudo com teste=true; limpeza apaga por assinatura.
 export async function criarMassaConfirmacao(data: string): Promise<ResultadoListaDia> {
   try {
-    const prof = await pb.collection('profissionais').create({
-      nome: 'Profissional Teste Confirmações',
-      origem: 'fixture',
-      ativo: true,
-      tipo_agenda: 'ambos',
-      teste: true,
-    })
+    // Idempotente: se o dia-alvo já tem a massa fixture, reusa — não acumula 4+4 consultas
+    // (o teste humano pegou 8 linhas duplicadas clicando "Criar massa de teste" 2× no mesmo dia).
+    const jaExiste = await pb
+      .collection('agenda_itens')
+      .getFullList({ filter: 'origem = "fixture" && teste = true && data = "' + data + '"' })
+      .catch(() => [])
+    if (jaExiste.length > 0) {
+      return await gerarListaDia(data, true)
+    }
+    let prof = await pb
+      .collection('profissionais')
+      .getFirstListItem('nome = "Profissional Teste Confirmações" && teste = true')
+      .catch(() => null)
+    if (!prof) {
+      prof = await pb.collection('profissionais').create({
+        nome: 'Profissional Teste Confirmações',
+        origem: 'fixture',
+        ativo: true,
+        tipo_agenda: 'ambos',
+        teste: true,
+      })
+    }
     const horarios = ['08:00', '09:00', '10:00', '11:00']
     const telefones = ['5521999993001', '5521999993002', '5521999993003', '119']
     for (let i = 0; i < 4; i++) {

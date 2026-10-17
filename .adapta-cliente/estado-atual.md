@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
 - analise: .adapta-cliente/analises/f124df8f-registrar-resposta.md
-- etapa: aguardando_teste_humano
+- etapa: em_correcao
 - autorizacao_implementacao: CONFIRMADA 16/10 20h43 ("Pode implementar")
 - decisao_cliente: nenhuma pendente — backend da CA-1-19 já existe (a9f9e30e); recorte desta task é tela + coleção de cobertura + provas
 - teste_humano: pendente (roteiro na análise: respostas na linha, mover não respondentes, cobertura por turno, provas P4-03/03b)
@@ -14,11 +14,11 @@
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: f3996b8 (v0.0.57)
-- skip_publicacao: publicada:f3996b8 em 2026-10-17T01:10:21Z
-- pendente_github: nao (debug v0.0.57 f3996b8 no GitHub: hook 7c05c16, reparo provas.ts 1a8790c, análise 33f5e82)
+- skip_versao: 1595728 (v0.0.58)
+- skip_publicacao: publicada:1595728 em 2026-10-17T01:32:42Z
+- pendente_github: sim:debug2 v0.0.58 1595728 (massa idempotente); falta push do confirmacao.ts
 - espelho: atualizado (7 arquivos da fdca5fb0; provas.ts íntegro por blob SHA)
 - housekeeping: 16/10 — card 8d76cea5 + subtask ac46ef6d marcados [x] na fase (concluídos 14/10, checkbox faltava); subtask eec75533 (importar leads APP CRC) segue aberta aguardando exportação (CL-PEND-001)
-- ultima_acao: 16/10 22h08 — teste humano pegou "Value must be unique": lista-dia não achava contato da massa por filtro de teste e duplicava agenda_item. Fix v0.0.57 f3996b8 (busca sem filtro teste); aguardando re-teste
+- ultima_acao: 16/10 22h30 — re-teste: erro sumiu porém massa ficou com 8 consultas (botão criado 2×). Fix v0.0.58 1595728: criarMassaConfirmacao idempotente; aguardando re-teste
 - proxima_acao: aguardar autorização para implementar ("pode")
-- atualizado_em: 2026-10-16T22:08:00-03:00
+- atualizado_em: 2026-10-16T22:32:00-03:00

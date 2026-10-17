@@ -16,6 +16,7 @@ import Horarios from './pages/Horarios'
 import Leads from './pages/Leads'
 import PacientesAgendar from './pages/PacientesAgendar'
 import Confirmacoes from './pages/Confirmacoes'
+import Ficha from './pages/Ficha'
 import Layout from './components/Layout'
 import { AuthProvider, Protegido, SomenteGestao } from '@/contexts/AuthContext'
 
@@ -89,6 +90,8 @@ const App = () => (
                 </SomenteGestao>
               }
             />
+            <Route path="/ficha" element={<Ficha />} />
+            <Route path="/ficha/:id" element={<Ficha />} />
             <Route
               path="/tabela-duracao"
               element={

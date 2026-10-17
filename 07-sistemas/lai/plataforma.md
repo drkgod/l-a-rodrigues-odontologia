@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: ff39792 (v0.0.55)
-- versao_publicada: ff39792 em 2026-10-16T20:19:17Z
-- ultima_task: fdca5fb0 (desvios de duração) — CONCLUÍDA (testada pelo dono "pode seguir" 19h36)
+- versao_aplicada: ced239c (v0.0.56)
+- versao_publicada: ced239c em 2026-10-17T00:37:34Z
+- ultima_task: f124df8f (resposta do paciente + cobertura de ligação) — publicada, aguardando teste humano
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -35,6 +35,7 @@
 | 16/10 | fdca5fb0 (debug 1 — provas via rota) | bc5d3c8 (v0.0.53) | hook duracao_sugerir.js (grava planejado), provas.ts (P2-05b/06 via rota) |
 | 16/10 | fdca5fb0 (debug 2 — getBoolean→getInt) | 3b817d9 (v0.0.54) | hooks duracao_sugerir.js e confirmacao_regras.js |
 | 16/10 | fdca5fb0 (debug 3 — dedup por hash aceito) | ff39792 (v0.0.55) | provas.ts (criarTabelaTesteP2 aceita ja_aplicado) |
+| 16/10 | f124df8f (resposta + cobertura de ligação) | ced239c (v0.0.56) | migration 0014 (config_turno_ligacao), hook confirmacao_regras.js (turno/responsavel na lista-dia), confirmacao.ts (ConfigTurno), Confirmacoes.tsx (ações + cards), provas.ts (P4-03/03b), Provas.tsx |
 
 ## Regras da plataforma
 

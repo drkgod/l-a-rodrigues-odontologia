@@ -1,23 +1,24 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v2
-- task_id: fdca5fb0-379d-4ede-8b73-409508033157
+- task_id: f124df8f-05d8-4233-aced-d5a2e8085509
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-002-duracao-sugerida.md
-- analise: .adapta-cliente/analises/fdca5fb0-motivo-desvio-reserva.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada 16/10 15h35 ("pode")
-- decisao_cliente: nenhuma pendente — reserva simulada (modo demonstrativo); guard de tratamento é outra task
-- teste_humano: aprovado pelo dono ("pode seguir", 16/10 19h36) na v0.0.55 ff39792
-- verificacao_automatica: passou (QA verde; publicado ff39792; fix ja_aplicado provado no QA)
-- aprendizado: capturado:06_notas/aprendizado-continuo/AP-2026-10-16-1940-prova-massa-dedup-hash.md
+- spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
+- analise: .adapta-cliente/analises/f124df8f-registrar-resposta.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 16/10 20h43 ("Pode implementar")
+- decisao_cliente: nenhuma pendente — backend da CA-1-19 já existe (a9f9e30e); recorte desta task é tela + coleção de cobertura + provas
+- teste_humano: pendente (roteiro na análise: respostas na linha, mover não respondentes, cobertura por turno, provas P4-03/03b)
+- verificacao_automatica: passou (QA verde; v0.0.56 ced239c publicado; migration 0014 aplicada na nuvem; coleção config_turno_ligacao criada)
+- aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: ff39792 (v0.0.55)
-- skip_publicacao: publicada:ff39792 em 2026-10-16T20:19:17Z
-- pendente_github: nao (provas.ts reparado e provado: blob SHA remoto 850c1dfb = local; registros da conclusão em 696146b)
-- espelho: atualizado (7 arquivos; provas.ts e Provas.tsx reparados no remoto após truncamento de subagente)
-- ultima_acao: 16/10 19h40 — task concluída: verificação independente PASSOU (versão no ar = testada, QA, segredos, diff, falhas silenciosas); fase 18/54
-- proxima_acao: aguardar pedido do dono ("próxima task")
-- atualizado_em: 2026-10-16T19:40:00-03:00
+- skip_versao: ced239c (v0.0.56)
+- skip_publicacao: publicada:ced239c em 2026-10-17T00:37:34Z
+- pendente_github: nao
+- espelho: atualizado (7 arquivos da fdca5fb0; provas.ts íntegro por blob SHA)
+- housekeeping: 16/10 — card 8d76cea5 + subtask ac46ef6d marcados [x] na fase (concluídos 14/10, checkbox faltava); subtask eec75533 (importar leads APP CRC) segue aberta aguardando exportação (CL-PEND-001)
+- ultima_acao: 16/10 21h45 — entrega no ar (v0.0.56): resposta na linha, mover não respondentes, cobertura por turno, provas P4-03/03b; aguardando teste humano
+- proxima_acao: aguardar autorização para implementar ("pode")
+- atualizado_em: 2026-10-16T21:45:00-03:00

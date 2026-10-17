@@ -1,3 +1,4 @@
+- 2026-10-17 · [Luiz] · Task f124df8f concluída: resposta do paciente + cobertura de ligação — botões por linha, mover não respondentes com responsável do turno, cobertura editável pela gestão (migration 0014), provas P4-03/03b; testado pelo dono ("pode seguir" 00h27) na v0.0.59 f4d3b7b (https://projeto-lai-19327.goskip.app).
 - 2026-10-16 · [Luiz] · DEBUG3 f124df8f: P4-03b falhou no teste humano — "getString is not a function": o SDK JS do PocketBase devolve record como objeto (campo direto), não Record do servidor. Provas P4-03/03b usavam getString/getBool; corrigido para campos diretos (skip f4d3b7b v0.0.59).
 - 2026-10-16 · [Luiz] · DEBUG2 f124df8f: massa de teste 2× acumulava 8 consultas — criarMassaConfirmacao agora é idempotente (reusa se o dia já tem fixture) (skip 1595728 v0.0.58).
 - 2026-10-16 · [Luiz] · DEBUG f124df8f: "Value must be unique" na lista-dia — rota não achava contato da massa (filtro teste) e duplicava agenda_item; fix: busca sem filtrar teste (skip f3996b8 v0.0.57).
@@ -21,7 +22,7 @@
 
 - 2026-10-16 · [Luiz] · DEBUG task 5bcfa6f1: "não consegui baixar a planilha" (lista vazia) → causa raiz: sem consultas no dia-alvo (massa da prova se auto-apaga; agenda real não importada) + UX sem orientação → corrigido: botão "Criar massa de teste" na tela + textos de estado (skip 6e10115 v0.0.50).
 ## 2026-10-16 — task 5bcfa6f1 (SPEC-1-004, CA-1-18) — IMPLEMENTADA E PUBLICADA
-- Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_regras.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
+- Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_rejs.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
 - Serviço confirmacao.ts: gerarListaDia, dividirSaidas (XLSX até limite / envio manual / corrigir telefone) e exportarXlsx (SheetJS import dinâmico; registro RN-15 em provas_execucoes; exportar NUNCA cria tentativa — RN-02).
 - Tela nova /confirmacoes (SomenteGestao): dia-alvo (default amanhã), tabela em ordem de horário com estado do contato, 3 blocos de saída, exportação com prévia/toast, banner "a central não envia mensagens nesta fase". Estados: carregando, vazio, erro role=alert.
 - package.json: dependência xlsx@^0.18.5 (import dinâmico — só carrega na exportação).
@@ -64,4 +65,4 @@
 - 23h16: 2ª tentativa após novo "pode seguir" — mcp_skip AINDA ausente; conector em "applying" aguardando conclusão pelo dono na tela Conectores. Nada alterado no Skip.
 - 23h25: rascunhos completos da 6d5de2f5 salvos em .adapta-cliente/rascunhos/6d5de2f5/ (migration 0011_planejamentos_validacao, adições planejamento.ts com agruparSemRegra/validarCombinacao, prova P2-05, patch Planejar.tsx, teste de mesa 9 casos). Skip ainda sem conexão; v0.0.40 intacta.
 - 23h32: dono reconectou o Skip (print: CONECTADOS 10, Skip verde). Sessão atual do assistente segue SEM expor mcp_skip (descoberta carregada com servidor fora não recarrega). Diagnóstico: sessão nova resolve. Rascunhos prontos no GitHub 0e3d888.
-- 02h41: teste decisivo — subagente com descoberta de ferramentas do zero TAMBÉM não achou mcp_skip (3 buscas). Desmente "sessão nova resolve": o runtime do assistente carregou o registro de conectores com o Skip fora e só reescaneia com reinício completo do app. Fix: dono reinicia o ETHOS e manda "pode seguir".
+- 02h41: teste decisivo — subagente com descoberta de ferramentas do zero TAMBÉM não achou mcp_skip (3 buscas). Desmente "sessão nova resolve": o runtime do assistente carregou o registro de conectores do runtime stale, uptime 32d. Fix: reiniciar o ETHOS e mandar "pode seguir".

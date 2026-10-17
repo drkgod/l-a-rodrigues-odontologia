@@ -44,7 +44,7 @@
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Procedimentos aprovados e não executados por arquivo autorizado; SPEC-1-003.
 - [x] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026  <!-- id:5bcfa6f1-3634-485d-8740-49c6ce94df0a -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de confirmação do dia para o robô (3 mensagens + 1 ligação, corte 17h); registro da resposta de cada paciente (subtask f124df8f). SPEC-1-004.
-  - [ ] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
+  - [x] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.
 - [x] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Desvio com motivo obrigatório quando a reserva difere do sugerido; reservas sem planejamento e planejamento sem reserva no fim do dia (CA-1-11); teste de duas e quatro coroas com dentistas diferentes (subtask c9b95987). SPEC-1-002 · CA-1-10/11 · P2-05/06.

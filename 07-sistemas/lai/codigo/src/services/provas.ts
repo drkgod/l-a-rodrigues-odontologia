@@ -38,6 +38,14 @@ import {
   registrarResposta,
   verificarCapacidade,
 } from '@/services/confirmacao'
+import {
+  buscarPaciente,
+  listarEventos,
+  registrarEvento,
+  salvarProximaAcao,
+  prazoVencido,
+  type PacienteFicha,
+} from '@/services/ficha'
 
 export interface ExecucaoProva {
   id: string
@@ -1124,8 +1132,7 @@ export async function executarProvaP4_03(): Promise<ResultadoProva> {
     const reguaInterrompida = contatoFinal.estado === 'confirmou'
     // consulta continua agendada: agenda_itens intacto (mesmo item, mesmo início)
     const depois = await pb.collection('agenda_itens').getOne(massa.itemId)
-    const consultaIntacta =
-      depois.inicio === antes.inicio && !depois.cancelado
+    const consultaIntacta = depois.inicio === antes.inicio && !depois.cancelado
     passou = contagemDistinta && semDuplicar && estadoMudou && reguaInterrompida && consultaIntacta
     detalhe =
       'mensagens: ' +
@@ -2032,5 +2039,140 @@ export async function executarProvaP3_03(): Promise<ResultadoProva> {
     obtido: detalhe,
     passou,
     observacao: passou ? 'CA-1-13 provado (sem fusão).' : 'Verificar duplicado.',
+  }
+}
+
+// ===== P3-09 (parte ficha) — task 35bff70c: eventos append-only, próxima ação,
+// prazo vencido e dentista sem acesso (CA-1-16 · CA-SEQ-01) =====
+
+// Massa da prova: paciente de teste (teste=true) + limpeza por teste=true.
+async function criarPacienteProva(nome: string): Promise<PacienteFicha> {
+  return pb.collection('pacientes').create({
+    nome,
+    telefone: '+5521999998001',
+    teste: true,
+  })
+}
+
+async function limparMassaFicha(): Promise<void> {
+  const pacientes = await pb.collection('pacientes').getFullList({ filter: 'teste = true' })
+  for (const p of pacientes) {
+    await pb
+      .collection('pacientes')
+      .delete(p.id)
+      .catch(() => {})
+  }
+  const eventos = await pb.collection('eventos').getFullList({ filter: 'teste = true' })
+  for (const ev of eventos) {
+    await pb
+      .collection('eventos')
+      .delete(ev.id)
+      .catch(() => {})
+  }
+}
+
+// P3-09a/b — evento gravado pela rota com autor da sessão; update NÃO é permitido
+// (append-only); próxima ação salva com prazo vencido sinalizado.
+export async function executarProvaP3_09a(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPacienteProva('Paciente Prova P3-09')
+    await registrarEvento({ paciente: p.id, tipo: 'contato', descricao: 'Ligação de prova P3-09' })
+    const evs = await listarEventos(p.id)
+    const gravado =
+      evs.length === 1 && evs[0].tipo === 'contato' && evs[0].descricao.includes('P3-09')
+    const autorOk = evs.length > 0 && (evs[0].autor || '').length > 0
+    // append-only: update direto deve falhar (regra da coleção)
+    let updateFalhou = false
+    try {
+      await pb.collection('eventos').update(evs[0].id, { descricao: 'ALTERADO' })
+    } catch (_) {
+      updateFalhou = true
+    }
+    // próxima ação com prazo no passado → vencido
+    await salvarProximaAcao(p.id, 'Ligar de volta', '2026-01-01', 'CRC teste')
+    const depois = await buscarPaciente(p.id)
+    const vencido = prazoVencido(depois.proxima_acao_prazo)
+    passou =
+      gravado && autorOk && updateFalhou && vencido && depois.proxima_acao === 'Ligar de volta'
+    detalhe =
+      'evento gravado: ' +
+      String(gravado) +
+      ' (autor: ' +
+      (evs[0]?.autor || '—') +
+      '); update bloqueado (append-only): ' +
+      String(updateFalhou) +
+      '; próxima ação salva: ' +
+      String(depois.proxima_acao === 'Ligar de volta') +
+      '; prazo 2026-01-01 vencido: ' +
+      String(vencido)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaFicha()
+  }
+  return {
+    cenario: 'P3-09a — evento append-only + próxima ação com prazo vencido sinalizado',
+    esperado:
+      'Evento gravado com autor da sessão; update direto falha; prazo passado vira vencido.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-1-16 provado (ficha).' : 'Verificar ficha/eventos.',
+  }
+}
+
+// P3-09b — dentista NÃO lê a ficha (0 registros) nem grava evento (rota recusa).
+export async function executarProvaP3_09b(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const p = await criarPacienteProva('Paciente Prova P3-09b')
+    // usuário dentista em memória: cria via API com papel dentista (gestão cria)
+    const dentista = await pb.collection('users').create({
+      email: 'prova-dentista-' + Date.now() + '@teste.local',
+      password: 'ProvaD3nt1sta!',
+      passwordConfirm: 'ProvaD3nt1sta!',
+      name: 'Dentista Prova',
+      papel: 'dentista',
+      ativo: true,
+      teste: true,
+    })
+    const clienteDentista = clienteProva()
+    await clienteDentista.collection('users').authWithPassword(dentista.email, 'ProvaD3nt1sta!')
+    let leu = -1
+    try {
+      const lista = await clienteDentista.collection('pacientes').getFullList()
+      leu = lista.length
+    } catch (_) {
+      leu = 0 // negado com erro também é "0 registros"
+    }
+    let rotaRecusou = false
+    try {
+      await clienteDentista.send('/backend/v1/ficha/evento', {
+        method: 'POST',
+        body: { paciente: p.id, tipo: 'contato', descricao: 'tentativa dentista' },
+      })
+    } catch (_) {
+      rotaRecusou = true
+    }
+    passou = leu === 0 && rotaRecusou
+    detalhe =
+      'dentista leu ' +
+      leu +
+      ' ficha(s) (0 = negado); rota de evento recusada: ' +
+      String(rotaRecusou)
+    await pb.collection('users').delete(dentista.id)
+  } catch (e) {
+    detalhe = e instanceof Error ? e.message : 'erro'
+  } finally {
+    await limparMassaFicha()
+  }
+  return {
+    cenario: 'P3-09b — dentista não acessa a ficha (leitura e gravação)',
+    esperado: 'Dentista vê 0 fichas e a rota de evento recusa o papel dele.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'CA-SEQ-01 provado (ficha).' : 'Verificar acesso do dentista.',
   }
 }

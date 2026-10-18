@@ -38,6 +38,7 @@
 | 16/10 | f124df8f (resposta + cobertura de ligação) | ced239c (v0.0.56) | migration 0014 (config_turno_ligacao), hook confirmacao_regras.js (turno/responsavel na lista-dia), confirmacao.ts (ConfigTurno), Confirmacoes.tsx (ações + cards), provas.ts (P4-03/03b), Provas.tsx |
 | 17/10 | f124df8f (debug 1-3: Value must be unique, massa idempotente, getString) | f3996b8 (v0.0.57) / 1595728 (v0.0.58) / f4d3b7b (v0.0.59) | hook confirmacao_regras.js (lista-dia sem filtro teste), confirmacao.ts (massa idempotente), provas.ts (campos diretos) |
 | 17/10 | 35bff70c (ficha do paciente) | eb44acb (v0.0.60) | hook ficha_regras.js (evento + próxima ação), service ficha.ts, tela Ficha.tsx, App.tsx (rotas /ficha), Layout.tsx (menu Fichas), provas.ts (P3-09a/b), Provas.tsx |
+| 2026-10-17 | f79847a5 | b0ad515 (v0.0.69) | hook liberacoes_conciliar, migration 0015, Confirmacoes, Importar, Provas.tsx, confirmacao.ts, provas.ts |
 
 ## Regras da plataforma
 

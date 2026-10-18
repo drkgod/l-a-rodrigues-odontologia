@@ -1,1 +1,24 @@
-IyBFc3RhZG8gYXR1YWwg4oCUIEFkYXB0YSBDbGllbnRlCgotIHNjaGVtYV92ZXJzaW9uOiBhZGFwdGEtY2xpZW50ZS1zdGF0ZS92MgotIHRhc2tfaWQ6IGY3
+# Estado atual — Adapta Cliente
+
+- schema_version: adapta-cliente-state/v2
+- task_id: f79847a5-0ec1-4549-b19c-8c982cef25c6
+- executor: Luiz (assistente ETHOS)
+- owner_informativo: L A Rodrigues
+- spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
+- analise: .adapta-cliente/analises/f79847a5-lista-ligacao-liberacao.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: CONFIRMADA 17/10 12h00 ("Pode implementar")
+- decisao_cliente: nenhuma pendente (regras fechadas na SPEC revisão 13/10)
+- teste_humano: pendente (roteiro na análise: ligação, decidir liberação, conciliar, lote sem/ com cancelamento, leitura parcial)
+- verificacao_automatica: passou (QA verde 3 applies; v0.0.69 b0ad515 publicado e provado — lastPublishedRef = b0ad515; P4-04/05/06/07/12 verdes no ar)
+- aprendizado: pendente (triagem ao concluir)
+- sistema: lai
+- skip_projeto: 65741
+- skip_versao: b0ad515 (v0.0.69)
+- skip_publicacao: publicada:b0ad515 em 2026-10-17T18:19:58Z
+- pendente_github: nao (espelho f79847a5 entregue via MCP: hook+migration e0d94da, Importar 4ff64a9, provas.ts 8c8ae4b, demais no commit do espelho; commits de teste bd2996b/8d9ff45 substituídos pelo conteúdo real)
+- espelho: atualizado (10 arquivos da task f79847a5)
+- housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)
+- ultima_acao: 17/10 15h10 — task f79847a5 analisada (SPEC-1-004, CA-1-20/22, P4-04/05/06/12); P4-04/05 já passando; recorte = tela de ligação + decidir liberação + conciliação CA-1-22 (rota + migration 0015) + Importar chama conciliação
+- proxima_acao: aguardar teste humano do dono (roteiro na análise)
+- atualizado_em: 2026-10-17T15:11:00-03:00

@@ -84,3 +84,17 @@ Nenhuma — o regime é derivável do profissional (fonte única no formulário)
 ## Teste humano
 
 Não é caso crítico (nada muda no que a equipe já usa — o gate já trava no servidor; a tela só mostra o que o servidor responde) e não é a última task da SPEC-1-004. Task entra em `aguardando_teste` e o roteiro da SPEC cobre.
+
+## Rev.2 (19/10, teste humano do dono)
+
+**Falha relatada:** 5 implantes + 2 extrações calculou 40 min (regra errada); regime de avaliação não aparecia para dentista "ambos".
+
+**Causa 1 (motor):** matcher com casamento "inverso" (cabe1Inversa/cabe2Inversa) espelhava as quantidades — q2=2 extrações lidas como 2 implantes casava a regra "2–2 + 2+ exo = 40min". A inversa não existe na SPEC (quantidade casa em qualquer posição era para variáveis trocadas de posição, não para espelhar valores).
+
+**Correção 1:** matcher só direto (cabe1Direta && cabe2Direta). Provado no ar: 5+2 → sem_regra; regressões 2+2=40, 2+1=30, 4=40, 1=30, 3=40, 5=60, 4+1=40, 5+1=sem_regra (tabela não tem regra pra 5+1 — correto: vai pra direção validar).
+
+**Causa 2 (regime):** regime deduzido só do tipo_agenda do profissional — dentista "ambos" não tinha como escolher avaliação.
+
+**Correção 2:** campo "Tipo do agendamento" (Avaliação/Tratamento) no formulário do Planejar; default segue a agenda do dentista escolhido; gate CA-1-21 usa o regime escolhido; badge do resultado mostra o regime.
+
+**Nota:** o caso "5 implantes + 2 extrações" entra na lista "Casos sem regra" — a direção valida e cadastra o tempo (é decisão da clínica, o sistema nunca inventa tempo).

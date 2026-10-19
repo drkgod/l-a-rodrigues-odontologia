@@ -192,7 +192,7 @@ routerAdd(
 
     const contatos = $app.findRecordsByFilter(
       'contatos_confirmacao',
-      'estado = "mensagem_enviada"',
+      'estado = "mensagem_enviada" || estado = "sem_resposta"',
       '',
       500,
       0,
@@ -363,11 +363,17 @@ routerAdd(
     }
 
     if (tipo === 'ordem_chegada') {
-      // visitas únicas por turno [inicio,fim); sem fim = "até terminar os pacientes"
+      if (!politica) {
+        return e.json(200, {
+          situacao: 'regra_nao_validada',
+          mensagem: 'Regra da agenda não validada — política ativa não encontrada.',
+          permitido: false,
+        })
+      }
+      // contar visitas únicas no turno [início, fim) — ou a partir de turno_inicio
       const noTurno = doProf.filter((it) => {
         const h = it.getString('inicio')
-        if (turnoFim) return h >= turnoInicio && h < turnoFim
-        return h >= turnoInicio
+        return turnoFim ? h >= turnoInicio && h < turnoFim : h >= turnoInicio
       })
       let ocupacoes = noTurno.length
       if (escopo === 'grupo') {
@@ -644,31 +650,20 @@ routerAdd(
     const pros = $app.findRecordsByFilter('profissionais', 'id != ""', '', 200, 0)
     for (let i = 0; i < pros.length; i++) nomesProf[pros[i].id] = pros[i].getString('nome')
 
-    // Contatos existentes (um por agenda_item, idempotente entre massas teste e reais):
-    // NÃO filtrar por teste — senão uma 2ª geração com flag diferente tenta criar um
-    // novo contato para o mesmo item e estoura o índice único agenda_item
-    // ("Value must be unique" — bug do teste humano 16/10, f124df8f).
-    const contatos = $app.findRecordsByFilter(
-      'contatos_confirmacao',
-      'agenda_item != ""',
-      '',
-      500,
-      0,
-    )
-    const contatoPorItem = {}
-    for (let i = 0; i < contatos.length; i++) {
-      contatoPorItem[contatos[i].getString('agenda_item')] = contatos[i]
-    }
-
-    const col = $app.findCollectionByNameOrId('contatos_confirmacao')
-    const criados = []
     const lista = []
-    for (let i = 0; i < itens.length; i++) {
-      const item = itens[i]
-      let contato = contatoPorItem[item.id]
-      if (!contato) {
-        // RN-01: consulta do dia-alvo sem contato → contato pendente (idempotente)
-        contato = new Record(col)
+    const criados = []
+    for (const item of itens) {
+      // contato do item (idempotente: 1 por agenda_item — índice único)
+      let contato
+      try {
+        contato = $app.findFirstRecordByFilter(
+          'contatos_confirmacao',
+          'agenda_item = "' + item.id + '"',
+          '',
+        )
+      } catch (_) {
+        const colContato = $app.findCollectionByNameOrId('contatos_confirmacao')
+        contato = new Record(colContato)
         contato.set('agenda_item', item.id)
         contato.set('estado', 'pendente')
         contato.set('responsavel', '')

@@ -52,7 +52,7 @@
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano com 2 CRCs: 2 e 4 coroas com dois dentistas conferindo a tabela; SPEC-1-002.
 - [x] Montar a ficha do paciente com histórico e próxima ação @"L A Rodrigues" !14/10/2026  <!-- id:35bff70c-73f2-40e5-96cf-c17bd68d1499 -->
   > Construir ficha com histórico, responsável/próxima ação e acesso por função; aba Etapas do tratamento consome as tasks novas de modelo/plano, sem CRC alterar decisão clínica. Dados do planejamento mínimo apenas para avaliador habilitado atribuído e equipe operacional autorizada (SPEC-1-003 · CA-1-16 · CA-SEQ-01 · P3-09).
-- [ ] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026  <!-- id:f79847a5-0ec1-4549-b19c-8c982cef25c6 -->
+- [x] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.76 e7770c1, teste humano aprovado)  <!-- id:f79847a5-0ec1-4549-b19c-8c982cef25c6 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de ligação e liberação de vagas só pela regra de confirmação; sobreposição na avaliação e conflito no tratamento sinalizados (subtask 8421e27b). SPEC-1-004.
   - [ ] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026  <!-- id:8421e27b-e7d2-4f59-a3df-633cde760d9e -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Sinal de sobreposição na avaliação e conflito no tratamento; SPEC-1-004.

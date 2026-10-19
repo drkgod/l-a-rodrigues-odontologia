@@ -1,25 +1,25 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: 8421e27b-e7d2-4f59-a3df-633cde760d9e
+- task_id: nenhuma
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
-- analise: .adapta-cliente/analises/8421e27b-sinalizar-sobreposicao-conflito.md
-- etapa: aguardando_teste_humano (reteste do ponto rev.2)
-- autorizacao_implementacao: confirmada 19/10 18h41 ("pode seguir" — ciclo contínuo 0.8.1, f79847a5 concluída com teste aprovado)
-- aguardando_teste: 8421e27b (caso crítico: fluxo "Ligar reserva" em uso agora bloqueia sobreposição)
+- analise: .adapta-cliente/analises/84b8f8d6-limites-agenda-turno.md
+- etapa: concluida
+- autorizacao_implementacao: confirmada 19/10 22h40 ("testei deu certo, pode seguir" — ciclo contínuo 0.8.1, 8421e27b concluída)
+- aguardando_teste: nenhuma
 - em_espera: nenhuma
-- teste_humano: pendente (roteiro do ponto crítico enviado na parada 19/10 21h50)
-- verificacao_automatica: passou (QA verde; v0.0.79 6a79d2f provada: bundle index-DMxhk-zb.js com strings rev.3; rev.2 provada via API: 5+2 exo = sem_regra + regressões)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (3 padrões: findFirstRecordByFilter 2 args, pod não recarrega hook, prova de bundle por strings)
+- teste_humano: nao_aplicavel:prova (P4-13/14/15 E2E verdes no ar v0.0.81 89dd14d; massa limpa)
+- verificacao_automatica: passou (QA verde; E2E: Leonel 6ª bloqueada, Wesley 21ª bloqueada + tarde livre, Erika 3ª bloqueada após corrigir vínculo por nome; 12 políticas ativas)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 6a79d2f (v0.0.79)
-- skip_publicacao: publicada:6a79d2f em 2026-10-19T22:34:34Z
+- skip_versao: 89dd14d (v0.0.81)
+- skip_publicacao: publicada:89dd14d em 2026-10-19T22:54:19Z
 - pendente_github: nao
-- espelho: atualizado (Planejar.tsx rev.3 + duracao_sugerir.js + planejamento.ts)
+- espelho: atualizado (confirmacao_regras.js + provas.ts + Provas.tsx da task 84b8f8d6)
 - housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)
-- ultima_acao: 19/10 22h35 — rev.3 no ar (v0.0.79 6a79d2f): avaliação = consulta fixa (sem procedimento/tabela); agendamento aprovado pelo dono na 1ª rodada; aguardando reteste do ponto rev.3
-- proxima_acao: aguardar teste do dono (roteiro do ponto crítico); depois, próxima task elegível da fase
-- atualizado_em: 2026-10-19T22h35:00-03:00
+- ultima_acao: 19/10 23h05 — TASK 84b8f8d6 CONCLUÍDA pela prova automática (v0.0.81 89dd14d): 12 políticas ativas + gate por turno + provas P4-13/14/15 verdes. fase.md 14/34. Próxima: próxima task elegível da fase
+- proxima_acao: próxima task elegível da fase (d03a15ee Acompanhar o lead até o comparecimento, SPEC-1-003)
+- atualizado_em: 2026-10-19T23h05:00-03:00

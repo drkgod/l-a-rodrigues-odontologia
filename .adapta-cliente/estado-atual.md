@@ -11,15 +11,15 @@
 - aguardando_teste: 8421e27b (caso crítico: fluxo "Ligar reserva" em uso agora bloqueia sobreposição)
 - em_espera: nenhuma
 - teste_humano: pendente (roteiro do ponto crítico enviado na parada 19/10 21h50)
-- verificacao_automatica: passou (QA verde; v0.0.78 680d586 provada via API: 5+2 exo = sem_regra; regressões 2+2=40, 2+1=30, 4=40, 1=30, 3=40, 5=60, 4+1=40, 5+1=sem_regra)
+- verificacao_automatica: passou (QA verde; v0.0.79 6a79d2f provada: bundle index-DMxhk-zb.js com strings rev.3; rev.2 provada via API: 5+2 exo = sem_regra + regressões)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (3 padrões: findFirstRecordByFilter 2 args, pod não recarrega hook, prova de bundle por strings)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 680d586 (v0.0.78)
-- skip_publicacao: publicada:680d586 em 2026-10-19T22:06:38Z
+- skip_versao: 6a79d2f (v0.0.79)
+- skip_publicacao: publicada:6a79d2f em 2026-10-19T22:34:34Z
 - pendente_github: nao
-- espelho: atualizado (Planejar.tsx + duracao_sugerir.js da rev.2)
+- espelho: atualizado (Planejar.tsx rev.3 + duracao_sugerir.js + planejamento.ts)
 - housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)
-- ultima_acao: 19/10 22h10 — rev.2 no ar (v0.0.78 680d586): matcher sem inversão (bug dos 40min) + campo Tipo do agendamento no formulário; provado via API; aguardando reteste do dono
+- ultima_acao: 19/10 22h35 — rev.3 no ar (v0.0.79 6a79d2f): avaliação = consulta fixa (sem procedimento/tabela); agendamento aprovado pelo dono na 1ª rodada; aguardando reteste do ponto rev.3
 - proxima_acao: aguardar teste do dono (roteiro do ponto crítico); depois, próxima task elegível da fase
-- atualizado_em: 2026-10-19T22h10:00-03:00
+- atualizado_em: 2026-10-19T22h35:00-03:00

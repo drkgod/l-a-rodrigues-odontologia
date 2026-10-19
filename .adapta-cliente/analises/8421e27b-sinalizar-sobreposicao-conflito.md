@@ -98,3 +98,9 @@ Não é caso crítico (nada muda no que a equipe já usa — o gate já trava no
 **Correção 2:** campo "Tipo do agendamento" (Avaliação/Tratamento) no formulário do Planejar; default segue a agenda do dentista escolhido; gate CA-1-21 usa o regime escolhido; badge do resultado mostra o regime.
 
 **Nota:** o caso "5 implantes + 2 extrações" entra na lista "Casos sem regra" — a direção valida e cadastra o tempo (é decisão da clínica, o sistema nunca inventa tempo).
+
+## Rev.3 (19/10, 2ª rodada de teste humano)
+
+**Falha relatada:** com tipo "Avaliação", o formulário ainda pedia procedimento e calculava tempo da tabela (40 min para "Escaneamento de coroas") — errado: avaliação é consulta fixa de 30 min (CL-004), sem procedimento.
+
+**Correção:** com regime "Avaliação": (1) formulário esconde Procedimento/Quantidade/2ª variável; (2) "Consultar tempo" não consulta tabela — resultado direto da config da unidade (duracao_avaliacao_minutos, limite_sobreposicao_avaliacao; default 30/2); (3) rótulo "X min (consulta de avaliação)"; (4) badge mostra "Avaliação — consulta de 30 min, até 2 pacientes por horário". Serviço novo buscarConfigAvaliacao (planejamento.ts). Gate CA-1-21 continua usando o regime escolhido.

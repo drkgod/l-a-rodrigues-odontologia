@@ -51,10 +51,10 @@ interface ProfissionalSimples {
   tipo_agenda?: string
 }
 
-// Task 8421e27b — regime do planejamento pelo tipo de agenda do profissional
-// (fonte única no formulário). Avaliação = 2 por horário; tratamento = sem sobreposição.
-function regimeDoProfissional(tipoAgenda: string | undefined): 'avaliacao' | 'horario_marcado' {
-  return tipoAgenda === 'avaliacao' ? 'avaliacao' : 'horario_marcado'
+// Task 8421e27b — regime do planejamento: escolha explícita no formulário
+// (default pela agenda do profissional). Avaliação = 2 por horário; tratamento = sem sobreposição.
+function regimeDefault(tipoAgenda: string | undefined): 'avaliacao' | 'tratamento' {
+  return tipoAgenda === 'avaliacao' ? 'avaliacao' : 'tratamento'
 }
 
 const hoje = () => new Date().toISOString().slice(0, 10)
@@ -72,6 +72,8 @@ const Planejar = () => {
   const [grupo, setGrupo] = useState('')
   const [quantidade, setQuantidade] = useState('1')
   const [quantidade2, setQuantidade2] = useState('')
+  // task 8421e27b — regime do agendamento (avaliação × tratamento), escolhido na tela
+  const [regime, setRegime] = useState<'avaliacao' | 'tratamento'>('tratamento')
   const [data, setData] = useState(hoje())
   const [resultado, setResultado] = useState<ResultadoSugestao | null>(null)
   const [vagas, setVagas] = useState<Array<{ inicio: string; fim: string }>>([])
@@ -232,12 +234,13 @@ const Planejar = () => {
         data,
         item.inicio,
         profSel.id,
-        regimeDoProfissional(profSel.tipo_agenda),
+        regime === 'avaliacao' ? 'avaliacao' : 'horario_marcado',
       )
       if (!cap.permitido) {
         if (cap.situacao === 'regra_nao_validada')
           toast.warning(
-            cap.mensagem || 'Regra da agenda não validada — resolva com a gestão antes de reservar.',
+            cap.mensagem ||
+              'Regra da agenda não validada — resolva com a gestão antes de reservar.',
           )
         else toast.error(cap.mensagem || 'Horário não permitido pelas regras da agenda.')
         return
@@ -358,7 +361,14 @@ const Planejar = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="profissional">Profissional</Label>
-                <Select value={profissional} onValueChange={setProfissional}>
+                <Select
+                  value={profissional}
+                  onValueChange={(v) => {
+                    setProfissional(v)
+                    // task 8421e27b — regime acompanha a agenda do dentista escolhido
+                    setRegime(regimeDefault(profissionais.find((p) => p.nome === v)?.tipo_agenda))
+                  }}
+                >
                   <SelectTrigger id="profissional" aria-label="Profissional">
                     <SelectValue placeholder="Escolha o profissional" />
                   </SelectTrigger>
@@ -368,6 +378,21 @@ const Planejar = () => {
                         {p.nome}
                       </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="regime">Tipo do agendamento</Label>
+                <Select
+                  value={regime}
+                  onValueChange={(v) => setRegime(v as 'avaliacao' | 'tratamento')}
+                >
+                  <SelectTrigger id="regime" aria-label="Tipo do agendamento">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="avaliacao">Avaliação (até 2 por horário)</SelectItem>
+                    <SelectItem value="tratamento">Tratamento (sem sobreposição)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -446,8 +471,7 @@ const Planejar = () => {
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Regime:{' '}
-                  {regimeDoProfissional(profissionais.find((p) => p.nome === profissional)?.tipo_agenda) ===
-                  'avaliacao'
+                  {regime === 'avaliacao'
                     ? 'Avaliação — até 2 pacientes por horário (30 min)'
                     : 'Tratamento — sem sobreposição de horário'}
                 </p>

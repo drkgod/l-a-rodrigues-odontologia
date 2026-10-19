@@ -122,11 +122,12 @@ routerAdd(
         const x1 = r.getInt('max_1')
         const m2 = r.getInt('min_2')
         const x2 = r.getInt('max_2')
+        // Task 8421e27b (teste humano 19/10): matcher sem inversão — a inversa
+        // "espelhava" as quantidades (2 extrações lidas como 2 implantes) e casava
+        // regra errada (5 implantes + 2 extrações → 40min em vez de "sem regra").
         const cabe1Direta = v1 ? q1 >= m1 && (x1 <= 0 || q1 <= x1) : q1 === 0
         const cabe2Direta = v2 ? q2 >= m2 && (x2 <= 0 || q2 <= x2) : q2 === 0
-        const cabe1Inversa = v1 ? q2 >= m1 && (x1 <= 0 || q2 <= x1) : q2 === 0
-        const cabe2Inversa = v2 ? q1 >= m2 && (x2 <= 0 || q1 <= x2) : q1 === 0
-        if ((cabe1Direta && cabe2Direta) || (cabe1Inversa && cabe2Inversa)) {
+        if (cabe1Direta && cabe2Direta) {
           regra = r
           break
         }

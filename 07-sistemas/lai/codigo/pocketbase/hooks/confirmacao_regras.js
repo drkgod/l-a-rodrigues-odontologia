@@ -214,11 +214,7 @@ routerAdd(
       const turno = inicio < '12:00' ? 'manha' : 'tarde'
       let responsavel = ''
       try {
-        const cfg = $app.findFirstRecordByFilter(
-          'config_turno_ligacao',
-          'turno = "' + turno + '"',
-          '',
-        )
+        const cfg = $app.findFirstRecordByFilter('config_turno_ligacao', 'turno = "' + turno + '"')
         responsavel = cfg.getString('responsavel')
       } catch (_) {
         responsavel = ''

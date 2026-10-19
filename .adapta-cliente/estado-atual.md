@@ -10,12 +10,12 @@
 - autorizacao_implementacao: CONFIRMADA 17/10 12h00 ("Pode implementar")
 - decisao_cliente: nenhuma pendente (regras fechadas na SPEC revisão 13/10)
 - teste_humano: pendente (roteiro na análise: ligação, decidir liberação, conciliar, lote sem/ com cancelamento, leitura parcial)
-- verificacao_automatica: passou (QA verde; v0.0.75 bd9f3e5 publicado e provado via API interna: mover -v2 = movidos 2, cobertura ok, responsável Thays gravado nos contatos)
+- verificacao_automatica: passou (QA verde; v0.0.76 e7770c1 provado NO NAVEGADOR: lista de ligação mostra "manhã | Thays" nos 2 pacientes que estavam "a definir"; e via API interna: mover -v2 = movidos 2, cobertura ok)
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: bd9f3e5 (v0.0.75)
-- skip_publicacao: publicada:bd9f3e5 em 2026-10-19T11:38:16Z
+- skip_versao: e7770c1 (v0.0.76)
+- skip_publicacao: publicada:e7770c1 em 2026-10-19T13:24:49Z
 - pendente_github: nao (espelho f79847a5 entregue via MCP: hook+migration e0d94da, Importar 4ff64a9, provas.ts 8c8ae4b, demais no commit do espelho; commits de teste bd2996b/8d9ff45 substituídos pelo conteúdo real)
 - espelho: atualizado (10 arquivos da task f79847a5)
 - housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)

@@ -10,12 +10,12 @@
 - autorizacao_implementacao: CONFIRMADA 17/10 12h00 ("Pode implementar")
 - decisao_cliente: nenhuma pendente (regras fechadas na SPEC revisão 13/10)
 - teste_humano: pendente (roteiro na análise: ligação, decidir liberação, conciliar, lote sem/ com cancelamento, leitura parcial)
-- verificacao_automatica: passou (QA verde 3 applies; v0.0.69 b0ad515 publicado e provado — lastPublishedRef = b0ad515; P4-04/05/06/07/12 verdes no ar)
+- verificacao_automatica: passou (QA verde; v0.0.75 bd9f3e5 publicado e provado via API interna: mover -v2 = movidos 2, cobertura ok, responsável Thays gravado nos contatos)
 - aprendizado: pendente (triagem ao concluir)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: b0ad515 (v0.0.69)
-- skip_publicacao: publicada:b0ad515 em 2026-10-17T18:19:58Z
+- skip_versao: bd9f3e5 (v0.0.75)
+- skip_publicacao: publicada:bd9f3e5 em 2026-10-19T11:38:16Z
 - pendente_github: nao (espelho f79847a5 entregue via MCP: hook+migration e0d94da, Importar 4ff64a9, provas.ts 8c8ae4b, demais no commit do espelho; commits de teste bd2996b/8d9ff45 substituídos pelo conteúdo real)
 - espelho: atualizado (10 arquivos da task f79847a5)
 - housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)

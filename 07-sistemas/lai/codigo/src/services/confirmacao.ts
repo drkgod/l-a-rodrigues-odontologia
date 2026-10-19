@@ -75,7 +75,7 @@ export interface ResultadoMoverNaoRespondentes {
 
 export async function moverNaoRespondentes(data: string): Promise<ResultadoMoverNaoRespondentes> {
   try {
-    return await pb.send('/backend/v1/confirmacao/mover-nao-respondentes', {
+    return await pb.send('/backend/v1/confirmacao/mover-nao-respondentes-v2', {
       method: 'POST',
       body: { data },
     })

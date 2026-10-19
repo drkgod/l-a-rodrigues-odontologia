@@ -14,6 +14,7 @@
 
 | Data | Task | Versão publicada | Arquivos alterados |
 |---|---|---|---|
+| 19/10/2026 | 8421e27b | 1aab519 (v0.0.77) | src/pages/Planejar.tsx |
 | 13/10/2026 | a9f9e30e (regras confirmação/liberação — gates CA-1-20/21) | 45af710 | migration 0006, hook confirmacao_regras.js, service confirmacao.ts, provas P4-04/05/07 |
 | 13/10/2026 | 1f4de19d (tabela de duração — importar/aprovar) | 9d1e3f1 | migration 0004, hooks duracao_importar/aprovar, service duracao, tela TabelaDuracao, provas P2-07/08 |
 | 13/10/2026 | c7194c3e (concluída — filtro de cadeira) | 3dd018e | src/pages/Agenda.tsx |

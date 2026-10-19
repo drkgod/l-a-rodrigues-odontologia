@@ -54,7 +54,7 @@
   > Construir ficha com histórico, responsável/próxima ação e acesso por função; aba Etapas do tratamento consome as tasks novas de modelo/plano, sem CRC alterar decisão clínica. Dados do planejamento mínimo apenas para avaliador habilitado atribuído e equipe operacional autorizada (SPEC-1-003 · CA-1-16 · CA-SEQ-01 · P3-09).
 - [x] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.76 e7770c1, teste humano aprovado)  <!-- id:f79847a5-0ec1-4549-b19c-8c982cef25c6 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de ligação e liberação de vagas só pela regra de confirmação; sobreposição na avaliação e conflito no tratamento sinalizados (subtask 8421e27b). SPEC-1-004.
-  - [ ] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026  <!-- id:8421e27b-e7d2-4f59-a3df-633cde760d9e -->
+  - [/] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026 (no ar v0.0.77 1aab519, aguardando teste)  <!-- id:8421e27b-e7d2-4f59-a3df-633cde760d9e -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Sinal de sobreposição na avaliação e conflito no tratamento; SPEC-1-004.
 - [ ] Validar as regras de liberação e encaixe em call com a equipe @"Rodrigo Santos" !15/10/2026  <!-- id:1c8eb871-e670-4b77-af97-56b6232e9efe -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Call de validação das regras de liberação/encaixe com a equipe; SPEC-1-004.

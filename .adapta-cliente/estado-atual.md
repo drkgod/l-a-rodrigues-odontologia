@@ -1,24 +1,25 @@
 # Estado atual — Adapta Cliente
 
-- schema_version: adapta-cliente-state/v2
-- task_id: f79847a5-0ec1-4549-b19c-8c982cef25c6
+- schema_version: adapta-cliente-state/v3
+- task_id: 8421e27b-e7d2-4f59-a3df-633cde760d9e
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacoes-liberacao-e-encaixe.md
-- analise: .adapta-cliente/analises/f79847a5-lista-ligacao-liberacao.md
+- analise: .adapta-cliente/analises/8421e27b-sinalizar-sobreposicao-conflito.md
 - etapa: aguardando_teste_humano
-- autorizacao_implementacao: CONFIRMADA 17/10 12h00 ("Pode implementar")
-- decisao_cliente: nenhuma pendente (regras fechadas na SPEC revisão 13/10)
-- teste_humano: pendente (roteiro na análise: ligação, decidir liberação, conciliar, lote sem/ com cancelamento, leitura parcial)
-- verificacao_automatica: passou (QA verde; v0.0.76 e7770c1 provado NO NAVEGADOR: lista de ligação mostra "manhã | Thays" nos 2 pacientes que estavam "a definir"; e via API interna: mover -v2 = movidos 2, cobertura ok)
-- aprendizado: pendente (triagem ao concluir)
+- autorizacao_implementacao: confirmada 19/10 18h41 ("pode seguir" — ciclo contínuo 0.8.1, f79847a5 concluída com teste aprovado)
+- aguardando_teste: 8421e27b (caso crítico: fluxo "Ligar reserva" em uso agora bloqueia sobreposição)
+- em_espera: nenhuma
+- teste_humano: pendente (roteiro do ponto crítico enviado na parada 19/10 21h50)
+- verificacao_automatica: passou (QA verde; v0.0.77 1aab519 publicada e provada: bundle index-BRP1MU98.js contém regime + gate; gate CA-1-21 no servidor com P4-07 verde)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (3 padrões: findFirstRecordByFilter 2 args, pod não recarrega hook, prova de bundle por strings)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: e7770c1 (v0.0.76)
-- skip_publicacao: publicada:e7770c1 em 2026-10-19T13:24:49Z
-- pendente_github: nao (espelho f79847a5 entregue via MCP: hook+migration e0d94da, Importar 4ff64a9, provas.ts 8c8ae4b, demais no commit do espelho; commits de teste bd2996b/8d9ff45 substituídos pelo conteúdo real)
-- espelho: atualizado (10 arquivos da task f79847a5)
+- skip_versao: 1aab519 (v0.0.77)
+- skip_publicacao: publicada:1aab519 em 2026-10-19T21:48:29Z
+- pendente_github: nao
+- espelho: atualizado (Planejar.tsx da task 8421e27b)
 - housekeeping: eec75533 (export leads APP CRC) e 71531c1d (modelo da planilha do robô) seguem abertas aguardando o dono (CL-PEND-001)
-- ultima_acao: 17/10 15h10 — task f79847a5 analisada (SPEC-1-004, CA-1-20/22, P4-04/05/06/12); P4-04/05 já passando; recorte = tela de ligação + decidir liberação + conciliação CA-1-22 (rota + migration 0015) + Importar chama conciliação
-- proxima_acao: aguardar teste humano do dono (roteiro na análise)
-- atualizado_em: 2026-10-17T15:11:00-03:00
+- ultima_acao: 19/10 21h50 — task 8421e27b ENTREGUE no ar (v0.0.77 1aab519): gate visível no "Ligar reserva" + badge do regime; caso crítico → parada para teste do dono
+- proxima_acao: aguardar teste do dono (roteiro do ponto crítico); depois, próxima task elegível da fase
+- atualizado_em: 2026-10-19T21h50:00-03:00

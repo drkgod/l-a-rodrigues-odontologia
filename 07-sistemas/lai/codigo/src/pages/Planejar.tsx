@@ -25,6 +25,7 @@ import {
 import { toast } from 'sonner'
 import { useAuth } from '@/contexts/AuthContext'
 import { listarAgendaDoDia, listarProfissionais, type ItemAgenda } from '@/services/agenda'
+import { verificarCapacidade } from '@/services/confirmacao'
 import {
   agruparSemRegra,
   conciliarReservas,
@@ -47,6 +48,13 @@ import {
 interface ProfissionalSimples {
   id: string
   nome: string
+  tipo_agenda?: string
+}
+
+// Task 8421e27b — regime do planejamento pelo tipo de agenda do profissional
+// (fonte única no formulário). Avaliação = 2 por horário; tratamento = sem sobreposição.
+function regimeDoProfissional(tipoAgenda: string | undefined): 'avaliacao' | 'horario_marcado' {
+  return tipoAgenda === 'avaliacao' ? 'avaliacao' : 'horario_marcado'
 }
 
 const hoje = () => new Date().toISOString().slice(0, 10)
@@ -213,6 +221,27 @@ const Planejar = () => {
     if (!resultado?.planejamento_id) return
     setLigando(item.id)
     try {
+      // Task 8421e27b — sinal do gate CA-1-21 antes de reservar: avaliação 2/horário,
+      // tratamento sem sobreposição, política pendente nunca vira ilimitada.
+      const profSel = profissionais.find((p) => p.nome === profissional)
+      if (!profSel) {
+        toast.error('Escolha o profissional novamente e tente de novo.')
+        return
+      }
+      const cap = await verificarCapacidade(
+        data,
+        item.inicio,
+        profSel.id,
+        regimeDoProfissional(profSel.tipo_agenda),
+      )
+      if (!cap.permitido) {
+        if (cap.situacao === 'regra_nao_validada')
+          toast.warning(
+            cap.mensagem || 'Regra da agenda não validada — resolva com a gestão antes de reservar.',
+          )
+        else toast.error(cap.mensagem || 'Horário não permitido pelas regras da agenda.')
+        return
+      }
       const r = await ligarReserva(resultado.planejamento_id, item.id)
       if (r.desvio_id) {
         toast.warning(
@@ -377,7 +406,7 @@ const Planejar = () => {
                     min={0}
                     value={quantidade2}
                     onChange={(e) => setQuantidade2(e.target.value)}
-                    aria-label={rotuloSegunda(grupoEscolhido?.varianta_2)}
+                    aria-label={rotuloSegunda(grupoEscolhido?.variavel_2)}
                     placeholder="0"
                   />
                 </div>
@@ -414,6 +443,13 @@ const Planejar = () => {
               <>
                 <p className="text-base font-bold text-green-800">
                   {resultado.minutos} min (regra: {rotuloRegra(resultado)})
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Regime:{' '}
+                  {regimeDoProfissional(profissionais.find((p) => p.nome === profissional)?.tipo_agenda) ===
+                  'avaliacao'
+                    ? 'Avaliação — até 2 pacientes por horário (30 min)'
+                    : 'Tratamento — sem sobreposição de horário'}
                 </p>
                 {resultado.minutos !== resultado.minutos_brutos && (
                   <p className="text-xs text-muted-foreground">

@@ -305,18 +305,33 @@ routerAdd(
       0,
     )
     let politica = null
+    let politicaFallback = null
     for (const p2 of todas) {
       if (p2.getInt('dia_semana') !== dia) continue
+      // Task 84b8f8d6 — unidade da política é metadado de ORIGEM (ITA/ALC); a central
+      // é a piloto única (agenda_itens não distingue unidade), então política com
+      // unidade de origem casa; pendente nunca é carregada (filtro situacao=ativa).
       const pUnidade = String(p2.getString('unidade') || '')
-      if (pUnidade && pUnidade !== unidadeConfig) continue
+      if (pUnidade && pUnidade !== unidadeConfig && pUnidade !== 'ITA' && pUnidade !== 'ALC')
+        continue
       const pProf = p2.getString('profissional')
       if (pProf && pProf !== profissionalId) continue
       const pNome = String(p2.getString('profissional_nome') || '').toLowerCase()
       if (pNome && nomeProf && pNome !== String(nomeProf).toLowerCase()) continue
       if (!pProf && !pNome) continue // política sem vínculo não é aplicável
-      politica = p2
-      break
+      // Task 84b8f8d6 (prova P4-14): entre políticas do mesmo dia/profissional/tipo,
+      // preferir a que COBRE a hora (turno_inicio <= hora < turno_fim, ou sem fim);
+      // sem nenhuma cobrindo, usar a primeira candidata (limite do turno mais próximo).
+      const tIni = p2.getString('turno_inicio')
+      const tFim = p2.getString('turno_fim')
+      const cobre = !tIni || (tFim ? hora >= tIni && hora < tFim : hora >= tIni)
+      if (cobre) {
+        politica = p2
+        break
+      }
+      if (!politicaFallback) politicaFallback = p2
     }
+    if (!politica) politica = politicaFallback
 
     if (tipo === 'ordem_chegada' && !politica) {
       return e.json(200, {
@@ -400,7 +415,33 @@ routerAdd(
       })
     }
 
-    // tipo === 'horario_marcado': sem sobreposição na REGRA GERAL (RN-09)
+    // tipo === 'horario_marcado': RN-09 sem sobreposição na REGRA GERAL;
+    // política específica ativa com limite_por_horario prevalece (task 84b8f8d6:
+    // Erika/ortodontia = 2 por horário na agenda validada).
+    if (politica && politica.getInt('limite_por_horario') > 0) {
+      const limiteEsp = politica.getInt('limite_por_horario')
+      const mesmoHorarioEsp = doProf.filter((it) => it.getString('inicio') === hora)
+      if (mesmoHorarioEsp.length >= limiteEsp) {
+        return e.json(200, {
+          situacao: 'bloqueado',
+          motivo:
+            'Limite de ' +
+            limiteEsp +
+            ' pacientes por horário já atingido (agenda ' +
+            (politica.getString('regime_agenda') || 'específica') +
+            ').',
+          permitido: false,
+          ocupacoes: mesmoHorarioEsp.length,
+          limite: limiteEsp,
+        })
+      }
+      return e.json(200, {
+        situacao: 'permitido',
+        permitido: true,
+        ocupacoes: mesmoHorarioEsp.length,
+        limite: limiteEsp,
+      })
+    }
     const sobrepostos = doProf.filter((it) => {
       const ini = it.getString('inicio')
       const fim = it.getString('fim')

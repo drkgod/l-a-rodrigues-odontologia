@@ -48,6 +48,9 @@ import {
   executarProvaP4_05,
   executarProvaP4_06,
   executarProvaP4_12,
+  executarProvaP4_13,
+  executarProvaP4_14,
+  executarProvaP4_15,
   executarProvaP4_07,
   executarProvaP3_01,
   executarProvaP3_02,
@@ -383,6 +386,27 @@ const Provas = () => {
             disabled={executando}
           >
             P4-07 (capacidade)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP4_13, 'SPEC-1-004')}
+            disabled={executando}
+          >
+            P4-13 (Leonel 5)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP4_14, 'SPEC-1-004')}
+            disabled={executando}
+          >
+            P4-14 (Wesley 20)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP4_15, 'SPEC-1-004')}
+            disabled={executando}
+          >
+            P4-15 (Erika 2/sáb)
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>

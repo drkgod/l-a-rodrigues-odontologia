@@ -138,6 +138,26 @@ export async function sugerirDuracao(
   }
 }
 
+// Task 8421e27b — avaliação é consulta fixa (CL-004): duração e limite da config da unidade.
+export interface ConfigAvaliacao {
+  duracao_minutos: number
+  limite_por_horario: number
+}
+
+export async function buscarConfigAvaliacao(): Promise<ConfigAvaliacao> {
+  try {
+    const cfg = await pb
+      .collection('config_unidade')
+      .getFirstListItem(pb.filter('nome_unidade = {:n}', { n: 'UNIDADE-DEMO' }))
+    return {
+      duracao_minutos: cfg.duracao_avaliacao_minutos || 30,
+      limite_por_horario: cfg.limite_sobreposicao_avaliacao || 2,
+    }
+  } catch (_) {
+    return { duracao_minutos: 30, limite_por_horario: 2 }
+  }
+}
+
 export async function listarPlanejamentos(): Promise<Planejamento[]> {
   return pb.collection<Planejamento>('planejamentos').getFullList({ sort: '-created' })
 }

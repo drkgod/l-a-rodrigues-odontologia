@@ -27,6 +27,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { listarAgendaDoDia, listarProfissionais, type ItemAgenda } from '@/services/agenda'
 import { verificarCapacidade } from '@/services/confirmacao'
 import {
+  buscarConfigAvaliacao,
   agruparSemRegra,
   conciliarReservas,
   ligarReserva,
@@ -74,6 +75,8 @@ const Planejar = () => {
   const [quantidade2, setQuantidade2] = useState('')
   // task 8421e27b — regime do agendamento (avaliação × tratamento), escolhido na tela
   const [regime, setRegime] = useState<'avaliacao' | 'tratamento'>('tratamento')
+  // task 8421e27b — avaliação é consulta fixa (CL-004): 30 min, 2 por horário
+  const [cfgAvaliacao, setCfgAvaliacao] = useState({ duracao_minutos: 30, limite_por_horario: 2 })
   const [data, setData] = useState(hoje())
   const [resultado, setResultado] = useState<ResultadoSugestao | null>(null)
   const [vagas, setVagas] = useState<Array<{ inicio: string; fim: string }>>([])
@@ -99,9 +102,14 @@ const Planejar = () => {
   const carregar = useCallback(async () => {
     setErro('')
     try {
-      const [profs, grps] = await Promise.all([listarProfissionais(), listarGruposAtivos()])
+      const [profs, grps, cfgAv] = await Promise.all([
+        listarProfissionais(),
+        listarGruposAtivos(),
+        buscarConfigAvaliacao(),
+      ])
       setProfissionais(profs)
       setGrupos(grps)
+      setCfgAvaliacao(cfgAv)
     } catch {
       setErro('Não foi possível carregar os dados. Tente novamente.')
     } finally {
@@ -127,6 +135,22 @@ const Planejar = () => {
     setErro('')
     setResultado(null)
     setVagas([])
+    // task 8421e27b — avaliação é consulta fixa (CL-004): sem procedimento/tabela
+    if (regime === 'avaliacao') {
+      setResultado({
+        situacao: 'ok',
+        mensagem: '',
+        minutos: cfgAvaliacao.duracao_minutos,
+        minutos_brutos: cfgAvaliacao.duracao_minutos,
+        arredondamento: 5,
+        regra_aplicada: null,
+        origem_tabela: 'avaliacao',
+        capacidade_validada: true,
+        planejamento_id: '',
+      })
+      setVagas([])
+      return
+    }
     const q1 = Number(quantidade)
     if (!profissional || !grupo || !Number.isFinite(q1) || q1 < 1) {
       setErro('Escolha o profissional, o procedimento e a quantidade (maior que 0).')
@@ -396,45 +420,51 @@ const Planejar = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="procedimento">Procedimento</Label>
-                <Select value={grupo} onValueChange={setGrupo}>
-                  <SelectTrigger id="procedimento" aria-label="Procedimento">
-                    <SelectValue placeholder="Escolha o procedimento" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {grupos.map((g) => (
-                      <SelectItem key={g.grupo_regra} value={g.grupo_regra}>
-                        {g.aplica_a || g.grupo_regra}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="quantidade">Quantidade</Label>
-                <Input
-                  id="quantidade"
-                  type="number"
-                  min={1}
-                  value={quantidade}
-                  onChange={(e) => setQuantidade(e.target.value)}
-                  aria-label="Quantidade"
-                />
-              </div>
-              {temSegundaVariavel && (
-                <div className="space-y-2">
-                  <Label htmlFor="quantidade2">{rotuloSegunda(grupoEscolhido?.variavel_2)}</Label>
-                  <Input
-                    id="quantidade2"
-                    type="number"
-                    min={0}
-                    value={quantidade2}
-                    onChange={(e) => setQuantidade2(e.target.value)}
-                    aria-label={rotuloSegunda(grupoEscolhido?.variavel_2)}
-                    placeholder="0"
-                  />
-                </div>
+              {regime === 'tratamento' && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="procedimento">Procedimento</Label>
+                    <Select value={grupo} onValueChange={setGrupo}>
+                      <SelectTrigger id="procedimento" aria-label="Procedimento">
+                        <SelectValue placeholder="Escolha o procedimento" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {grupos.map((g) => (
+                          <SelectItem key={g.grupo_regra} value={g.grupo_regra}>
+                            {g.aplica_a || g.grupo_regra}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="quantidade">Quantidade</Label>
+                    <Input
+                      id="quantidade"
+                      type="number"
+                      min={1}
+                      value={quantidade}
+                      onChange={(e) => setQuantidade(e.target.value)}
+                      aria-label="Quantidade"
+                    />
+                  </div>
+                  {temSegundaVariavel && (
+                    <div className="space-y-2">
+                      <Label htmlFor="quantidade2">
+                        {rotuloSegunda(grupoEscolhido?.variavel_2)}
+                      </Label>
+                      <Input
+                        id="quantidade2"
+                        type="number"
+                        min={0}
+                        value={quantidade2}
+                        onChange={(e) => setQuantidade2(e.target.value)}
+                        aria-label={rotuloSegunda(grupoEscolhido?.variavel_2)}
+                        placeholder="0"
+                      />
+                    </div>
+                  )}
+                </>
               )}
               <div className="space-y-2">
                 <Label htmlFor="data">Dia das vagas</Label>
@@ -467,12 +497,19 @@ const Planejar = () => {
             {resultado.situacao === 'ok' ? (
               <>
                 <p className="text-base font-bold text-green-800">
-                  {resultado.minutos} min (regra: {rotuloRegra(resultado)})
+                  {resultado.minutos} min
+                  {regime === 'avaliacao'
+                    ? ' (consulta de avaliação)'
+                    : ` (regra: ${rotuloRegra(resultado)})`}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   Regime:{' '}
                   {regime === 'avaliacao'
-                    ? 'Avaliação — até 2 pacientes por horário (30 min)'
+                    ? 'Avaliação — consulta de ' +
+                      cfgAvaliacao.duracao_minutos +
+                      ' min, até ' +
+                      cfgAvaliacao.limite_por_horario +
+                      ' pacientes por horário'
                     : 'Tratamento — sem sobreposição de horário'}
                 </p>
                 {resultado.minutos !== resultado.minutos_brutos && (

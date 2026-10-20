@@ -1,6 +1,3 @@
-[file: fase.md | total: 26953 bytes | read: bytes 0-26952]
-[END OF FILE - no further content.]
-
 # Fase 1 — Tarefas
 
 <!-- fase-format:2 -->
@@ -65,9 +62,9 @@
   > Ofertar até3 elegíveis por tempo/profissional/capacidade/disponibilidade/prontidão e etapa do tratamento liberada pelo avaliador. Pré-condição: task nova Liberar agendamento e encaixe conforme a etapa aprovada concluída; revalidar versão do plano antes de oferta. Ordem provisória por entrada só entre elegíveis; ela não define ordem clínica (SPEC-1-004 · CA-1-23 · CA-SEQ-06 · P4-08/22/23).
   - [ ] Garantir que a vaga fique com o primeiro que aceitar @"L A Rodrigues" !15/10/2026  <!-- id:36cdfc82-9bd2-400e-96d6-101b4240abab -->
     > Primeiro aceite válido vence em operação protegida, revalidando capacidade/vaga e versão/liberação das etapas antes de gravar. Revisão clínica concorrente impede confirmação nova; reservas anteriores não são canceladas automaticamente. Depende do guard compartilhado da task nova de liberação (SPEC-1-004 · CA-1-24/25 · CA-SEQ-06 · P4-09/24).
-- [x] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.87 776ca31: vínculo por telefone + chegada compareceu/faltou; aguardando teste humano)
+- [x] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88 9b843b1: vínculo por telefone + chegada compareceu/faltou; teste humano aprovado pelo dono)
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Acompanhamento do lead até o comparecimento; relatório de origem para a agência (subtask d45e8f8a). SPEC-1-003.
-  - [x] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.87 776ca31: card Relatório de origem na tela Leads; aguardando teste humano)
+  - [x] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88 9b843b1: card Relatório de origem na tela Leads, por data real do APP CRC; teste humano aprovado pelo dono)
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Relatório de origem dos leads para a agência; SPEC-1-003.
 - [ ] Montar a tela de atendimento do dia @"L A Rodrigues" !15/10/2026  <!-- id:a3dc6e0f-adca-4b99-83cf-933f305ba6cc -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Atendimento do dia: chegada, chamada, início e fim (subtask 2ab1282b); falta vira pendência de reagendamento (subtask b517d69d). SPEC-1-005.

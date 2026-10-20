@@ -1,6 +1,3 @@
-[file: plataforma.md | total: 5589 bytes | read: bytes 0-5588]
-[END OF FILE - no further content.]
-
 # Lai (central de agendamento da unidade piloto) — plataforma de construção
 
 - plataforma: Skip
@@ -45,6 +42,7 @@
 | 2026-10-17 | f79847a5 | b0ad515 (v0.0.69) | hook liberacoes_conciliar, migration 0015, Confirmacoes, Importar, Provas.tsx, confirmacao.ts, provas.ts |
 | 20/10/2026 | eec75533 | 11f8bef (v0.0.82) | migration 0016, leads_regras.js (fase→etapa), leads.ts (xlsx), Leads.tsx (importar .xlsx) |
 | 20/10/2026 | d03a15ee + d45e8f8a | 776ca31 (v0.0.87) | hook leads_acompanhamento.js, migration 0017, leads.ts, Leads.tsx, provas.ts (P3-07), Provas.tsx |
+| 20/10/2026 | d03a15ee (fix data_entrada + backfill) | 9b843b1 (v0.0.88) | migration 0018, leads_regras.js (data_entrada), leads_acompanhamento.js (relatório usa data_entrada) |
 
 ## Regras da plataforma
 

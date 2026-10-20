@@ -1,6 +1,3 @@
-[file: d03a15ee-acompanhar-lead-comparecimento.md | total: 1687 bytes | read: bytes 0-1686]
-[END OF FILE - no further content.]
-
 # Análise — d03a15ee: Acompanhar o lead até o comparecimento (+ d45e8f8a relatório)
 
 **SPEC:** SPEC-1-003 · **CA:** CA-1-17 · **Prova:** P3-07
@@ -24,3 +21,10 @@
 ## Verificação
 - E2E no ar: vínculo→agendado ✓, guarda 400 ✓, agendado→compareceu ✓; rota do relatório responde ✓.
 - Pendência de teste humano: P3-07 + gerar relatório na tela.
+
+## FIX pós-teste (v0.0.88 9b843b1, 20/10 ~03h30)
+- Teste do dono provou a chegada (compareceu) e a guarda (2º registro recusado com mensagem clara).
+- Descoberto no relatório: `entrada_em` é autodate — a data real do APP CRC não ficou gravada (todos os 4.117 caíram no dia da importação).
+- Correção: migration 0018 (`leads.data_entrada`), hook grava data_entrada na importação, relatório usa data_entrada com fallback pra entrada_em.
+- Backfill executado das planilhas: 4.117/4.117 com data real (9 recuperados após rate limit 429).
+- Relatório validado por dia real: 19/10 → 4 leads (ICOMBOT), 05/10 → 7 leads (ICOMBOT + Clinicorp-Importação).

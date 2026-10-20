@@ -39,6 +39,13 @@ import {
   type EventoFicha,
   type PacienteFicha,
 } from '@/services/ficha'
+import {
+  atribuirAvaliador,
+  listarDentistas,
+  obterPlano,
+  type AvaliadorHabilitado,
+  type PlanoProjetado,
+} from '@/services/tratamento'
 
 const dataCurta = (iso: string): string => {
   if (!iso) return '—'
@@ -57,9 +64,20 @@ const dataCurta = (iso: string): string => {
   )
 }
 
+const rotuloEstadoPlano = (estado: string): string =>
+  estado === 'rascunho'
+    ? 'Rascunho'
+    : estado === 'aprovado'
+      ? 'Aprovado'
+      : estado === 'em_revisao'
+        ? 'Em revisão'
+        : estado === 'encerrado'
+          ? 'Encerrado'
+          : estado || '—'
+
 const Ficha = () => {
   const { id } = useParams()
-  const { usuario } = useAuth()
+  const { usuario, eGestao } = useAuth()
   const podeGravar = podeGravarFicha(usuario?.papel ?? '')
 
   const [busca, setBusca] = useState('')
@@ -86,6 +104,15 @@ const Ficha = () => {
   const [novaTelefone, setNovaTelefone] = useState('')
   const [novaAviso, setNovaAviso] = useState('')
   const [novaSalvando, setNovaSalvando] = useState(false)
+
+  // Emenda CA-SEQ-01 — avaliador do plano de tratamento (status operacional)
+  const [plano, setPlano] = useState<PlanoProjetado | null>(null)
+  const [carregandoPlano, setCarregandoPlano] = useState(false)
+  const [planoErro, setPlanoErro] = useState('')
+  const [dialogAvaliador, setDialogAvaliador] = useState(false)
+  const [avaliadorEscolhido, setAvaliadorEscolhido] = useState('')
+  const [salvandoAvaliador, setSalvandoAvaliador] = useState(false)
+  const [dentistasHabilitados, setDentistasHabilitados] = useState<AvaliadorHabilitado[]>([])
 
   const carregarLista = useCallback(async (q: string) => {
     setCarregando(true)
@@ -132,6 +159,15 @@ const Ficha = () => {
       setPrazo(p.proxima_acao_prazo ? p.proxima_acao_prazo.slice(0, 10) : '')
       setRespAcao(p.proxima_acao_responsavel || '')
       setEventos(await listarEventos(pacienteId))
+      setCarregandoPlano(true)
+      setPlanoErro('')
+      try {
+        setPlano(await obterPlano(pacienteId))
+      } catch (e2) {
+        setPlanoErro(e2 instanceof Error ? e2.message : 'Não foi possível consultar o plano.')
+      } finally {
+        setCarregandoPlano(false)
+      }
     } catch (e) {
       setErro(e instanceof Error ? e.message : 'Não foi possível abrir a ficha.')
     }
@@ -192,6 +228,36 @@ const Ficha = () => {
     }
   }
 
+  // Emenda CA-SEQ-01 — designar avaliador (só gestão; rota do hook valida no servidor)
+  const carregarDentistas = useCallback(async () => {
+    try {
+      const todos = await listarDentistas()
+      setDentistasHabilitados(todos.filter((d) => d.avaliador_habilitado && d.ativo))
+    } catch (e) {
+      setPlanoErro(e instanceof Error ? e.message : 'Não foi possível carregar os avaliadores.')
+    }
+  }, [])
+
+  const gravarAvaliador = async () => {
+    if (!paciente) return
+    if (!avaliadorEscolhido) {
+      setPlanoErro('Escolha o avaliador.')
+      return
+    }
+    setPlanoErro('')
+    setSalvandoAvaliador(true)
+    try {
+      await atribuirAvaliador(paciente.id, avaliadorEscolhido, plano?.versao)
+      setDialogAvaliador(false)
+      setAviso('Avaliador designado.')
+      await carregarFicha(paciente.id)
+    } catch (e) {
+      setPlanoErro(e instanceof Error ? e.message : 'Não foi possível designar o avaliador.')
+    } finally {
+      setSalvandoAvaliador(false)
+    }
+  }
+
   // Sem id: lista de busca de fichas
   if (!id) {
     return (
@@ -232,11 +298,19 @@ const Ficha = () => {
                 Nova ficha
               </Button>
             </div>
-            <Dialog open={dialogNova} onOpenChange={(aberto) => { setDialogNova(aberto); if (!aberto) setNovaAviso('') }}>
+            <Dialog
+              open={dialogNova}
+              onOpenChange={(aberto) => {
+                setDialogNova(aberto)
+                if (!aberto) setNovaAviso('')
+              }}
+            >
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Nova ficha de paciente</DialogTitle>
-                  <DialogDescription>Cria a ficha com nome e telefone (DDD + número).</DialogDescription>
+                  <DialogDescription>
+                    Cria a ficha com nome e telefone (DDD + número).
+                  </DialogDescription>
                 </DialogHeader>
                 {novaAviso && (
                   <div className="rounded-md border border-amber-500 bg-amber-50 p-3 text-sm text-amber-800">
@@ -293,8 +367,8 @@ const Ficha = () => {
               <p className="text-sm text-muted-foreground">Carregando…</p>
             ) : pacientes.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Nenhuma ficha encontrada. Use “Nova ficha” para cadastrar — ou cadastre um
-                lead na tela Leads: a ficha do paciente é criada junto.
+                Nenhuma ficha encontrada. Use “Nova ficha” para cadastrar — ou cadastre um lead na
+                tela Leads: a ficha do paciente é criada junto.
               </p>
             ) : (
               <ul className="space-y-2 text-sm">
@@ -554,11 +628,78 @@ const Ficha = () => {
             Sequência definida pelo avaliador habilitado — decisão clínica não é editada aqui.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Aguarda sequência/liberação do avaliador. Quando houver plano aprovado, as etapas
-            aparecem nesta aba.
-          </p>
+        <CardContent className="space-y-2 text-sm">
+          {carregandoPlano ? (
+            <p className="text-muted-foreground">Consultando plano…</p>
+          ) : planoErro ? (
+            <p className="text-destructive">{planoErro}</p>
+          ) : !plano || !plano.tem_plano ? (
+            <p className="text-muted-foreground">
+              Sem plano de tratamento ainda.{' '}
+              {eGestao
+                ? 'Designar avaliador habilitado para começar.'
+                : 'Aguarda avaliador designado.'}
+            </p>
+          ) : (
+            <div className="space-y-1">
+              <p>
+                <span className="text-muted-foreground">Avaliador:</span>{' '}
+                {plano.avaliador_nome || '—'}
+              </p>
+              <p>
+                <span className="text-muted-foreground">Estado do plano:</span>{' '}
+                <Badge variant="secondary">{rotuloEstadoPlano(plano.estado || '')}</Badge>
+              </p>
+              <p className="text-muted-foreground">
+                As etapas aparecem aqui quando o avaliador aprovar o plano.
+              </p>
+            </div>
+          )}
+          {eGestao && paciente && (
+            <Dialog open={dialogAvaliador} onOpenChange={(aberto) => {
+              setDialogAvaliador(aberto)
+              if (aberto) void carregarDentistas()
+            }}>
+              <DialogTrigger asChild>
+                <Button size="sm" variant="outline">
+                  {plano?.tem_plano ? 'Trocar avaliador' : 'Designar avaliador'}
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Avaliador do paciente</DialogTitle>
+                  <DialogDescription>
+                    Só a gestão designa. O dentista precisa estar habilitado na tela Avaliadores.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <Label>Avaliador habilitado *</Label>
+                    <Select value={avaliadorEscolhido} onValueChange={setAvaliadorEscolhido}>
+                      <SelectTrigger aria-label="Avaliador habilitado">
+                        <SelectValue placeholder="Escolha o dentista" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dentistasHabilitados.map((d) => (
+                          <SelectItem key={d.id} value={d.id}>
+                            {d.name || d.email}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setDialogAvaliador(false)}>
+                    Cancelar
+                  </Button>
+                  <Button onClick={() => void gravarAvaliador()} disabled={salvandoAvaliador}>
+                    {salvandoAvaliador ? 'Salvando…' : 'Designar'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
         </CardContent>
       </Card>
     </div>

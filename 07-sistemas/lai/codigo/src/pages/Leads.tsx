@@ -19,6 +19,7 @@ import {
   criarLead,
   csvParaLinhasAppCrc,
   importarLeadsAppCrc,
+  xlsxParaLinhasAppCrc,
   listarCampanhas,
   listarOrigensManuais,
   listarLeads,
@@ -156,7 +157,11 @@ const Leads = () => {
     setResultadoImport(null)
     if (!arquivo) return
     try {
-      const linhas = csvParaLinhasAppCrc(await arquivo.text())
+      // task eec75533 — XLSX do APP CRC (planilha oficial) ou CSV
+      const ehXlsx = /\.xlsx$/i.test(arquivo.name)
+      const linhas = ehXlsx
+        ? await xlsxParaLinhasAppCrc(arquivo)
+        : csvParaLinhasAppCrc(await arquivo.text())
       if (linhas.length === 0) throw new Error('O arquivo não tem linhas de dados.')
       setPrevia(linhas)
     } catch (e) {
@@ -406,7 +411,7 @@ const Leads = () => {
         <CardContent className="space-y-3">
           <input
             type="file"
-            accept=".csv,text/csv"
+            accept=".xlsx,.csv,text/csv,text/comma-separated-values"
             onChange={(e) => void escolherArquivo(e.target.files?.[0])}
             className="text-sm file:mr-3 file:rounded-md file:border file:bg-background file:px-3 file:py-1.5"
           />

@@ -153,6 +153,37 @@ export async function salvarOrigemManual(nome: string): Promise<void> {
 
 // Parser do export do APP CRC: colunas esperadas Id Lead/Paciente, Nome, Telefone,
 // Status do lead, Origem, Telefone de entrada (aceita ; ou ,).
+// Task eec75533 — lê XLSX do APP CRC (aba "Dados", colunas Nome/Telefone/Origem/
+// Fase/Data registro/Etiquetas) e devolve as linhas no formato do importador.
+export async function xlsxParaLinhasAppCrc(arquivo: File): Promise<
+  Array<{ id_app_crc: string; nome: string; telefone: string; origem: string; fase: string; entrada_em: string }>
+> {
+  const XLSX = await import('xlsx')
+  const buf = await arquivo.arrayBuffer()
+  const wb = XLSX.read(buf, { type: 'array' })
+  const ws = wb.Sheets[wb.SheetNames[0]]
+  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws, { defval: '' })
+  return rows
+    .map((r) => {
+      const pega = (...nomes: string[]) => {
+        for (const n of nomes) {
+          const chave = Object.keys(r).find((k) => k.trim().toLowerCase() === n)
+          if (chave && r[chave] != null) return String(r[chave]).trim()
+        }
+        return ''
+      }
+      return {
+        id_app_crc: pega('Etiquetas'),
+        nome: pega('Nome'),
+        telefone: pega('Telefone'),
+        origem: pega('Origem'),
+        fase: pega('Fase'),
+        entrada_em: pega('Data registro'),
+      }
+    })
+    .filter((l) => l.nome || l.telefone)
+}
+
 export function csvParaLinhasAppCrc(texto: string): Array<{
   id_app_crc: string
   nome: string

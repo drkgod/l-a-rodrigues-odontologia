@@ -261,6 +261,9 @@ routerAdd(
         nome: nome,
         telefone: '+' + telDigitos,
         origem_texto: String(r.origem || '').trim(),
+        // task eec75533 — fase do APP CRC mapeada pra etapa da central
+        fase_app_crc: String(r.fase || '').trim(),
+        entrada_em: String(r.entrada_em || '').trim(),
       })
     }
 
@@ -313,7 +316,22 @@ routerAdd(
       if (campanhaId) lead.set('campanha', campanhaId)
       lead.set('origem_texto_original', v.origem_texto)
       lead.set('id_app_crc', v.id_app_crc)
-      lead.set('etapa', 'novo')
+      // task eec75533 — etapa pela fase do APP CRC (leads em aberto não voltam a "novo")
+      const mapaFase = {
+        'aguardando 1º contato': 'novo',
+        'aguardando posição do decisor': 'em_atendimento',
+        'aguardando entrada': 'em_atendimento',
+        'sem resposta': 'aguardando_retorno',
+        'agendou retorno': 'agendado',
+        'contato perdido': 'aguardando_retorno',
+        'pós venda': 'compareceu',
+      }
+      const etapa = mapaFase[String(v.fase_app_crc || '').toLowerCase()] || 'novo'
+      lead.set('etapa', etapa)
+      if (v.entrada_em && /^\d{2}\/\d{2}\/\d{4}$/.test(v.entrada_em)) {
+        const p = v.entrada_em.split('/')
+        lead.set('entrada_em', p[2] + '-' + p[1] + '-' + p[0] + ' 12:00:00.000Z')
+      }
       lead.set('importado_app_crc', true)
       lead.set(
         'responsavel',

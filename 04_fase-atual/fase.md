@@ -32,7 +32,7 @@
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lead com origem campanha (código), manual ou desconhecida, nunca preenchida por suposição; telefone repetido mostra o possível duplicado sem juntar fichas (SPEC-1-003 · CA-1-12 e CA-1-13). Provas P3-01 a P3-03.
   - [x] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Código de campanha combinado com a agência para atribuição de origem dos leads; SPEC-1-003.
-  - [ ] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026  <!-- id:eec75533-0163-4b64-a7d3-cb2bc6e91a31 -->
+  - [x] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026 ✅ 20/10/2026 (v0.0.82 11f8bef: 4.117 leads + fichas importados das planilhas ALC/ITA)
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Leads em aberto do APP CRC importados por arquivo; SPEC-1-003.
 - [x] Mostrar o tempo sugerido ao planejar um agendamento @"L A Rodrigues" !13/10/2026  <!-- id:097ff6ce-cdc7-44fd-984c-4ee315fc8406 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Rota /duracao/sugerir + tela de planejamento: tempo pela tabela da clínica (grupo ou por dentista, específica prevalece), arredondamento no múltiplo configurado, vagas compatíveis; combinação sem regra lista para a direção (subtask 6d5de2f5). SPEC-1-002 · CA-1-08/09 · P2-01..P2-04.

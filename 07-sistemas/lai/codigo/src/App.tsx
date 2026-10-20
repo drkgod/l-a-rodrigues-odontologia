@@ -17,6 +17,7 @@ import Leads from './pages/Leads'
 import PacientesAgendar from './pages/PacientesAgendar'
 import Confirmacoes from './pages/Confirmacoes'
 import Ficha from './pages/Ficha'
+import Avaliadores from './pages/Avaliadores'
 import Layout from './components/Layout'
 import { AuthProvider, Protegido, SomenteGestao } from '@/contexts/AuthContext'
 
@@ -92,6 +93,14 @@ const App = () => (
             />
             <Route path="/ficha" element={<Ficha />} />
             <Route path="/ficha/:id" element={<Ficha />} />
+            <Route
+              path="/avaliadores"
+              element={
+                <SomenteGestao>
+                  <Avaliadores />
+                </SomenteGestao>
+              }
+            />
             <Route
               path="/tabela-duracao"
               element={

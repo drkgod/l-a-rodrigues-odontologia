@@ -15,6 +15,7 @@ export default function Layout() {
     { para: '/horarios', rotulo: 'Horários', visivel: eGestao },
     { para: '/leads', rotulo: 'Leads', visivel: eGestao },
     { para: '/ficha', rotulo: 'Fichas', visivel: true },
+    { para: '/avaliadores', rotulo: 'Avaliadores', visivel: eGestao },
     { para: '/pacientes-a-agendar', rotulo: 'Pacientes a agendar', visivel: eGestao },
     { para: '/confirmacoes', rotulo: 'Confirmações', visivel: eGestao },
     { para: '/tabela-duracao', rotulo: 'Tabela de duração', visivel: eGestao },

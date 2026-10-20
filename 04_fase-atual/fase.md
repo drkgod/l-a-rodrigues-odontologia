@@ -105,8 +105,7 @@
 
 Novos incrementos abertos; sem prazo novo. Preservar entregas aceitas e executar uma task por vez.
 
-- [ ] Configurar quem pode validar o planejamento clínico @"L A Rodrigues"
-  > Primeiro incremento da emenda: flag avaliador_habilitado e atribuição por plano/paciente/unidade; backend permite decisão clínica só ao dentista habilitado atribuído. Gestão designa, CRC lê status operacional; não dá acesso a todos os leads/prontuários. Provar acesso direto e paciente alheio. Depende da base de papéis existente. (SPEC-1-003 · CA-SEQ-01 · P3-09). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
+- [ ] Configurar quem pode validar o planejamento clínico @"L A Rodrigues" [/] ENTREGUE 20/10/2026 (v0.0.94 491e424: flag avaliador_habilitado + planos_tratamento + rotas atribuir-avaliador/plano; tela /avaliadores + Ficha; P3-09c E2E 12/12 PASS no ar) — AGUARDA TESTE HUMANO
 - [ ] Cadastrar modelos de sequência de tratamento @"L A Rodrigues"
   > Criar catálogo opcional de modelos, versões e aprovação clínica. Ordem visual separada de dependências; validar ciclos/cross-plano e etapas paralelas. Modelo não é regra universal; cópias independentes podem ser provadas com snapshots em fixture antes da tela do paciente. O fluxo completo de cópia/exceção é validado no card do editor. Depende da habilitação clínica. A clínica fornece/valida o conteúdo, sem ordem médica inventada. (SPEC-1-003 · CA-SEQ-02 · P3-10). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
 - [ ] Definir e aprovar as etapas de cada paciente @"L A Rodrigues"

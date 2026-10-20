@@ -1,25 +1,25 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: nenhuma
+- task_id: CA-SEQ-01 (emenda SPEC-1-003)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
-- analise: .adapta-cliente/analises/b2cb546c-teste-reposicao-vaga.md
-- etapa: concluida
-- autorizacao_implementacao: confirmada 19/10 22h40 ("testei deu certo, pode seguir" — ciclo contínuo 0.8.1, 8421e27b concluída)
-- aguardando_teste: nenhuma
+- analise: .adapta-cliente/analises/CA-SEQ-01-avaliador-habilitado.md
+- etapa: aguardando_teste_humano
+- autorizacao_implementacao: confirmada 20/10 10h35 ("segue a emenda" — task 1: configurar avaliador habilitado)
+- aguardando_teste: CA-SEQ-01 (roteiro na parada)
 - em_espera: nenhuma
-- teste_humano: aprovado (b2cb546c: "testei passou" 20/10 10h22; d03a15ee aprovado)
-- verificacao_automatica: passou (QA verde; E2E no ar v0.0.87: vínculo por telefone→agendado ✓, guarda 400 ✓, agendado→compareceu ✓; rota do relatório provada)
+- teste_humano: pendente (b2cb546c/d03a15ee aprovados)
+- verificacao_automatica: passou (QA verde v0.0.94; E2E CA-SEQ-01 12/12 PASS no ar; prova P3-09c registrada em provas_execucoes)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 9b843b1 (v0.0.88)
-- skip_publicacao: publicada:9b843b1 em 2026-10-20T03:34:43Z
+- skip_versao: 491e424 (v0.0.94)
+- skip_publicacao: publicada:491e424 em 2026-10-20T13:53:38Z
 - pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
-- ultima_acao: 20/10 10h25 — TASK b2cb546c CONCLUÍDA (teste humano aprovado, v0.0.92): reposição de vaga de ponta a ponta provada; massa apagada. fase.md 16/34
-- proxima_acao: próxima task elegível da fase — e2369241 (Ofertar a vaga liberada a até três pacientes) depende da emenda CA-SEQ-06 (guard da etapa aprovada); avaliar ordem com o dono
-- atualizado_em: 2026-10-20T10h25:00-03:00
+- ultima_acao: 20/10 11h05 — CA-SEQ-01 ENTREGUE no ar (v0.0.94): E2E 12/12 PASS; aguarda teste humano
+- proxima_acao: teste humano do dono (tela Avaliadores + Ficha); depois: task 2 da emenda (modelos de sequência CA-SEQ-02)
+- atualizado_em: 2026-10-20T11h05:00-03:00

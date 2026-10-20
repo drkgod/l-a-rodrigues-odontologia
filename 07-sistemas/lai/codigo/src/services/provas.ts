@@ -23,7 +23,7 @@ import {
   verificarAgendamentoFuturo,
   type Pendencia,
 } from '@/services/pendencias'
-import { criarLead } from '@/services/leads'
+import { criarLead, registrarChegada, relatorioOrigem } from '@/services/leads'
 import {
   criarContatoTeste,
   conciliarLiberacoes,
@@ -47,6 +47,7 @@ import {
   prazoVencido,
   type PacienteFicha,
 } from '@/services/ficha'
+import { atribuirAvaliador, limparMassaTratamento } from '@/services/tratamento'
 
 export interface ExecucaoProva {
   id: string
@@ -1040,6 +1041,149 @@ export async function executarProvaP4_07(): Promise<ResultadoProva> {
   }
 }
 
+// ===== PROVAS P4-13/P4-14/P4-15 (SPEC-1-004, CA-1-21) — task 84b8f8d6 =====
+// Políticas reais ATIVAS (dono 13/10): Leonel 5/turno ITA qua 16h+;
+// Wesley 20/turno individual; Erika 2/horário sábado ortodontia (ALC).
+// Massa teste=true com o profissional real da política; limpeza no fim.
+
+async function criarItensTeste(
+  profissionalId: string,
+  data: string,
+  horarios: Array<[string, string]>,
+): Promise<void> {
+  for (let i = 0; i < horarios.length; i++) {
+    await pb.collection('agenda_itens').create({
+      item_tipo: 'APPOINTMENT',
+      clinicorp_id: 'p84-' + Date.now() + '-' + i,
+      data: data,
+      inicio: horarios[i][0],
+      fim: horarios[i][1],
+      profissional: profissionalId,
+      paciente_nome: 'Teste limite ' + (i + 1),
+      origem: 'fixture',
+      teste: true,
+    })
+  }
+}
+
+// P4-13 — Leonel: aceita até 5, bloqueia a 6ª (ordem de chegada, ITA qua 16h+).
+export async function executarProvaP4_13(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const prof = await pb
+      .collection('profissionais')
+      .getFirstListItem(pb.filter('nome = {:n}', { n: 'Leonel' }))
+    // quarta futura (dia 3)
+    const hoje = new Date()
+    const dias = (3 - hoje.getUTCDay() + 7) % 7 || 7
+    const data = new Date(hoje.getTime() + dias * 86400000).toISOString().slice(0, 10)
+    await criarItensTeste(prof.id, data, [
+      ['16:00', '16:30'],
+      ['16:30', '17:00'],
+      ['17:00', '17:30'],
+      ['17:30', '18:00'],
+      ['18:00', '18:30'],
+    ])
+    const sexta = await verificarCapacidade(data, '18:30', prof.id, 'ordem_chegada', true)
+    passou = sexta.situacao === 'bloqueado'
+    detalhe = '6ª visita do turno: ' + sexta.situacao + ' (' + (sexta.motivo || '') + ').'
+  } catch (erro) {
+    detalhe = 'falha na prova: ' + (erro instanceof Error ? erro.message : 'erro')
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-13 — Leonel: 5/6 visitas no turno (ordem de chegada)',
+    esperado: '6ª visita bloqueada (limite 5/turno).',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Limite do Leonel ativo.' : 'Verificar política do Leonel.',
+  }
+}
+
+// P4-14 — Wesley: 20/21 no turno; turno seguinte não soma.
+export async function executarProvaP4_14(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const prof = await pb
+      .collection('profissionais')
+      .getFirstListItem(pb.filter('nome = {:n}', { n: 'Wesley' }))
+    const hoje = new Date()
+    const dias = (1 - hoje.getUTCDay() + 7) % 7 || 7
+    const data = new Date(hoje.getTime() + dias * 86400000).toISOString().slice(0, 10)
+    const manha: Array<[string, string]> = []
+    for (let i = 0; i < 20; i++) {
+      const m = 9 * 60 + i * 12
+      manha.push([
+        String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'),
+        String(Math.floor((m + 12) / 60)).padStart(2, '0') +
+          ':' +
+          String((m + 12) % 60).padStart(2, '0'),
+      ])
+    }
+    await criarItensTeste(prof.id, data, manha)
+    const vigesimaPrimeira = await verificarCapacidade(
+      data,
+      '13:00',
+      prof.id,
+      'ordem_chegada',
+      true,
+    )
+    const tarde = await verificarCapacidade(data, '14:00', prof.id, 'ordem_chegada', true)
+    passou = vigesimaPrimeira.situacao === 'bloqueado' && tarde.situacao === 'permitido'
+    detalhe =
+      '21ª da manhã: ' + vigesimaPrimeira.situacao + '; 1ª da tarde: ' + tarde.situacao + '.'
+  } catch (erro) {
+    detalhe = 'falha na prova: ' + (erro instanceof Error ? erro.message : 'erro')
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-14 — Wesley: 20/21 no turno; turno seguinte não soma',
+    esperado: '21ª da manhã bloqueada; tarde permitida (limites por turno, não somados).',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Limite do Wesley ativo por turno.' : 'Verificar política do Wesley.',
+  }
+}
+
+// P4-15 — Erika: 2/3 no sábado (ortodontia, 2 por horário); outro dia não estende.
+export async function executarProvaP4_15(): Promise<ResultadoProva> {
+  let detalhe = ''
+  let passou = false
+  try {
+    const prof = await pb
+      .collection('profissionais')
+      .getFirstListItem(pb.filter('nome = {:n}', { n: 'Dra. Erika' }))
+    const hoje = new Date()
+    const dias = (6 - hoje.getUTCDay() + 7) % 7 || 7
+    const sabado = new Date(hoje.getTime() + dias * 86400000).toISOString().slice(0, 10)
+    await criarItensTeste(prof.id, sabado, [
+      ['08:00', '08:30'],
+      ['08:00', '08:30'],
+    ])
+    const terceiro = await verificarCapacidade(sabado, '08:00', prof.id, 'horario_marcado', true)
+    passou = terceiro.situacao === 'bloqueado' && (terceiro.motivo || '').includes('agenda')
+    detalhe = '3ª no sábado: ' + terceiro.situacao + ' (' + (terceiro.motivo || '') + ').'
+  } catch (erro) {
+    detalhe = 'falha na prova: ' + (erro instanceof Error ? erro.message : 'erro')
+  } finally {
+    await limparMassaConfirmacao()
+    await apagarSobrasDeTeste()
+  }
+  return {
+    cenario: 'P4-15 — Erika: 2/3 no sábado (ortodontia, 2 por horário)',
+    esperado: '3ª no sábado bloqueada pelo limite da agenda específica.',
+    obtido: detalhe,
+    passou,
+    observacao: passou ? 'Limite da Erika ativo.' : 'Verificar política da Erika.',
+  }
+}
+
 // ===== PROVAS P4-01/P4-02 (SPEC-1-004, CA-1-18) — task 5bcfa6f1 =====
 // Lista de confirmação do dia + exportação XLSX (massa teste=true, limpeza no fim).
 
@@ -1573,135 +1717,4 @@ export async function executarProvaP2_04(): Promise<ResultadoProva> {
     await apagarMassaP2()
   }
   return {
-    cenario: 'P2-04 — 10 facetas + 1 implante sem regra → sem_regra + caso listado',
-    esperado: '"sem regra — validar com a direção", sem tempo, e o caso entra na lista.',
-    obtido: detalhe,
-    passou,
-    observacao: passou ? 'CA-1-09 provado (sem tempo fictício).' : 'Verificar caso sem regra.',
-  }
-}
-
-// P2-05 — casos sem regra agrupados e validação pela direção (CA-1-09).
-// 2 ocorrências da MESMA combinação viram 1 grupo com contagem; ao validar,
-// saem dos pendentes com validado_por/em gravados; a outra combinação segue.
-export async function executarProvaP2_05(): Promise<ResultadoProva> {
-  let detalhe = ''
-  let passou = false
-  try {
-    await criarTabelaTesteP2()
-    // defensiva: resíduo de execuções anteriores não contamina a massa desta prova
-    await limparPlanejamentosTeste()
-    // duas ocorrências da MESMA combinação + uma combinação diferente
-    const combo = [
-      { grupo_regra: 'FACETAS_PROVA_P2', quantidade: 10 },
-      { grupo_regra: GRUPO_COROAS, quantidade: 1 },
-    ]
-    const r1 = await sugerirDuracao(combo, 'Profissional Teste P2 A', true)
-    const r2 = await sugerirDuracao(combo, 'Profissional Teste P2 A', true)
-    const r3 = await sugerirDuracao(
-      [{ grupo_regra: GRUPO_COROAS, quantidade: 7 }],
-      'Profissional Teste P2 A',
-      true,
-    )
-
-    // agrupa EXATAMENTE os 3 planejamentos desta prova (ids devolvidos pela rota):
-    // imune a resíduo de outras provas na coleção
-    const idsProva = [r1.planejamento_id, r2.planejamento_id, r3.planejamento_id]
-    const regs: Planejamento[] = []
-    for (const id of idsProva) {
-      regs.push(await pb.collection<Planejamento>('planejamentos').getOne(id))
-    }
-    const grupos = agruparSemRegra(regs)
-    const alvo = grupos.find((g) => g.ocorrencias === 2)
-    if (!alvo || grupos.length !== 2) {
-      throw new Error(
-        'agrupamento inesperado: ' +
-          grupos.length +
-          ' grupo(s) — ' +
-          grupos.map((g) => g.descricao + ' x' + g.ocorrencias).join(' | '),
-      )
-    }
-
-    await validarCombinacao(alvo.ids)
-
-    const depois: Planejamento[] = []
-    for (const id of idsProva) {
-      depois.push(await pb.collection<Planejamento>('planejamentos').getOne(id))
-    }
-    const restantes = agruparSemRegra(depois)
-    const marcados = depois.filter((p) => alvo.ids.indexOf(p.id) >= 0)
-    const comAutoria = marcados.every((p) => p.validado_em && p.validado_por)
-    passou =
-      restantes.length === 1 &&
-      restantes[0].ocorrencias === 1 &&
-      comAutoria &&
-      marcados.length === 2
-    detalhe =
-      `antes: ${grupos.length} grupos (repetida com ${alvo.ocorrencias} ocorrências); ` +
-      `depois de validar: ${restantes.length} pendente(s) com ${restantes[0]?.ocorrencias ?? 0}; ` +
-      `validado_por/em gravados nos 2: ${comAutoria}`
-  } catch (e) {
-    detalhe = e instanceof Error ? e.message : 'erro'
-  } finally {
-    await apagarMassaP2()
-  }
-  return {
-    cenario: 'P2-05 — agrupar sem regra e validar com a direção',
-    esperado:
-      '2 ocorrências iguais viram 1 grupo com contagem 2; ao validar, saem dos pendentes com validado_por/em gravados; a outra combinação segue pendente.',
-    obtido: detalhe,
-    passou,
-    observacao: passou
-      ? 'CA-1-09 provado (agrupamento + validação).'
-      : 'Verificar agrupamento/validação.',
-  }
-}
-
-// ===== PROVAS P2-05b/P2-06 (SPEC-1-002, CA-1-10/11) — task fdca5fb0 =====
-// Desvio de duração (RN-04) e conciliação de reservas (RN-05/06).
-// Massa fixture teste=true, apagada no fim (nunca dado real).
-
-// P2-05b — desvio: planejamento (via rota, createRule null) ligado a item de 60 min
-// → sem_motivo; registrar motivo → justificado; gestão revisa → revisado.
-// BUG FIX (teste humano 16/10): planejamentos.createRule = null (só o hook cria) —
-// criar direto dava "Only superusers can perform this action". A prova usa a rota
-// sugerirDuracao(teste=true) com a tabela de teste (coroa 2 = 30 min) e um item de
-// 60 min → desvio com diferença +30 (a regra é reservado ≠ sugerido, não o exemplo 40×60).
-export async function executarProvaP2_05b(): Promise<ResultadoProva> {
-  let detalhe = ''
-  let passou = false
-  try {
-    await limparPlanejamentosTeste()
-    await criarTabelaTesteP2()
-    const prof = await pb.collection('profissionais').create({
-      nome: 'Profissional Teste P2 B',
-      origem: 'fixture',
-      ativo: true,
-      tipo_agenda: 'ambos',
-    })
-    // planejamento de teste VIA ROTA (coroa 2 com o dentista B = 25 min na tabela de teste)
-    const sugestao = await sugerirDuracao(
-      [{ grupo_regra: GRUPO_COROAS, quantidade: 2 }],
-      'Profissional Teste P2 B',
-      true,
-    )
-    if (sugestao.situacao !== 'ok' || !sugestao.planejamento_id) {
-      throw new Error('rota sugerir: ' + sugestao.situacao + ' id=' + sugestao.planejamento_id)
-    }
-    const sugeridos = sugestao.minutos // 25 (regra específica do dentista B)
-    // item de agenda de 60 min (diferença +35)
-    const item = await pb.collection('agenda_itens').create({
-      item_tipo: 'APPOINTMENT',
-      clinicorp_id: 'p2-05b-' + Date.now(),
-      data: '2026-10-14',
-      inicio: '09:00',
-      fim: '10:00',
-      profissional: prof.id,
-      paciente_nome: 'Paciente P2-05b',
-      paciente_telefone: '5521999994001',
-      origem: 'fixture',
-      teste: true,
-    })
-    const r = await ligarReserva(sugestao.planejamento_id, item.id)
-    const desvioCriado = r.desvio_id !== ''
-    const desvios = await listarDesv
+    ce

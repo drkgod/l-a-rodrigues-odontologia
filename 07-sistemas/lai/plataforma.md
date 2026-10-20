@@ -1,3 +1,6 @@
+[file: plataforma.md | total: 5589 bytes | read: bytes 0-5588]
+[END OF FILE - no further content.]
+
 # Lai (central de agendamento da unidade piloto) — plataforma de construção
 
 - plataforma: Skip
@@ -40,6 +43,8 @@
 | 17/10 | f124df8f (debug 1-3: Value must be unique, massa idempotente, getString) | f3996b8 (v0.0.57) / 1595728 (v0.0.58) / f4d3b7b (v0.0.59) | hook confirmacao_regras.js (lista-dia sem filtro teste), confirmacao.ts (massa idempotente), provas.ts (campos diretos) |
 | 17/10 | 35bff70c (ficha do paciente) | eb44acb (v0.0.60) | hook ficha_regras.js (evento + próxima ação), service ficha.ts, tela Ficha.tsx, App.tsx (rotas /ficha), Layout.tsx (menu Fichas), provas.ts (P3-09a/b), Provas.tsx |
 | 2026-10-17 | f79847a5 | b0ad515 (v0.0.69) | hook liberacoes_conciliar, migration 0015, Confirmacoes, Importar, Provas.tsx, confirmacao.ts, provas.ts |
+| 20/10/2026 | eec75533 | 11f8bef (v0.0.82) | migration 0016, leads_regras.js (fase→etapa), leads.ts (xlsx), Leads.tsx (importar .xlsx) |
+| 20/10/2026 | d03a15ee + d45e8f8a | 776ca31 (v0.0.87) | hook leads_acompanhamento.js, migration 0017, leads.ts, Leads.tsx, provas.ts (P3-07), Provas.tsx |
 
 ## Regras da plataforma
 

@@ -1,3 +1,6 @@
+[file: fase.md | total: 26953 bytes | read: bytes 0-26952]
+[END OF FILE - no further content.]
+
 # Fase 1 — Tarefas
 
 <!-- fase-format:2 -->
@@ -32,7 +35,7 @@
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lead com origem campanha (código), manual ou desconhecida, nunca preenchida por suposição; telefone repetido mostra o possível duplicado sem juntar fichas (SPEC-1-003 · CA-1-12 e CA-1-13). Provas P3-01 a P3-03.
   - [x] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Código de campanha combinado com a agência para atribuição de origem dos leads; SPEC-1-003.
-  - [x] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026 ✅ 20/10/2026 (v0.0.82 11f8bef: 4.117 leads + fichas importados das planilhas ALC/ITA)
+  - [x] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026 ✅ 20/10/2026 (v0.0.82 11f8bef: 4.117 leads + fichas importados das planilhas ALC/ITA; teste humano aprovado pelo dono)
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Leads em aberto do APP CRC importados por arquivo; SPEC-1-003.
 - [x] Mostrar o tempo sugerido ao planejar um agendamento @"L A Rodrigues" !13/10/2026  <!-- id:097ff6ce-cdc7-44fd-984c-4ee315fc8406 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Rota /duracao/sugerir + tela de planejamento: tempo pela tabela da clínica (grupo ou por dentista, específica prevalece), arredondamento no múltiplo configurado, vagas compatíveis; combinação sem regra lista para a direção (subtask 6d5de2f5). SPEC-1-002 · CA-1-08/09 · P2-01..P2-04.
@@ -62,9 +65,9 @@
   > Ofertar até3 elegíveis por tempo/profissional/capacidade/disponibilidade/prontidão e etapa do tratamento liberada pelo avaliador. Pré-condição: task nova Liberar agendamento e encaixe conforme a etapa aprovada concluída; revalidar versão do plano antes de oferta. Ordem provisória por entrada só entre elegíveis; ela não define ordem clínica (SPEC-1-004 · CA-1-23 · CA-SEQ-06 · P4-08/22/23).
   - [ ] Garantir que a vaga fique com o primeiro que aceitar @"L A Rodrigues" !15/10/2026  <!-- id:36cdfc82-9bd2-400e-96d6-101b4240abab -->
     > Primeiro aceite válido vence em operação protegida, revalidando capacidade/vaga e versão/liberação das etapas antes de gravar. Revisão clínica concorrente impede confirmação nova; reservas anteriores não são canceladas automaticamente. Depende do guard compartilhado da task nova de liberação (SPEC-1-004 · CA-1-24/25 · CA-SEQ-06 · P4-09/24).
-- [ ] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026  <!-- id:d03a15ee-3488-48f2-8bc3-64014ad412f7 -->
+- [x] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.87 776ca31: vínculo por telefone + chegada compareceu/faltou; aguardando teste humano)
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Acompanhamento do lead até o comparecimento; relatório de origem para a agência (subtask d45e8f8a). SPEC-1-003.
-  - [ ] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026  <!-- id:d45e8f8a-c3a7-4096-8d45-206a635bf804 -->
+  - [x] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.87 776ca31: card Relatório de origem na tela Leads; aguardando teste humano)
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Relatório de origem dos leads para a agência; SPEC-1-003.
 - [ ] Montar a tela de atendimento do dia @"L A Rodrigues" !15/10/2026  <!-- id:a3dc6e0f-adca-4b99-83cf-933f305ba6cc -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Atendimento do dia: chegada, chamada, início e fim (subtask 2ab1282b); falta vira pendência de reagendamento (subtask b517d69d). SPEC-1-005.

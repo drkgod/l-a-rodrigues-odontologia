@@ -229,10 +229,7 @@ onRecordAfterUpdateSuccess((e) => {
         }
       } catch (_) {}
       ev.set('tipo', 'mudanca_etapa')
-      ev.set(
-        'descricao',
-        'Etapa: ' + etapa + ' → aguardando_retorno (cancelou na confirmação)',
-      )
+      ev.set('descricao', 'Etapa: ' + etapa + ' → aguardando_retorno (cancelou na confirmação)')
       ev.set('autor', autor)
       ev.set('teste', lead.getBool('teste'))
       $app.save(ev)
@@ -286,7 +283,10 @@ routerAdd(
           resultado +
           (resultado === 'compareceu' ? ' (chegada registrada)' : ' (falta registrada)'),
       )
-      ev.set('autor', e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '')
+      ev.set(
+        'autor',
+        e.auth ? String(e.auth.getString('name') || e.auth.getString('email') || '') : '',
+      )
       ev.set('teste', lead.getBool('teste'))
       $app.save(ev)
     } catch (_) {}
@@ -305,8 +305,17 @@ routerAdd(
     const ate = String(q.ate || '')
     if (!/^\d{4}-\d{2}-\d{2}$/.test(de) || !/^\d{4}-\d{2}-\d{2}$/.test(ate))
       throw new BadRequestError('Informe de e ate no formato YYYY-MM-DD.', null)
+    // data_entrada (data real do APP CRC/import) com fallback pra entrada_em (autodate)
     const filtro =
-      'entrada_em >= "' + de + ' 00:00:00.000Z" && entrada_em <= "' + ate + ' 23:59:59.999Z"'
+      '(data_entrada >= "' +
+      de +
+      ' 00:00:00.000Z" && data_entrada <= "' +
+      ate +
+      ' 23:59:59.999Z") || (data_entrada = "" && entrada_em >= "' +
+      de +
+      ' 00:00:00.000Z" && entrada_em <= "' +
+      ate +
+      ' 23:59:59.999Z")'
     const leads = $app.findRecordsByFilter('leads', filtro, '-created', 20000, 0)
 
     const nomesCampanha = {}
@@ -334,7 +343,12 @@ routerAdd(
       }
       g.leads++
       const etapa = l.getString('etapa')
-      if (etapa === 'agendado' || etapa === 'confirmado' || etapa === 'compareceu' || etapa === 'faltou')
+      if (
+        etapa === 'agendado' ||
+        etapa === 'confirmado' ||
+        etapa === 'compareceu' ||
+        etapa === 'faltou'
+      )
         g.agendados++
       if (etapa === 'confirmado') g.confirmados++
       if (etapa === 'compareceu') g.compareceram++

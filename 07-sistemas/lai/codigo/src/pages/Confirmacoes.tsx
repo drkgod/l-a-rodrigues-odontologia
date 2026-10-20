@@ -33,6 +33,7 @@ import {
   limparMassaConfirmacaoDia,
   registrarResposta,
   registrarLigacao,
+  registrarMensagem,
   moverNaoRespondentes,
   garantirTurnosPadrao,
   salvarTurno,
@@ -84,6 +85,7 @@ const Confirmacoes = () => {
   const [limpandoMassa, setLimpandoMassa] = useState(false)
   const [movendo, setMovendo] = useState(false)
   const [respondendoId, setRespondendoId] = useState('')
+  const [mensagensPorContato, setMensagensPorContato] = useState<Record<string, number>>({})
   const [turnos, setTurnos] = useState<ConfigTurno[]>([])
   const [ligandoId, setLigandoId] = useState('')
   const [decidindoId, setDecidindoId] = useState('')
@@ -185,6 +187,24 @@ const Confirmacoes = () => {
     }
   }
 
+  // Task b2cb546c — registrar MENSAGEM enviada na mão (tentativa 1..3, idempotente).
+  const mensagem = async (contatoId: string) => {
+    setRespondendoId(contatoId)
+    setErro('')
+    try {
+      const atual = mensagensPorContato[contatoId] || 0
+      const tentativa = Math.min(atual + 1, 3)
+      await registrarMensagem(contatoId, tentativa, 'enviada')
+      setMensagensPorContato({ ...mensagensPorContato, [contatoId]: tentativa })
+      await carregar(data)
+      toast.success('Mensagem ' + tentativa + '/3 registrada como enviada.')
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : 'Não foi possível registrar a mensagem.')
+    } finally {
+      setRespondendoId('')
+    }
+  }
+
   // Task f79847a5 — resultado da LIGAÇÃO na lista de ligação (RN-05, CA-1-19/20).
   const ligar = async (contatoId: string, resultadoLigacao: string) => {
     setLigandoId(contatoId)
@@ -268,7 +288,12 @@ const Confirmacoes = () => {
     try {
       await salvarTurno(turnoId, responsavel, usuario?.email || 'gestão')
       await carregarTurnos()
-      toast.success('Responsável da ' + turnoLabel(responsavel) + ' salvo.')
+      // Task f79847a5 — cobertura nova atualiza quem JÁ está na lista de ligação
+      // (re-mover é idempotente: recoloca o responsável do turno nos em_lista_ligacao).
+      const r = await moverNaoRespondentes(data)
+      if (r.alerta_gestao) toast.warning(r.alerta_gestao)
+      await carregar(data)
+      toast.success('Responsável salvo: quem está na lista de ligação já aparece com o nome novo.')
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Não foi possível salvar o responsável.')
     }
@@ -299,6 +324,15 @@ const Confirmacoes = () => {
       <TableCell>
         {l.estado === 'mensagem_enviada' || l.estado === 'pendente' ? (
           <div className="flex flex-wrap gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => void mensagem(l.contato_id)}
+              disabled={respondendoId === l.contato_id || (mensagensPorContato[l.contato_id] || 0) >= 3}
+              title={'Registrar que a mensagem do robô foi enviada na mão (tentativa ' + ((mensagensPorContato[l.contato_id] || 0) + 1) + '/3)'}
+            >
+              Mensagem {(mensagensPorContato[l.contato_id] || 0) + 1}/3
+            </Button>
             <Button
               size="sm"
               variant="outline"
@@ -752,11 +786,45 @@ const Confirmacoes = () => {
                     {resultado.lista
                       .filter((l) => l.estado === 'em_lista_ligacao')
                       .map((l) => (
-                        <li key={l.contato_id}>
+                        <li key={l.contato_id} className="flex flex-wrap items-center gap-2">
                           <span className="font-medium">{l.paciente}</span> · {l.hora} ·{' '}
                           <Badge variant="secondary">{l.turno ? turnoLabel(l.turno) : '—'}</Badge>{' '}
                           <span className="text-muted-foreground">
                             {l.responsavel || 'a definir'}
+                          </span>
+                          <span className="flex flex-wrap gap-1">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => void ligar(l.contato_id, 'nao_atendeu')}
+                              disabled={ligandoId === l.contato_id}
+                            >
+                              Não atendeu
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => void ligar(l.contato_id, 'confirmou')}
+                              disabled={ligandoId === l.contato_id}
+                            >
+                              Confirmou
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => void ligar(l.contato_id, 'cancelou')}
+                              disabled={ligandoId === l.contato_id}
+                            >
+                              Cancelou
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => void ligar(l.contato_id, 'pediu_remarcacao')}
+                              disabled={ligandoId === l.contato_id}
+                            >
+                              Remarcar
+                            </Button>
                           </span>
                         </li>
                       ))}

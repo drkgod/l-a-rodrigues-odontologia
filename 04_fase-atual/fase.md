@@ -72,7 +72,7 @@
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro de chegada/chamada/início/fim por paciente no dia; SPEC-1-005.
   - [ ] Transformar falta em pendência de reagendamento @"L A Rodrigues" !15/10/2026  <!-- id:b517d69d-91e1-4496-82fc-f1e04a8be0c9 -->
     > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Falta vira pendência de reagendamento para a lista de ligação; SPEC-1-005.
-- [ ] Testar a reposição de uma vaga do começo ao fim @"L A Rodrigues" !16/10/2026  <!-- id:b2cb546c-7900-48db-9211-08e29a45b382 -->
+- [x] Testar a reposição de uma vaga do começo ao fim @"L A Rodrigues" !16/10/2026 ✅ 20/10/2026 (v0.0.92 07daddf: teste humano aprovado — gate recusou 2x com a regra certa, liberação + conciliação + evidência; oferta/aceite ficam nas tasks e2369241/36cdfc82)
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano da reposição de vaga de ponta a ponta; SPEC-1-004/005.
 - [ ] Comparar o botão de finalizar com a baixa do Clinicorp @"L A Rodrigues" !16/10/2026  <!-- id:3926f0ae-e2fe-4ffb-b508-0564ecf0be27 -->
   > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Construir comparação de fim pelo botão com campos de baixa de arquivo/fixture vinculados. Data sem hora não vira horário e ambiguidade fica em revisão. Prova real da conta apenas na fase 4 (SPEC-1-005 · CA-1-30 · P5-09).

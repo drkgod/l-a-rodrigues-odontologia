@@ -1,16 +1,16 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: d03a15ee-3488-48f2-8bc3-64014ad412f7 (+d45e8f8a)
+- task_id: nenhuma
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
-- analise: .adapta-cliente/analises/eec75533-importar-leads-app-crc.md
+- analise: .adapta-cliente/analises/b2cb546c-teste-reposicao-vaga.md
 - etapa: concluida
 - autorizacao_implementacao: confirmada 19/10 22h40 ("testei deu certo, pode seguir" — ciclo contínuo 0.8.1, 8421e27b concluída)
 - aguardando_teste: nenhuma
 - em_espera: nenhuma
-- teste_humano: aprovado (d03a15ee: chegada compareceu provada pelo dono 20/10 ~00h30; guarda recusou 2º registro)
+- teste_humano: aprovado (b2cb546c: "testei passou" 20/10 10h22; d03a15ee aprovado)
 - verificacao_automatica: passou (QA verde; E2E no ar v0.0.87: vínculo por telefone→agendado ✓, guarda 400 ✓, agendado→compareceu ✓; rota do relatório provada)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
@@ -20,6 +20,6 @@
 - pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
-- ultima_acao: 20/10 03h40 — FIX v0.0.88 (data_entrada + backfill 4.117) e teste humano aprovado; d03a15ee+d45e8f8a CONCLUÍDAS. fase.md 15/34
-- proxima_acao: próxima task elegível da fase (b2cb546c Testar a reposição de uma vaga do começo ao fim) — aguardar "pode seguir"
-- atualizado_em: 2026-10-20T03h40:00-03:00
+- ultima_acao: 20/10 10h25 — TASK b2cb546c CONCLUÍDA (teste humano aprovado, v0.0.92): reposição de vaga de ponta a ponta provada; massa apagada. fase.md 16/34
+- proxima_acao: próxima task elegível da fase — e2369241 (Ofertar a vaga liberada a até três pacientes) depende da emenda CA-SEQ-06 (guard da etapa aprovada); avaliar ordem com o dono
+- atualizado_em: 2026-10-20T10h25:00-03:00

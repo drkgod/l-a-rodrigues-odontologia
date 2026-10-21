@@ -4,9 +4,9 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 491e424 (v0.0.94)
-- versao_publicada: 491e424 em 2026-10-20T13:53:38Z
-- ultima_task: CA-SEQ-01 (avaliador habilitado) — publicada, aguardando teste humano
+- versao_aplicada: 4bd1332 (v0.0.96)
+- versao_publicada: 4bd1332 em 2026-10-20T18:00:02Z
+- ultima_task: CA-SEQ-02 (modelos de sequência) — CONCLUÍDA (teste humano aprovado 21/10)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 
@@ -44,6 +44,7 @@
 | 20/10/2026 | d03a15ee + d45e8f8a | 776ca31 (v0.0.87) | hook leads_acompanhamento.js, migration 0017, leads.ts, Leads.tsx, provas.ts (P3-07), Provas.tsx |
 | 20/10/2026 | d03a15ee (fix data_entrada + backfill) | 9b843b1 (v0.0.88) | migration 0018, leads_regras.js (data_entrada), leads_acompanhamento.js (relatório usa data_entrada) |
 | 20/10/2026 | CA-SEQ-01 | 491e424 (v0.0.94) | migration 0019, hook tratamento_regras.js, service tratamento.ts, tela Avaliadores.tsx, App.tsx, Layout.tsx, Ficha.tsx, Provas.tsx, provas.ts (P3-09c) |
+| 20/10/2026 | CA-SEQ-02 | 4bd1332 (v0.0.96) | migration 0020, hook modelos_regras.js, service modelos.ts, tela Modelos.tsx, App.tsx, Layout.tsx, auth.ts, Provas.tsx, provas.ts (P3-10) |
 
 ## Regras da plataforma
 

@@ -105,9 +105,8 @@
 
 Novos incrementos abertos; sem prazo novo. Preservar entregas aceitas e executar uma task por vez.
 
-- [ ] Configurar quem pode validar o planejamento clínico @"L A Rodrigues" [/] ENTREGUE 20/10/2026 (v0.0.94 491e424: flag avaliador_habilitado + planos_tratamento + rotas atribuir-avaliador/plano; tela /avaliadores + Ficha; P3-09c E2E 12/12 PASS no ar) — AGUARDA TESTE HUMANO
-- [ ] Cadastrar modelos de sequência de tratamento @"L A Rodrigues"
-  > Criar catálogo opcional de modelos, versões e aprovação clínica. Ordem visual separada de dependências; validar ciclos/cross-plano e etapas paralelas. Modelo não é regra universal; cópias independentes podem ser provadas com snapshots em fixture antes da tela do paciente. O fluxo completo de cópia/exceção é validado no card do editor. Depende da habilitação clínica. A clínica fornece/valida o conteúdo, sem ordem médica inventada. (SPEC-1-003 · CA-SEQ-02 · P3-10). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
+- [x] Configurar quem pode validar o planejamento clínico @"L A Rodrigues" ✅ 21/10/2026 (v0.0.94 491e424: flag avaliador_habilitado + planos_tratamento + rotas atribuir-avaliador/plano; tela /avaliadores + Ficha; P3-09c E2E 12/12 PASS no ar; teste humano aprovado pelo dono 21/10)
+- [x] Cadastrar modelos de sequência de tratamento @"L A Rodrigues" ✅ 21/10/2026 (v0.0.96 4bd1332: catálogo modelos_sequencia + grafo validado no servidor + aprovação clínica do avaliador + tela /modelos; P3-10 E2E 12/12 PASS no ar; teste humano aprovado pelo dono 21/10)
 - [ ] Definir e aprovar as etapas de cada paciente @"L A Rodrigues"
   > Editor de etapas e aprovação pelo avaliador atribuído: criar manualmente ou copiar modelo aprovado, adaptar o caso com motivo, ligar procedimentos e liberar etapas explicitamente. Rascunho/versão, etapa única e paralelo; exceção de A não altera B/modelo. Depende de habilitação/modelos; sem API. Teste humano com avaliador e CRC. (SPEC-1-003 · CA-SEQ-02/03/05 · P3-10/11/13). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
 - [ ] Registrar conclusão e revisão das etapas do paciente @"L A Rodrigues"

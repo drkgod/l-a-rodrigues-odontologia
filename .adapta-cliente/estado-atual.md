@@ -1,25 +1,25 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: CA-SEQ-01 (emenda SPEC-1-003)
+- task_id: CA-SEQ-03 (emenda SPEC-1-003)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
-- analise: .adapta-cliente/analises/CA-SEQ-01-avaliador-habilitado.md
-- etapa: aguardando_teste_humano
-- autorizacao_implementacao: confirmada 20/10 10h35 ("segue a emenda" — task 1: configurar avaliador habilitado)
-- aguardando_teste: CA-SEQ-01 (roteiro na parada)
+- analise: .adapta-cliente/analises/CA-SEQ-03-editor-etapas.md
+- etapa: analisando
+- autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
+- aguardando_teste: nenhuma (CA-SEQ-01/02 aprovadas pelo dono 21/10 12h28)
 - em_espera: nenhuma
-- teste_humano: pendente (b2cb546c/d03a15ee aprovados)
-- verificacao_automatica: passou (QA verde v0.0.94; E2E CA-SEQ-01 12/12 PASS no ar; prova P3-09c registrada em provas_execucoes)
+- teste_humano: aprovado (CA-SEQ-01/02 em 21/10 12h28)
+- verificacao_automatica: passou (QA verde v0.0.96; E2E CA-SEQ-01 12/12 + CA-SEQ-02 12/12 PASS no ar; provas P3-09c/P3-10 registradas)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 491e424 (v0.0.94)
-- skip_publicacao: publicada:491e424 em 2026-10-20T13:53:38Z
+- skip_versao: 4bd1332 (v0.0.96)
+- skip_publicacao: publicada:4bd1332 em 2026-10-20T18:00:02Z
 - pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
-- ultima_acao: 20/10 11h05 — CA-SEQ-01 ENTREGUE no ar (v0.0.94): E2E 12/12 PASS; aguarda teste humano
-- proxima_acao: teste humano do dono (tela Avaliadores + Ficha); depois: task 2 da emenda (modelos de sequência CA-SEQ-02)
-- atualizado_em: 2026-10-20T11h05:00-03:00
+- ultima_acao: 21/10 12h30 — teste humano das 2 tasks APROVADO ("passou"); CA-SEQ-03 em análise
+- proxima_acao: construir CA-SEQ-03 (editor de etapas por paciente + aprovação pelo avaliador atribuído + prova P3-11) e publicar
+- atualizado_em: 2026-10-21T12h30:00-03:00

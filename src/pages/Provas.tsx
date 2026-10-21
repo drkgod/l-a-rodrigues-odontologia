@@ -61,7 +61,10 @@ import {
   executarProvaP3_07,
   executarProvaP3_09a,
   executarProvaP3_09b,
+  executarProvaP3_09c,
+  executarProvaP3_10,
   executarProvaP3_11,
+  executarProvaP3_11b,
   limparExecucoes,
   listarExecucoes,
   type ExecucaoProva,
@@ -331,6 +334,27 @@ const Provas = () => {
             disabled={executando}
           >
             P3-09b (dentista sem acesso)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_09c, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-09c (avaliador atribuído)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_10, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-10 (modelos)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => void executar(executarProvaP3_11b, 'SPEC-1-003')}
+            disabled={executando}
+          >
+            P3-11b (etapas do plano)
           </Button>
           <Button
             variant="outline"

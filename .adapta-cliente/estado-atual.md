@@ -1,14 +1,14 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: nenhuma
+- task_id: CA-SEQ-04 (emenda SPEC-1-003)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
 - analise: .adapta-cliente/analises/CA-SEQ-03-editor-etapas.md
-- etapa: aguardando_teste_humano
+- etapa: analisando
 - autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
-- aguardando_teste: CA-SEQ-03 (roteiro na parada)
+- aguardando_teste: nenhuma (CA-SEQ-03 aprovada pelo dono 21/10 21h45)
 - em_espera: nenhuma
 - teste_humano: aprovado (CA-SEQ-01/02 em 21/10 12h28)
 - verificacao_automatica: passou (QA verde v0.0.101; E2E P3-11b 12/12 PASS no ar; prova registrada)
@@ -21,5 +21,5 @@
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
 - ultima_acao: 21/10 12h45 — CA-SEQ-03 em construção (análise gravada): etapas no plano + editor na Ficha
-- proxima_acao: teste humano do dono (editor de etapas na Ficha); depois: CA-SEQ-04 (conclusão/revisão de etapas)
+- proxima_acao: analisar e construir CA-SEQ-04 (conclusão/revisão de etapas pelo avaliador)
 - atualizado_em: 2026-10-21T12h45:00-03:00

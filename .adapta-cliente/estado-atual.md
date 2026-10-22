@@ -1,25 +1,25 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: CA-SEQ-04 (emenda SPEC-1-003)
+- task_id: nenhuma
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-003-leads-pacientes-e-ficha.md
 - analise: .adapta-cliente/analises/CA-SEQ-03-editor-etapas.md
-- etapa: analisando
+- etapa: aguardando_teste_humano
 - autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
-- aguardando_teste: nenhuma (CA-SEQ-03 aprovada pelo dono 21/10 21h45)
+- aguardando_teste: CA-SEQ-04 (roteiro na parada)
 - em_espera: nenhuma
 - teste_humano: aprovado (CA-SEQ-01/02 em 21/10 12h28)
 - verificacao_automatica: passou (QA verde v0.0.101; E2E P3-11b 12/12 PASS no ar; prova registrada)
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 7b5c8e9 (v0.0.111)
+- skip_versao: ebd458a (v0.0.113)
 - skip_publicacao: publicada:70507a0 em 2026-10-21T15:40:56Z
 - pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
 - ultima_acao: 21/10 12h45 — CA-SEQ-03 em construção (análise gravada): etapas no plano + editor na Ficha
-- proxima_acao: analisar e construir CA-SEQ-04 (conclusão/revisão de etapas pelo avaliador)
+- proxima_acao: teste humano do dono (Concluir/Reabrir etapa na Ficha); depois: CA-SEQ-06 (liberar agendamento por etapa)
 - atualizado_em: 2026-10-21T12h45:00-03:00

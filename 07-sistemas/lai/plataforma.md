@@ -6,7 +6,7 @@
 - url_preview: https://projeto-lai-19327--preview.goskip.app
 - versao_aplicada: 7b5c8e9 (v0.0.111)
 - versao_publicada: 70507a0 em 2026-10-21T15:40:56Z
-- ultima_task: CA-SEQ-03 (editor de etapas) — publicada, aguardando teste humano
+- ultima_task: CA-SEQ-03 (editor de etapas) — CONCLUÍDA (teste humano aprovado 21/10 21h45)
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
   consulta; a fonte executável é o Skip. Nunca edite o espelho para mudar o sistema.
 

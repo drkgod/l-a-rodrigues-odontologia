@@ -1,59 +1,115 @@
 # Fase 1 — Tarefas
 
-- [ ] Fazer a call de início da construção da fase 1 @"Rodrigo Santos" !06/10/2026
-- [x] Criar a base da unidade piloto com acesso por função @"L A Rodrigues" !07/10/2026
-  - [x] Montar a tela de provas da fase 1 @"L A Rodrigues" !07/10/2026
-- [x] Enviar a tabela de tempo por procedimento e por dentista @"L A Rodrigues" !07/10/2026
-- [x] Trazer a agenda do Clinicorp para a central @"L A Rodrigues" !08/10/2026
-  - [x] Ler profissionais, cadeiras, status e categorias @"L A Rodrigues" !08/10/2026
-  - [x] Conferir 20 horários da central com o Clinicorp @"L A Rodrigues" !08/10/2026
-- [x] Cadastrar a tabela de duração na central @"L A Rodrigues" !08/10/2026
-- [x] Definir as regras de confirmação e liberação de vagas @"L A Rodrigues" !08/10/2026
-  - [ ] Enviar o modelo da planilha do robô de confirmação @"L A Rodrigues" !07/10/2026
-- [x] Montar a tela de agenda e vagas da unidade @"L A Rodrigues" !09/10/2026
-  - [x] Cadastrar os horários de atendimento de cada dentista @"L A Rodrigues" !09/10/2026
-  - [x] Testar a agenda de um dia real com a equipe @"L A Rodrigues" !09/10/2026
-- [x] Cadastrar leads com a origem da campanha @"L A Rodrigues" !09/10/2026
-  - [x] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026
-  - [x] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026 ✅ 20/10/2026 (v0.0.82)
-- [x] Mostrar o tempo sugerido ao planejar um agendamento @"L A Rodrigues" !13/10/2026
-  - [x] Listar as combinações sem regra para a direção validar @"L A Rodrigues" !13/10/2026
-- [x] Montar a lista de pacientes a agendar @"L A Rodrigues" !13/10/2026
-  - [x] Trazer do Clinicorp os procedimentos aprovados e não executados @"L A Rodrigues" !13/10/2026
-- [x] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026
-  - [x] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026
-- [x] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026
-  - [x] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026
-- [x] Montar a ficha do paciente com histórico e próxima ação @"L A Rodrigues" !14/10/2026
-- [x] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.76)
-  - [x] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.79)
-- [ ] Validar as regras de liberação e encaixe em call com a equipe @"Rodrigo Santos" !15/10/2026
-- [ ] Ofertar a vaga liberada a até três pacientes @"L A Rodrigues" !15/10/2026
-  - [ ] Garantir que a vaga fique com o primeiro que aceitar @"L A Rodrigues" !15/10/2026
-- [x] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88)
-  - [x] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88)
-- [ ] Montar a tela de atendimento do dia @"L A Rodrigues" !15/10/2026
-  - [ ] Registrar chegada, chamada, início e fim de cada paciente @"L A Rodrigues" !15/10/2026
-  - [ ] Transformar falta em pendência de reagendamento @"L A Rodrigues" !15/10/2026
-- [x] Testar a reposição de uma vaga do começo ao fim @"L A Rodrigues" !16/10/2026 ✅ 20/10/2026 (v0.0.92)
-- [ ] Comparar o botão de finalizar com a baixa do Clinicorp @"L A Rodrigues" !16/10/2026
-- [ ] Montar o painel de agendamento da gestão @"L A Rodrigues" !16/10/2026
-  - [ ] Mostrar a carga de pacientes e minutos por dentista @"L A Rodrigues" !16/10/2026
-- [ ] Calcular a linha de base da unidade piloto @"L A Rodrigues" !16/10/2026
-  - [ ] Informar o custo de cada dentista e o período da linha de base @"L A Rodrigues" !13/10/2026
-- [ ] Exportar o histórico do Trello e do APP CRC @"L A Rodrigues" !16/10/2026
-- [ ] Revisar as evidências e aceitar as entregas da fase 1 @"Rodrigo Santos" !20/10/2026
-  - [ ] Decidir o fechamento da fase 1 @"Rodrigo Santos" !20/10/2026
-- [ ] Criar o registro das tentativas de confirmação @"L A Rodrigues" [interno]
-- [x] Configurar os limites de pacientes por agenda e turno @"L A Rodrigues" [interno] ✅ 19/10/2026 (v0.0.81)
-- [ ] Conferir o histórico de campanhas com a agência @"L A Rodrigues" [interno]
-- [ ] Testar consulta ausente em leitura parcial @"L A Rodrigues" [interno]
-- [ ] Conferir cancelamentos na linha de base @"L A Rodrigues" [interno]
+<!-- fase-format:2 -->
+
+- [ ] Fazer a call de início da construção da fase 1 @"Rodrigo Santos" !06/10/2026  <!-- id:029c9b34-b67b-4390-9df1-ca940b9eaa25 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Call de validação com Luiz e Victor: apresentar as SPECs da fase 1, combinar como testar com o Maestro e combinar a massa local/importação, usuários/papéis e provas sem credenciais externas (SPEC-1-001). Pronto quando a ata curta estiver no card.
+- [x] Criar a base da unidade piloto com acesso por função @"L A Rodrigues" !07/10/2026  <!-- id:7805f88a-2157-43fc-9a25-a59ef7b45691 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Projeto Skip só da unidade piloto, com as coleções e a matriz de acesso da SPEC-1-001. Prova: P1-01 (usuário sem função não vê nada · CA-1-01). Pare se alguma função precisar de acesso fora da matriz.
+  - [x] Montar a tela de provas da fase 1 @"L A Rodrigues" !07/10/2026  <!-- id:556859ba-f5f4-4154-9908-69d216d1070a -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Tela só da gestão com um botão por SPEC que roda os cenários e grava o resultado; massa de teste sempre marcada como teste e botão para limpá-la (SPEC-1-001, mecanismo de provas).
+- [x] Enviar a tabela de tempo por procedimento e por dentista @"L A Rodrigues" !07/10/2026  <!-- id:f4982b80-9c9e-4a0b-95b2-49a41af4e476 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Planilha com procedimento, quantidade ou combinação, dentista e minutos, mais as cadeiras (qual é de avaliação) e os horários de cada dentista (CL-001). É a base do tempo sugerido (SPEC-1-002 · CA-1-07).
+- [x] Trazer a agenda do Clinicorp para a central @"L A Rodrigues" !08/10/2026  <!-- id:c7194c3e-4a69-49aa-935b-136865c09d1d -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Construir importação de agenda por CSV/XLSX ou fixture, sem API. Validar mapeamento, origem/lote, upsert e dados incertos; nenhum token/polling (SPEC-1-001 · CA-1-02/04/06 · P1-02/03/04/07/08). O título histórico conserva o UUID; integração foi adiada à fase 4.
+  - [x] Ler profissionais, cadeiras, status e categorias @"L A Rodrigues" !08/10/2026  <!-- id:a38335a3-52a3-4bcd-9bb0-74f978b3eea7 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Catálogos do arquivo/fixture gravados na central; o CPF dos profissionais não é guardado (SPEC-1-001, contrato de dados).
+  - [x] Conferir 20 horários da central com o Clinicorp @"L A Rodrigues" !08/10/2026  <!-- id:416ed8cc-aa7a-4e30-b9e7-aeb76913d02c -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Conferir 20 horários contra arquivo autorizado da clínica ou massa sintética identificada, em horário/profissional/paciente/status. Não consultar API nem alterar agenda oficial (SPEC-1-001 · CA-1-03 · P1-02/09).
+- [x] Cadastrar a tabela de duração na central @"L A Rodrigues" !08/10/2026  <!-- id:1f4de19d-189b-46a2-8538-fd394a7be2dc -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Importar a planilha de tempos, mostrar as linhas rejeitadas com o motivo e a gestão aprovar a versão (SPEC-1-002 · CA-1-07). Os tempos só vêm da clínica; o sistema não completa lacunas.
+- [x] Definir as regras de confirmação e liberação de vagas @"L A Rodrigues" !08/10/2026  <!-- id:a9f9e30e-5f5b-4212-900b-a679a4ae2290 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Cadastrar as respostas recebidas: 3 mensagens e 1 ligação no dia anterior, corte às 17h (America/Sao_Paulo), avaliação 2 por horário com 30min. Confirmar somente cobertura por turno/texto e os vínculos pendentes de Leonel, Wesley/Pamela e Erika; não reabrir regras já respondidas. Pronto quando parâmetros aprovados estiverem gravados e provas passarem (CL-004 · SPEC-1-004 · CA-1-20/21). Resposta recebida não equivale a configuração concluída.
+  - [ ] Enviar o modelo da planilha do robô de confirmação @"L A Rodrigues" !07/10/2026  <!-- id:71531c1d-0e0d-443f-9b6e-3e8dbf3e00b8 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Exemplo da planilha que hoje vai no robô (nome, telefone e mensagem), junto com as planilhas da rotina pedidas no kickoff (CL-009 · SPEC-1-004 · CA-1-18).
+- [x] Montar a tela de agenda e vagas da unidade @"L A Rodrigues" !09/10/2026  <!-- id:5b3fe9b6-78b3-4cda-b45d-9c3f23f49305 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Agenda por data, profissional e cadeira com ocupados e livres; horário ocupado por consulta, compromisso ou bloqueio nunca aparece livre; consulta dividida aparece como uma visita com alerta (SPEC-1-001 · CA-1-05). Prova P1-05.
+  - [x] Cadastrar os horários de atendimento de cada dentista @"L A Rodrigues" !09/10/2026  <!-- id:81d10fc4-1ab6-4c12-85cf-8d99442e74ff -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Horários por dia da semana a partir da tabela enviada (CL-001); dentista sem horário mostra "horário não cadastrado" (SPEC-1-001).
+  - [x] Testar a agenda de um dia real com a equipe @"L A Rodrigues" !09/10/2026  <!-- id:b1b67130-339f-4348-bfd5-db6bb5a12f0c -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Roteiro do teste humano da SPEC-1-001: conferir horários, trocar para a visão por cadeira, ver uma desmarcação de teste liberar o horário e entrar com usuário sem função. Responder "testei, pode seguir" no card (CL-008).
+- [x] Cadastrar leads com a origem da campanha @"L A Rodrigues" !09/10/2026  <!-- id:8d76cea5-87db-4604-9180-148613b0a5d1 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lead com origem campanha (código), manual ou desconhecida, nunca preenchida por suposição; telefone repetido mostra o possível duplicado sem juntar fichas (SPEC-1-003 · CA-1-12 e CA-1-13). Provas P3-01 a P3-03.
+  - [x] Cadastrar as campanhas com o código combinado com a agência @"L A Rodrigues" !09/10/2026  <!-- id:ac46ef6d-a26b-4ff4-bfdc-35f9be83bbca -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Código de campanha combinado com a agência para atribuição de origem dos leads; SPEC-1-003.
+  - [x] Importar os leads em aberto do APP CRC @"L A Rodrigues" !09/10/2026 ✅ 20/10/2026 (v0.0.82 11f8bef: 4.117 leads + fichas importados das planilhas ALC/ITA; teste humano aprovado pelo dono)
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Leads em aberto do APP CRC importados por arquivo; SPEC-1-003.
+- [x] Mostrar o tempo sugerido ao planejar um agendamento @"L A Rodrigues" !13/10/2026  <!-- id:097ff6ce-cdc7-44fd-984c-4ee315fc8406 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Rota /duracao/sugerir + tela de planejamento: tempo pela tabela da clínica (grupo ou por dentista, específica prevalece), arredondamento no múltiplo configurado, vagas compatíveis; combinação sem regra lista para a direção (subtask 6d5de2f5). SPEC-1-002 · CA-1-08/09 · P2-01..P2-04.
+  - [x] Listar as combinações sem regra para a direção validar @"L A Rodrigues" !13/10/2026  <!-- id:6d5de2f5-cdc0-4314-bbee-293d7f3b3d71 -->
+    > Construir a lista Sem regra para duração das combinações, agrupada por combinação/quantidade/profissional. Pode montar a lista agora; antes de ativar validação clínica, concluir Configurar quem pode validar o planejamento clínico. Avaliador habilitado valida novas regras clinicamente e gestão publica a versão; marcar validado sem regra utilizável não resolve. Rejeição fica auditada e cálculo sem regra. Não tratar sequência por paciente nesta tela nem exigir nova planilha já recebida (SPEC-1-002 · CA-1-09, CA-SEQ-D · P2-04/07/08).
+- [x] Montar a lista de pacientes a agendar @"L A Rodrigues" !13/10/2026  <!-- id:55a359b0-bb52-4a85-8648-77d323dc1620 -->
+  > Lista com procedimentos pendentes, leads/faltas e disponibilidade/prontidão. Para tratamento, ligar a etapa do plano do paciente e mostrar aguarda sequência/liberação do avaliador quando necessário; avaliação sem execução de tratamento não exige plano. Usar o contrato da emenda, sem importar prontuário inteiro (SPEC-1-003 · CA-1-14/15 · CA-SEQ-03 · P3-04/05/06/11).
+  - [x] Trazer do Clinicorp os procedimentos aprovados e não executados @"L A Rodrigues" !13/10/2026  <!-- id:90ad21b0-1692-4994-bdcf-13767f603968 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Procedimentos aprovados e não executados por arquivo autorizado; SPEC-1-003.
+- [x] Gerar a lista de confirmação do dia para o robô @"L A Rodrigues" !13/10/2026  <!-- id:5bcfa6f1-3634-485d-8740-49c6ce94df0a -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de confirmação do dia para o robô (3 mensagens + 1 ligação, corte 17h); registro da resposta de cada paciente (subtask f124df8f). SPEC-1-004.
+  - [x] Registrar a resposta de cada paciente @"L A Rodrigues" !13/10/2026  <!-- id:f124df8f-05d8-4233-aced-d5a2e8085509 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro da resposta (confirmou/não confirmou/sem resposta) por paciente na lista do robô; SPEC-1-004.
+- [x] Pedir o motivo quando a reserva fugir do tempo sugerido @"L A Rodrigues" !14/10/2026  <!-- id:fdca5fb0-379d-4ede-8b73-409508033157 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Desvio com motivo obrigatório quando a reserva difere do sugerido; reservas sem planejamento e planejamento sem reserva no fim do dia (CA-1-11); teste de duas e quatro coroas com dentistas diferentes (subtask c9b95987). SPEC-1-002 · CA-1-10/11 · P2-05/06.
+  - [x] Testar duas e quatro coroas com dentistas diferentes @"L A Rodrigues" !14/10/2026  <!-- id:c9b95987-0344-4a5f-b528-b5561c1717ca -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano com 2 CRCs: 2 e 4 coroas com dois dentistas conferindo a tabela; SPEC-1-002.
+- [x] Montar a ficha do paciente com histórico e próxima ação @"L A Rodrigues" !14/10/2026  <!-- id:35bff70c-73f2-40e5-96cf-c17bd68d1499 -->
+  > Construir ficha com histórico, responsável/próxima ação e acesso por função; aba Etapas do tratamento consome as tasks novas de modelo/plano, sem CRC alterar decisão clínica. Dados do planejamento mínimo apenas para avaliador habilitado atribuído e equipe operacional autorizada (SPEC-1-003 · CA-1-16 · CA-SEQ-01 · P3-09).
+- [x] Montar a lista de ligação e liberar vagas só pela regra @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.76 e7770c1, teste humano aprovado)  <!-- id:f79847a5-0ec1-4549-b19c-8c982cef25c6 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Lista de ligação e liberação de vagas só pela regra de confirmação; sobreposição na avaliação e conflito no tratamento sinalizados (subtask 8421e27b). SPEC-1-004.
+  - [x] Sinalizar sobreposição na avaliação e conflito no tratamento @"L A Rodrigues" !14/10/2026 ✅ 19/10/2026 (v0.0.79 6a79d2f, teste humano aprovado: "testei deu certo")  <!-- id:8421e27b-e7d2-4f59-a3df-633cde760d9e -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Sinal de sobreposição na avaliação e conflito no tratamento; SPEC-1-004.
+- [ ] Validar as regras de liberação e encaixe em call com a equipe @"Rodrigo Santos" !15/10/2026  <!-- id:1c8eb871-e670-4b77-af97-56b6232e9efe -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Call de validação das regras de liberação/encaixe com a equipe; SPEC-1-004.
+- [ ] Ofertar a vaga liberada a até três pacientes @"L A Rodrigues" !15/10/2026  <!-- id:e2369241-9bca-4732-a139-874cdd1d6a5e -->
+  > Ofertar até3 elegíveis por tempo/profissional/capacidade/disponibilidade/prontidão e etapa do tratamento liberada pelo avaliador. Pré-condição: task nova Liberar agendamento e encaixe conforme a etapa aprovada concluída; revalidar versão do plano antes de oferta. Ordem provisória por entrada só entre elegíveis; ela não define ordem clínica (SPEC-1-004 · CA-1-23 · CA-SEQ-06 · P4-08/22/23).
+  - [ ] Garantir que a vaga fique com o primeiro que aceitar @"L A Rodrigues" !15/10/2026  <!-- id:36cdfc82-9bd2-400e-96d6-101b4240abab -->
+    > Primeiro aceite válido vence em operação protegida, revalidando capacidade/vaga e versão/liberação das etapas antes de gravar. Revisão clínica concorrente impede confirmação nova; reservas anteriores não são canceladas automaticamente. Depende do guard compartilhado da task nova de liberação (SPEC-1-004 · CA-1-24/25 · CA-SEQ-06 · P4-09/24).
+- [x] Acompanhar o lead até o comparecimento @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88 9b843b1: vínculo por telefone + chegada compareceu/faltou; teste humano aprovado pelo dono)
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Acompanhamento do lead até o comparecimento; relatório de origem para a agência (subtask d45e8f8a). SPEC-1-003.
+  - [x] Gerar o relatório de origem para a agência @"L A Rodrigues" !15/10/2026 ✅ 20/10/2026 (v0.0.88 9b843b1: card Relatório de origem na tela Leads, por data real do APP CRC; teste humano aprovado pelo dono)
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Relatório de origem dos leads para a agência; SPEC-1-003.
+- [ ] Montar a tela de atendimento do dia @"L A Rodrigues" !15/10/2026  <!-- id:a3dc6e0f-adca-4b99-83cf-933f305ba6cc -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Atendimento do dia: chegada, chamada, início e fim (subtask 2ab1282b); falta vira pendência de reagendamento (subtask b517d69d). SPEC-1-005.
+  - [ ] Registrar chegada, chamada, início e fim de cada paciente @"L A Rodrigues" !15/10/2026  <!-- id:2ab1282b-8315-43c1-823d-1ddca08f05ed -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Registro de chegada/chamada/início/fim por paciente no dia; SPEC-1-005.
+  - [ ] Transformar falta em pendência de reagendamento @"L A Rodrigues" !15/10/2026  <!-- id:b517d69d-91e1-4496-82fc-f1e04a8be0c9 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Falta vira pendência de reagendamento para a lista de ligação; SPEC-1-005.
+- [x] Testar a reposição de uma vaga do começo ao fim @"L A Rodrigues" !16/10/2026 ✅ 20/10/2026 (v0.0.92 07daddf: teste humano aprovado — gate recusou 2x com a regra certa, liberação + conciliação + evidência; oferta/aceite ficam nas tasks e2369241/36cdfc82)
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Teste humano da reposição de vaga de ponta a ponta; SPEC-1-004/005.
+- [ ] Comparar o botão de finalizar com a baixa do Clinicorp @"L A Rodrigues" !16/10/2026  <!-- id:3926f0ae-e2fe-4ffb-b508-0564ecf0be27 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Construir comparação de fim pelo botão com campos de baixa de arquivo/fixture vinculados. Data sem hora não vira horário e ambiguidade fica em revisão. Prova real da conta apenas na fase 4 (SPEC-1-005 · CA-1-30 · P5-09).
+- [ ] Montar o painel de agendamento da gestão @"L A Rodrigues" !16/10/2026  <!-- id:86053b82-b444-4950-b0a0-c31a87242bb2 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Indicadores do período com denominador: agendados, confirmados, sem resposta, ligações, faltas, vagas liberadas e preenchidas, tempos e desvios; registros de teste não entram (SPEC-1-006 · CA-1-31, CA-1-32 e CA-1-34). Provas P6-01 a P6-05 e conferência de um dia da massa/arquivo.
+  - [ ] Mostrar a carga de pacientes e minutos por dentista @"L A Rodrigues" !16/10/2026  <!-- id:22de9577-d910-49c1-95de-38bc0377c0dc -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Por dentista e dia: pacientes e minutos reservados × minutos disponíveis (SPEC-1-006 · CA-1-33).
+- [ ] Calcular a linha de base da unidade piloto @"L A Rodrigues" !16/10/2026  <!-- id:7fc031f6-15da-45ba-adfd-3764a1c8d266 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Preparar fórmula e memória de cálculo em massa ou arquivo histórico completo com origem/versão. Resultado provisório/demonstrativo separado; baseline oficial será confirmada na fase 4 antes da virada (SPEC-1-006 · CA-1-35 · P6-06/07).
+  - [ ] Informar o custo de cada dentista e o período da linha de base @"L A Rodrigues" !13/10/2026  <!-- id:04d3496d-faf3-4332-85d2-9e8c4478e993 -->
+    > Consultar fontes já compartilhadas sobre remuneração por dentista e período da medição, conforme análise da SPEC-1-006 (CL-PEND-003 · CA-1-35). Aproveitar diária ou forma documentada e esclarecer só campo/definição ausentes após consulta; explicar efeito no custo por paciente/ociosidade. Não inventar rateio nem exigir novo documento se o existente atende. Baseline oficial permanece na fase 4; cálculo demonstrativo não depende de dados reais.
+- [ ] Exportar o histórico do Trello e do APP CRC @"L A Rodrigues" !16/10/2026  <!-- id:ee4d87d7-d467-46d3-bbea-cfc5b60a959e -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Guardar arquivos que a equipe fornecer manualmente, com data/acesso restrito; ausência registrada permite demonstração com fixture. Não conectar Trello/APP CRC nem desligá-los (SPEC-1-007 · CA-1-36 · P7-03).
+- [ ] Revisar as evidências e aceitar as entregas da fase 1 @"Rodrigo Santos" !20/10/2026  <!-- id:08034e11-3455-4cc7-9531-96be0e75f0f1 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Revisar P1–P7, testes humanos, roteiros locais/painel e zero chamadas externas. Registrar aceite somente da fundamentação e limitações na tela Demonstração e aceite; go-live ficará para a fase 4 (SPEC-1-007 · CA-1-39 · P7-04/05/06).
+  - [ ] Decidir o fechamento da fase 1 @"Rodrigo Santos" !20/10/2026  <!-- id:b9de8e96-cdcc-4cf7-83c2-160d89548e79 -->
+    > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Decisão do consultor: fechar a fase 1 e liberar a fase 2, ou manter a fase aberta com as pendências listadas (SPEC-1-007 · CA-1-39).
+- [ ] Criar o registro das tentativas de confirmação @"L A Rodrigues" [interno]  <!-- id:6a8a817e-1b0d-49e0-bea7-e805d3ade439 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Construir o registro auditado de tentativas, sintéticas na prova desta fase, com chave única por evento e interrupção por confirmação; exportar a planilha não conta como envio. Provar16:59/17:00, 2/3 mensagens, sem ligação e clock do browser (SPEC-1-004 · CA-1-19/20 · P4-03, P4-04, P4-05, P4-10, P4-11, P4-16, P4-17, P4-18, P4-19, P4-20). Só continuar depois do teste humano. Prazo novo não definido.
+- [x] Configurar os limites de pacientes por agenda e turno @"L A Rodrigues" [interno] ✅ 19/10/2026 (v0.0.81 89dd14d, provas P4-13/14/15 verdes + E2E no ar; teste_humano nao_aplicavel: prova automática)
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Cadastrar políticas locais com unidade/profissional/regime/turno aprovados: avaliação2×30min; Leonel5; Wesley/Pamela20 com escopo confirmado; Erika2 no sábado na agenda identificada. Bloquear os vínculos ainda pendentes e não presumir40 nem tratamento sobreposto (SPEC-1-004 · CA-1-21 · P4-07, P4-13, P4-14, P4-15). Sem confirmações, configurar apenas regras já completas e devolver a pendência.
+- [ ] Conferir o histórico de campanhas com a agência @"L A Rodrigues" [interno]  <!-- id:1ccd1bb9-ad1c-4d16-8327-462ae08621ac -->
+  > Localizar e analisar o PDF/base e evidências existentes no Drive antes de pedir arquivo. Confirmar unidade/conta, mês, granularidade e qualidade; reaproveitar/converter o formato quando viável. Somente solicitar campo/evidência/esclarecimento com ausência confirmada, explicando seu uso no relatório. Preservar origem reconstruída e CPL de junho divergente; agregado não cadastra pessoas nem atribuição retroativa; código sem match permanece desconhecido (SPEC-1-003 · CA-1-12/17 · P3-08). Não pedir XLSX/CSV automaticamente. Acesso aos anúncios é gate futuro, não condição da análise local.
+- [ ] Testar consulta ausente em leitura parcial @"L A Rodrigues" [interno]  <!-- id:11aeb329-28b3-401b-8cc9-e6a16f3ef73f -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. A consulta ocupada de teste some numa leitura parcial: deve continuar indisponível/incerta e fora do encaixe. Cancelamento explícito comprovado libera. Provar também erro de permissão, preservando dados anteriores (SPEC-1-001 · CA-1-04/05/06 · P1-07). Teste automatizado e humano antes do aceite.
+- [ ] Conferir cancelamentos na linha de base @"L A Rodrigues" [interno]  <!-- id:d350fb12-466a-47a0-a5c5-f60a45b0d599 -->
+  > Fundamentação: fixture separada/arquivo/cadastro manual; zero chamadas a APIs externas e nenhuma mensagem de teste enviada. Executed pelo profissional fictício CANCELAMENTO não conta como paciente atendido ou produção; usar evidência de atendimento real. Duas avaliações simultâneas na mesma cadeira usam união de intervalos; turno sem hora individual mostra pessoas/limite, sem minutos fictícios (SPEC-1-006 · CA-1-31/33/35 · P6-07). Guardar memória de cálculo e evidência para comparação final.
 
 ## Emenda — sequência individual (14/10/2026)
 
-- [x] Configurar quem pode validar o planejamento clínico @"L A Rodrigues" ✅ 21/10/2026 (v0.0.94)
-- [x] Cadastrar modelos de sequência de tratamento @"L A Rodrigues" ✅ 21/10/2026 (v0.0.96)
-- [x] Definir e aprovar as etapas de cada paciente @"L A Rodrigues" ✅ 21/10/2026 (v0.0.111)
-- [x] Registrar conclusão e revisão das etapas do paciente @"L A Rodrigues" ✅ 21/10/2026 (v0.0.113)
-- [ ] Liberar agendamento e encaixe conforme a etapa aprovada @"L A Rodrigues" [/] MOTOR ENTREGUE 21/10/2026 (v0.0.114 c9473ad) — falta integração no commit da oferta/aceite; AGUARDA TESTE HUMANO
+Novos incrementos abertos; sem prazo novo. Preservar entregas aceitas e executar uma task por vez.
+
+- [x] Configurar quem pode validar o planejamento clínico @"L A Rodrigues" ✅ 21/10/2026 (v0.0.94 491e424: flag avaliador_habilitado + planos_tratamento + rotas atribuir-avaliador/plano; tela /avaliadores + Ficha; P3-09c E2E 12/12 PASS no ar; teste humano aprovado pelo dono 21/10)
+- [x] Cadastrar modelos de sequência de tratamento @"L A Rodrigues" ✅ 21/10/2026 (v0.0.96 4bd1332: catálogo modelos_sequencia + grafo validado no servidor + aprovação clínica do avaliador + tela /modelos; P3-10 E2E 12/12 PASS no ar; teste humano aprovado pelo dono 21/10)
+- [x] Definir e aprovar as etapas de cada paciente @"L A Rodrigues" ✅ 21/10/2026 (v0.0.111 7b5c8e9: etapas no plano + editor na Ficha com copiar modelo aprovado + aprovação pelo avaliador atribuído; P3-11b E2E 12/12 PASS; acesso dentista fechado 6/6 PASS no ar; teste humano aprovado pelo dono 21/10 "passou")
+  > Editor de etapas e aprovação pelo avaliador atribuído: criar manualmente ou copiar modelo aprovado, adaptar o caso com motivo, ligar procedimentos e liberar etapas explicitamente. Rascunho/versão, etapa única e paralelo; exceção de A não altera B/modelo. Depende de habilitação/modelos; sem API. Teste humano com avaliador e CRC. (SPEC-1-003 · CA-SEQ-02/03/05 · P3-10/11/13). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
+- [x] Registrar conclusão e revisão das etapas do paciente @"L A Rodrigues" ✅ 21/10/2026 (v0.0.113 ebd458a: rotas concluir/reabrir só avaliador atribuído + fonte/motivo obrigatórios + eventos; P3-12 E2E 6/6 PASS no ar; teste humano aprovado pelo dono 21/10 22h "passou")
+  > Avaliador confere e registra conclusão/fonte ou revisão, preservando versões e eventos. Agendada não é concluída; cancelamento/Executed financeiro não libera próxima etapa. Revisão de plano aprovado bloqueia novos agendamentos até nova aprovação e sinaliza reservas existentes sem cancelá-las. Depende do editor/aprovação; concorrência por versão. (SPEC-1-003 · CA-SEQ-03/04/05 · P3-11/12/13). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.
+- [x] Liberar agendamento e encaixe conforme a etapa aprovada @"L A Rodrigues" ✅ 21/10/2026 (v0.0.114 c9473ad: rota elegibilidade + card no Planejar; E2E 6/6 PASS no ar; teste humano aprovado pelo dono 21/10 22h17 — print "✓ Elegível"; integração no commit da oferta/aceite fica nas tasks e2369241/36cdfc82)
+  > Implementar elegibilidade_tratamento compartilhada e integrar finalização de planejamento, oferta, aceite e vínculo de nova reserva. Todas as etapas da visita exigem plano aprovado, dependências concluídas, liberação clínica e prontidão; avaliações são dispensadas. Revalidar versão no commit com proteção comprovada, bloquear tratamento sem plano sem bloquear cálculo/rascunho. Depende de editor/conclusão/revisão; entregar antes das ofertas e aceites de tratamento. (SPEC-1-004 · CA-SEQ-06 · P4-22/23/24/25). Registrar prova e teste humano antes de concluir; UUID será devolvido pelo portal.

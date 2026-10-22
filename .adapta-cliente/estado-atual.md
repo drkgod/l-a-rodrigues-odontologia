@@ -1,23 +1,25 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: nenhuma
+- task_id: e2369241 (SPEC-1-004)
 - executor: Luiz (assistente ETHOS)
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacao-agendamento-e-liberacao.md
-- analise: .adapta-cliente/analises/CA-SEQ-06-liberacao-etapa.md
-- etapa: aguardando_teste_humano
+- analise: .adapta-cliente/analises/e2369241-oferta-vaga.md
+- etapa: analisando
 - autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
-- aguardando_teste: CA-SEQ-06 motor (card no Planejar)
+- aguardando_teste: nenhuma (CA-SEQ-06 aprovada pelo dono 21/10 22h17)
 - em_espera: nenhuma
 - teste_humano: aprovado (CA-SEQ-01/02 em 21/10 12h28)
-- verificacao_automatica: passou (QA verde v0.0.114 c9473ad; E2E elegibilidade 6/6 PASS no ar)
-- aprendizado: capturado em 06_notas/aprendizado-continuo/controle.md
+- verificacao_automatica: passou (QA verde v0.0.101; E2E P3-11b 12/12 PASS no ar; prova registrada)
+- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: c9473ad (v0.0.114)
 - skip_publicacao: publicada:70507a0 em 2026-10-21T15:40:56Z
-- espelho: atualizado (Planejar.tsx + plano.ts com elegibilidade)
-- ultima_acao: 21/10 — CA-SEQ-06 motor entregue no ar
-- proxima_acao: teste humano do dono (card Elegibilidade no Planejar); depois: e2369241 (ofertar vaga a até 3 pacientes)
-- atualizado_em: 2026-10-21T22:03:00-03:00
+- pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
+- espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
+- housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
+- ultima_acao: 21/10 12h45 — CA-SEQ-03 em construção (análise gravada): etapas no plano + editor na Ficha
+- proxima_acao: analisar e construir e2369241 (ofertar a vaga liberada a até 3 pacientes + primeiro aceite)
+- atualizado_em: 2026-10-21T12h45:00-03:00

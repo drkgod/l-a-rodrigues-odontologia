@@ -4,7 +4,7 @@
 - projeto_id: 65741
 - url_producao: https://projeto-lai-19327.goskip.app
 - url_preview: https://projeto-lai-19327--preview.goskip.app
-- versao_aplicada: 70507a0 (v0.0.101)
+- versao_aplicada: 7b5c8e9 (v0.0.111)
 - versao_publicada: 70507a0 em 2026-10-21T15:40:56Z
 - ultima_task: CA-SEQ-03 (editor de etapas) — publicada, aguardando teste humano
 - espelho: `codigo/` guarda a última versão de cada arquivo alterado pelas tasks. É cópia de
@@ -45,7 +45,7 @@
 | 20/10/2026 | d03a15ee (fix data_entrada + backfill) | 9b843b1 (v0.0.88) | migration 0018, leads_regras.js (data_entrada), leads_acompanhamento.js (relatório usa data_entrada) |
 | 20/10/2026 | CA-SEQ-01 | 491e424 (v0.0.94) | migration 0019, hook tratamento_regras.js, service tratamento.ts, tela Avaliadores.tsx, App.tsx, Layout.tsx, Ficha.tsx, Provas.tsx, provas.ts (P3-09c) |
 | 20/10/2026 | CA-SEQ-02 | 4bd1332 (v0.0.96) | migration 0020, hook modelos_regras.js, service modelos.ts, tela Modelos.tsx, App.tsx, Layout.tsx, auth.ts, Provas.tsx, provas.ts (P3-10) |
-| 21/10/2026 | CA-SEQ-03 | 70507a0 (v0.0.101) | migration 0021, hook plano_regras.js, service plano.ts, Ficha.tsx (editor), Provas.tsx, provas.ts (P3-11b) |
+| 21/10/2026 | CA-SEQ-03 | 7b5c8e9 (v0.0.111) | migration 0021, hook plano_regras.js, service plano.ts, Ficha.tsx (editor), Provas.tsx, provas.ts (P3-11b) |
 
 ## Regras da plataforma
 

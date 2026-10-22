@@ -15,7 +15,7 @@
 - aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: 70507a0 (v0.0.101)
+- skip_versao: 7b5c8e9 (v0.0.111)
 - skip_publicacao: publicada:70507a0 em 2026-10-21T15:40:56Z
 - pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)

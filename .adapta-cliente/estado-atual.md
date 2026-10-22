@@ -6,7 +6,7 @@
 - owner_informativo: L A Rodrigues
 - spec: 04_fase-atual/specs/spec-1-004-confirmacao-agendamento-e-liberacao.md
 - analise: .adapta-cliente/analises/e2369241-oferta-vaga.md
-- etapa: analisando
+- etapa: implementando
 - autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
 - aguardando_teste: nenhuma (CA-SEQ-06 aprovada pelo dono 21/10 22h17)
 - em_espera: nenhuma
@@ -21,5 +21,5 @@
 - espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
 - housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
 - ultima_acao: 21/10 12h45 — CA-SEQ-03 em construção (análise gravada): etapas no plano + editor na Ficha
-- proxima_acao: analisar e construir e2369241 (ofertar a vaga liberada a até 3 pacientes + primeiro aceite)
+- proxima_acao: construir e2369241 (migration 0024 + hook ofertas + prova P4-08) e publicar
 - atualizado_em: 2026-10-21T12h45:00-03:00

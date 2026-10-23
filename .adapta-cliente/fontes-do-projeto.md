@@ -47,3 +47,12 @@ Antes de registrar ausência, ler os materiais compartilhados, aproveitar o sufi
 “Consultei [arquivos/fontes]. Para [task e tela], precisamos de [documento/informação e campos], porque [uso concreto]. Já encontrei [dados aproveitados]; falta apenas [lacuna comprovada]. Isso [bloqueia uso real / permite seguir em demonstração]. Podem [completar os campos ou liberar acesso ao arquivo identificado]?”
 
 Falha de acesso pede identificação do ambiente/conta e permissão mínima, depois de conferidos. Não inventar e-mail de acesso nem declarar ausência de documento.
+
+
+## Liberação da fase 2 — 23/10/2026
+
+- **Fonte lida:** cinco SPECs, índice e arquivo de 16 tarefas preparados pelo Claude em 23/10, no plano local do projeto. Publicados em `04_fase-atual/`, com UUIDs, responsáveis, prazos e estados preservados.
+- **Decisão lida:** AC-23-02, em `03-Projeto/analise-do-consultor.md` do plano: fase 1 encerrada; entradas da clínica transferidas ao checklist; fase 2 liberada. O plano privado não integra este pacote.
+- **Evidência lida:** changelog do repositório no commit f8f7b01: aceite humano do painel e da linha de base demonstrativa em 23/10, 10h10. Atualizado o contexto da SPEC-2-001 sem remover seu teste de uso pela equipe.
+- **Guia da CRC:** `guia-conexao-comunicacao-crc.pdf`, recebido em 23/10 e localizado na pasta de contexto da clínica. Os campos incorporados pelo Claude na SPEC-2-003 foram lidos; o PDF original não foi relido nesta publicação e não foi copiado para o Git.
+- **Entradas ainda necessárias:** conferir `04_fase-atual/checklist-do-cliente.md`. Transferir uma pendência não significa que o documento foi recebido.

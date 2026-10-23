@@ -1,25 +1,17 @@
 # Estado atual — Adapta Cliente
 
 - schema_version: adapta-cliente-state/v3
-- task_id: e2369241 (SPEC-1-004)
-- executor: Luiz (assistente ETHOS)
-- owner_informativo: L A Rodrigues
-- spec: 04_fase-atual/specs/spec-1-004-confirmacao-agendamento-e-liberacao.md
-- analise: .adapta-cliente/analises/e2369241-oferta-vaga.md
-- etapa: implementando
-- autorizacao_implementacao: confirmada 20/10 14h56 ("continue de onde parou" — ciclo contínuo; task 3 da emenda)
-- aguardando_teste: nenhuma (CA-SEQ-06 aprovada pelo dono 21/10 22h17)
-- em_espera: nenhuma
-- teste_humano: aprovado (CA-SEQ-01/02 em 21/10 12h28)
-- verificacao_automatica: passou (QA verde v0.0.101; E2E P3-11b 12/12 PASS no ar; prova registrada)
-- aprendizado: capturado:06_notas/aprendizado-continuo/controle.md (padrões 7-9: política por turno, vínculo por nome, unidade de origem)
+- fase: 2
+- task_id: 22d83348-1372-46f4-88cd-0cf15f55cd06
+- spec: 04_fase-atual/specs/spec-2-001-central-em-uso-pela-equipe.md
+- etapa: pronta-para-construcao
+- teste_humano: pendente para a SPEC-2-001; aceite do painel da fase 1 registrado em 23/10 às 10h10
+- verificacao_automatica: pacote documental validado; sem novo teste do app
 - sistema: lai
 - skip_projeto: 65741
-- skip_versao: c9473ad (v0.0.114)
-- skip_publicacao: publicada:70507a0 em 2026-10-21T15:40:56Z
-- pendente_github: nao (espelho provas.ts 93KB vai no próximo envio — estoura o limite do subagente; código e registros já no GitHub)
-- espelho: atualizado (leads_acompanhamento.js rev.6 + migration 0017 + leads.ts + Leads.tsx + provas.ts P3-07 + Provas.tsx; provas.ts 93KB inteiro segue pendente de push)
-- housekeeping: 71531c1d (modelo da planilha do robô) segue aberta aguardando o dono (CL-PEND-001); eec75533 RESOLVIDA com as planilhas recebidas 19/10
-- ultima_acao: 21/10 12h45 — CA-SEQ-03 em construção (análise gravada): etapas no plano + editor na Ficha
-- proxima_acao: construir e2369241 (migration 0024 + hook ofertas + prova P4-08) e publicar
-- atualizado_em: 2026-10-21T12h45:00-03:00
+- skip_versao: v0.0.146 (61460db), conforme entrega registrada no changelog
+- ultima_acao: liberação documental da fase 2 a partir da decisão AC-23-02 e das SPECs preparadas pelo Claude
+- proxima_acao: comparar os números do painel com a contagem direta da base, conforme SPEC-2-001
+- atualizado_em: 2026-10-23
+
+Estado anterior preservado em `05_entregas/fase-1/estado-executor-antes-da-liberacao.md`.

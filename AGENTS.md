@@ -1,6 +1,6 @@
 # Instruções — L A Rodrigues
 
-Antes de trabalhar, leia `README.md`, `.adapta-cliente/fontes-do-projeto.md`, o card e sua SPEC. Preserve UUID, estado e edições do cliente. Execute uma task por vez; conclusão exige prova e teste humano explícito.
+Antes de trabalhar, leia `README.md`, `.adapta-cliente/fontes-do-projeto.md`, o card e sua SPEC. Preserve UUID, estado e edições do cliente. Execute uma task por vez. Na fase 2, construa as tasks de cada SPEC em sequência, com provas por task; faça o teste humano único previsto na SPEC quando suas tasks estiverem no ar. Conclusão exige as provas e o aceite humano explícito da SPEC. A última task da SPEC-2-001 espera o dia de uso; enquanto isso, siga para a SPEC-2-002.
 
 ## Procurar antes de pedir documentos
 

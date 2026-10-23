@@ -1,33 +1,32 @@
 # Execução — L A Rodrigues Odontologia
 
-**Atualizado:** 13/10/2026 · **Fase atual:** 1, fundamentação do app · **Pacote:** sete SPECs e 49 cards com UUID.
+**Atualizado:** 23/10/2026 · **Fase atual:** 2, rotinas internas e contexto da avaliação · **Pacote:** cinco SPECs e 16 tarefas com UUID.
 
-Comece por `04_fase-atual/fase.md` e `04_fase-atual/specs/00-INDICE.md`. Esta fase constrói telas, banco, papéis e regras: agenda, duração, leads/ficha, pacientes a agendar, confirmação/ligação, encaixe assistido, atendimento do dia e painel.
+Comece por [tarefas da fase 2](04_fase-atual/fase.md) e pelo [índice das SPECs](04_fase-atual/specs/00-INDICE.md). A fase acrescenta tarefas com dono e prazo, contexto e registro da avaliação, gravação autorizada e médias de tempo por dentista.
 
 ## Como começar
 
-1. Disponibilize esta pasta ao Maestro no ambiente de construção.
-2. Leia `AGENTS.md` e `.adapta-cliente/fontes-do-projeto.md`, escolha uma única task elegível e leia sua SPEC. Títulos históricos foram preservados; a descrição atual define o recorte local.
-3. Use fixture separada, arquivo validado ou cadastro manual. Não precisa de token Clinicorp, conta Meta ou provedor de IA para começar. Login, banco e arquivos nativos do Skip são a base.
-4. Construa apenas a task, rode RED/GREEN/regressão e registre evidência em `05_entregas/`, ligada ao UUID.
-5. A equipe segue o teste humano da SPEC. Só concluir e avançar depois de evidência e resposta explícita “testei, pode seguir”. Falha volta à mesma task.
+1. Leia `AGENTS.md`, `.adapta-cliente/fontes-do-projeto.md`, o card e sua SPEC.
+2. Comece por **Comparar os números do painel com a contagem direta da base** (SPEC-2-001; UUID `22d83348-1372-46f4-88cd-0cf15f55cd06`). O aceite anterior do painel está preservado; esta task faz a comparação detalhada e prepara o uso pela equipe.
+3. Construa uma task por vez, em sequência dentro da SPEC, com provas e evidências em `05_entregas/fase-2/`. Faça o teste humano único de cada SPEC quando suas tasks estiverem no ar; registre o aceite antes de concluí-las.
+4. A correção dos problemas do dia de uso espera a equipe usar a central. Enquanto isso, siga para a SPEC-2-002, conforme o índice.
+5. Consulte o [checklist da clínica](04_fase-atual/checklist-do-cliente.md). As entradas pendentes não impedem a construção; gravação real depende do termo aprovado.
 
 ## Dados e regras
 
-A clínica indicou a pasta de documentos: https://drive.google.com/drive/folders/1Zwvm_2xfc7B-Ub9Ndk9hXpIOT_5yFgc9. Antes de pedir material, procurar nela e nas fontes recebidas. Falha de acesso não significa documento não enviado. Cada pedido identifica documento/campos, finalidade na task e lacuna; não solicitar reenvio genérico.
+Use fixture isolada, arquivo validado ou cadastro manual. Consulte as fontes já recebidas antes de pedir documentos; não invente valores da clínica nem copie dados identificáveis para o Git.
 
-Tabelas de duração/cadeiras e modelos de arquivos ajudam a validar os dados reais. Demonstração sintética permite começar enquanto faltam entradas, sem preencher parâmetros reais por suposição. Unidade/turno de Leonel, limite de Wesley/Pamela, regime de Erika e cobertura de ligações exigem confirmação no uso afetado.
-
-Toda tela identifica origem/data e modo demonstrativo ou importado, sem sincronização. Testes não enviam mensagens, não acionam robô nem alteram consultas reais. Vencedor local não confirma reserva no Clinicorp. A clínica mantém suas ferramentas atuais até o piloto conectado e aceito na fase 4.
+Clinicorp continua sendo a agenda oficial. Nenhuma API externa, envio ao paciente, transcrição ou IA é ativada nesta fase. Trello, APP CRC e robô continuam na rotina atual; conexões e piloto real ficam para a fase 4. Toda tela identifica origem e dados de teste.
 
 ## Organização
 
-- `04_fase-atual/`: cards e SPECs da fase atual.
-- `05_entregas/`: provas e demonstrações.
+- `04_fase-atual/`: 16 tarefas, checklist e cinco SPECs da fase 2.
+- `05_entregas/fase-1/`: tarefas, SPECs e estado histórico da fase 1, encerrada por AC-23-02.
+- `05_entregas/fase-2/`: destino das evidências a produzir durante a execução.
 - `06_notas/`: dúvidas e registros da equipe.
-- `07-sistemas/`: arquivos ou referências do app construído.
+- `07-sistemas/`: código e referências do app existente.
 
-Conexões externas ficam para a fase 4 e segunda unidade para a fase 5; instruções serão disponibilizadas na liberação. Cinco cards de acesso/virada foram reservados no plano futuro, preservando UUIDs. Os 49 cards atuais conservam estado, responsável, data e visibilidade; datas antigas são histórico a replanejar. Nenhuma implementação/aceite foi produzido neste preparo. Destino GitHub autorizado: `drkgod/l-a-rodrigues-odontologia`, privado.
+A fase 2 está liberada para construção; suas tarefas ainda não foram implementadas por esta publicação. O aceite do painel pelo Luiz em 23/10 às 10h10 foi preservado no changelog. Repositório: `drkgod/l-a-rodrigues-odontologia` (visibilidade pública constatada em 23/10/2026).
 
 ## Repositório do sistema
 

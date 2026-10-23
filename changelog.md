@@ -1,3 +1,5 @@
+- 2026-10-23 · Publicação da fase 2: cinco SPECs, 16 tarefas com UUID e checklist; referências da fase 1 arquivadas; README, AGENTS e estado do executor alinhados ao teste humano por SPEC. Decisão AC-23-02 preservada, assim como o aceite posterior do painel/linha de base às 10h10. Publicação documental; sem alteração de código nem ação no portal.
+
 [file: changelog.md | total: 36399 bytes | read: bytes 0-36398]
 [END OF FILE - no further content.]
 

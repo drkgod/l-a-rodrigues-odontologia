@@ -1,64 +1,196 @@
-- 2026-10-23 · Publicação da fase 2: cinco SPECs, 16 tarefas com UUID e checklist; referências da fase 1 arquivadas; README, AGENTS e estado do executor alinhados ao teste humano por SPEC. Decisão AC-23-02 preservada, assim como o aceite posterior do painel/linha de base às 10h10. Publicação documental; sem alteração de código nem ação no portal.
+## 2026-10-23 — task 22d83348 (SPEC-2-001, CA-2-01) — LIBERAÇÃO DA FASE 2
+- Decisão AC-23-02 registrada: fase 2 liberada a partir das SPECs preparadas pelo Claude; publicação documental, sem alteração de código nem ação no portal.
+- Cinco SPECs publicadas em 04_fase-atual/specs/: spec-2-001-central-em-uso-pela-equipe, spec-2-002-tarefas-da-central, spec-2-003-registro-da-avaliacao, spec-2-004-gravacao-e-audio, spec-2-005-media-de-tempo-e-tabela.
+- 16 tarefas com UUID e checklist em 04_fase-atual/fase.md (fase-format:2), com prazos de 26/10 a 16/11/2026.
+- Referências da fase 1 arquivadas em 05_entregas/fase-1/ (estado-executor-antes-da-liberacao.md preserva o estado anterior).
+- README, AGENTS e .adapta-cliente/estado-atual.md alinhados ao teste humano por SPEC.
+- Aceite do painel/linha de base (86053b82) registrado às 10h10 — massa de teste limpa, base zerada (4.118 pacientes reais).
+- Próxima ação: comparar os números do painel com a contagem direta da base (CA-2-01).
 
-[file: changelog.md | total: 36399 bytes | read: bytes 0-36398]
-[END OF FILE - no further content.]
+## 2026-10-23 — task 86053b82 CONCLUÍDA (teste humano aprovado pelo dono)
+- "passou" 10h10 na v0.0.146 (61460db). Painel de agendamento + linha de base provados pelo dono com massa de demonstração (Operação/Carga/Tempos) e linha de base v1 (ociosidade 92,5%, custo R$1000).
+- Massa de teste limpa — base zerada (4.118 pacientes reais, 0 em tudo).
+- TODAS as tasks técnicas da fase 1 concluídas; restam 4 do dono/equipe (call Rodrigo, Trello/APP CRC, campanhas, aceite).
 
-- 2026-10-23 · [Luiz] · TESTE HUMANO 86053b82 APROVADO ("passou", 10h10): dono conferiu o painel com massa de demonstração (Operação/Carga/Tempos) e a linha de base demonstrativa (v1 ociosidade 92,5%, custo R$1000). Massa de teste limpa — base zerada (4.118 pacientes reais, 0 em tudo).
-- 2026-10-23 · [Luiz] · 86053b82+22de9577+d350fb12 ENTREGUES no ar (v0.0.146 61460db, QA verde): PAINEL DE AGENDAMENTO — rota /painel agregada (agendados, confirmados 6/8, sem resposta, ligações, faltas 1/9, vagas preenchidas 1/2 com mediana de reposição, carga por dentista reservado÷disponível, ocupação, tempos/desvios, espera/duração, reservas sem planejamento; RN-05 só números; RN-02 teste fora salvo modo demonstração) + tela /painel (SomenteGestao) + LINHA DE BASE (migration 0028; ociosidade por união de intervalos por cadeira com CANCELAMENTO excluído; custo por paciente — RN-04 dados insuficientes sem custo; RN-03 registrada não se edita, recálculo = nova versão com motivo). P6-01..06 14/14 PASS no ar. d350fb12: CANCELAMENTO fora de todos os indicadores. Bugs pegos: falta sai do denominador de previstos (1/9), vagas pela data da VAGA (não created), fuso, e teste que esperava valor errado (3 em vez de 2).
-- 2026-10-23 · [Luiz] · TESTE HUMANO a3dc6e0f + 3926f0ae APROVADO ("passou", 00h45): dono clicou chegada→chamar→iniciar→finalizar na tela /atendimento e gerou o relatório Botão × Clinicorp com os 4 casos. Modo demonstração (checkbox incluir massa de teste) na fila e no relatório — dados de teste nunca entram sem ele. Massa de teste limpa (atendimentos, baixas, consultas, pendências — tudo zerado).
-- 2026-10-23 · [Luiz] · 3926f0ae ENTREGUE no ar (v0.0.137 63ff1a4, QA verde): BOTÃO × CLINICORP — coleção baixas_clinicorp (migration 0027; fonte arquivo/fixture/manual, upsert por paciente+procedimento+data+hora) + rota importar (gestão) + rota relatorio (fim pelo botão vs baixa do mesmo dia+paciente+profissional; diferença em min; "sem baixa"/"baixa sem horário"/"revisão (vínculo ambíguo)"; nunca hora inventada) + card na tela /atendimento. P5-09 6/6 PASS no ar. Bugs pegos: fuso da baixa (local SP → UTC somava errado, -355min) e upsert que fundia 2 baixas distintas (ambiguidade destruída).
-- 2026-10-22 · [Luiz] · a3dc6e0f+2ab1282b+b517d69d ENTREGUES no ar (v0.0.133 349047e, QA verde): ATENDIMENTO DO DIA — coleção atendimentos (migration 0026) + rotas abrir-dia (previstos idempotentes da agenda), registrar (chegada/chamada/início/fim/falta com autor+horário; espera e duração calculadas; fim antes do início recusado; dentista só o próprio), corrigir (recepção/gestão, motivo obrigatório, evento antes→depois), fila (dentista vê só o próprio), fechar-dia (sem início/fim = incompleto) + tela /atendimento (botões por estado, correção auditada). Falta vira pendência a_agendar (b517d69d). P5-01..07 14/14 PASS no ar. Debugs: função top-level inline (JSVM), campo data do bloco pendencia (ReferenceError engolido pelo try/catch — exposto e corrigido).
-- 2026-10-22 · [Luiz] · 11aeb329 CONCLUÍDA (v0.0.125 3f97c97, QA verde): P1-07 7/7 PASS no ar — consulta ocupada omitida em leitura parcial fica incerta (ausente_na_ultima_leitura=true), nunca vira vaga falsa; cancelamento explícito comprovado libera (cancelado=true, incerto=false); erro de permissão preserva dados anteriores. BUG REAL de segurança: usuário SEM PAPEL conseguia aplicar lote de agenda (rota só exigia login) — gate de gestão no aplicar-lote.
-- 2026-10-22 · [Luiz] · 6a8a817e CONCLUÍDA (v0.0.124 0e880ec, QA verde): registro de tentativas de confirmação provado — P4-10 (2 msgs+ligação recusa; falha não conta; ligação não substitui 3ª), P4-11 (ligação no dia errado recusa; confirmação antes da decisão impede), P4-16 (domingo sem tentativas recusa), P4-17 (confirmação após decisão: régua interrompida, liberação preservada), P4-18 (confirmação concorrente impede decisão), P4-19 (contagens 1,3,2; retry e correção não multiplicam), P4-20 (3 msgs sem ligação recusa). 16/16 PASS no ar. BUG REAL: correção falhou→enviada bloqueada pela chave idempotente (chave não incluía resultado) — fix: chave por resultado + campo corrigida_em (migration 0025).
-- 2026-10-22 · [Luiz] · 36cdfc82 CONCLUÍDA (v0.0.121 5d79fde, QA verde): corrida do aceite provada — liberação virou LOCK atômico (leitura+gravação preenchida dentro de runInTransaction); 2 CRCs aceitando simultaneamente → 1×200 (vence) + 1×409 (perde), um aceita + um expirada, liberação preenchida. Regressão do aceite sequencial PASS. BUG REAL pego pela prova: sem a transação, os DOIS aceites venciam (2 ofertas aceitas na mesma vaga).
-- 2026-10-22 · [Luiz] · TESTE HUMANO e2369241 APROVADO ("passou"): oferta criada pela UI no Planejar + aceite → vaga preenchida, liberação virou preenchida, evento ACEITOU na ficha. Massa de teste limpa (vaga demo, Maria Demo, ofertas; base voltou a 4.118 pacientes).
-- 2026-10-22 · [Luiz] · e2369241 UI + 36cdfc82 ENTREGUES no ar (v0.0.120 b5a1d5e, QA verde): card "Ofertar vaga liberada" no Planejar (escolher vaga liberada → buscar paciente → até 3 → ofertar; recusados com motivo; lista de ofertas com Aceitou/Recusou) + rotas /ofertas/aceitar e /ofertas/recusar (revalidação completa no commit: oferta ofertada + vaga cancelada + liberação liberada + plano aprovado; vencedor aceita, irmãs expiram com evento na ficha, liberação vira preenchida; recusa mantém vaga aberta). E2E 10/10 PASS no ar. Debugs: import do service (./pocketbase → @/lib/pocketbase/client) e função top-level inline (scoping JSVM — QA pegou).
-- 2026-10-21 · [Luiz] · TASK e2369241 (motor) ENTREGUE no ar (v0.0.116 e2f4d40, QA verde): ofertas de vaga — coleção ofertas_vaga (migration 0024, única vaga+paciente) + rota /ofertas/criar (gestão/CRC; vaga CANCELADA com liberação situacao=liberada; ATÉ 3 pacientes; cada um revalidado no servidor: plano aprovado exigido, recusado entra na resposta com motivo; evento "Vaga ofertada" na ficha de cada um) + /ofertas/limpar-teste. E2E 6/6 PASS no ar. Aceite (primeiro vence) fica no 36cdfc82. rev.2: vaga cancelada = bool cancelado + liberacao por situacao (bug do E2E).
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-06 (motor) CONCLUÍDA: teste humano aprovado pelo dono (print: "✓ Elegível: Plano aprovado e dependências concluídas" no card do Planejar, paciente asp8y5cieq6b4eo) 21/10 22h17. EMENDA SPEC-1-003/004 COMPLETA NO MOTOR: avaliador habilitado → modelos → etapas por paciente → conclusão/reabertura → elegibilidade. fase.md 24/34 cards (71%). Próxima: e2369241 (ofertar a vaga liberada a até 3 pacientes, com revalidação no commit).
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-06 (motor) ENTREGUE no ar (v0.0.114 c9473ad, QA verde): elegibilidade de tratamento — rota /tratamento/elegibilidade (sem plano/plano não aprovado/etapa anterior pendente BLOQUEIAM com motivo; avaliação dispensada; anônimo 401) + card "Elegibilidade de tratamento" no Planejar (consulta por id do paciente + etapa). E2E 6/6 PASS no ar. Oferta a 3 pacientes/aceite (e2369241/36cdfc82) usam esta rota com revalidação no commit — próximas tasks.
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-04 CONCLUÍDA: teste humano aprovado pelo dono ("passou" 21/10 22h) — conclusão com fonte e reabertura com motivo provadas na Ficha, com eventos no histórico. fase.md 22/34 cards (65%). Próxima: CA-SEQ-06 (liberar agendamento por etapa) — destrava a oferta de vagas.
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-04 ENTREGUE no ar (v0.0.113 ebd458a, QA verde): conclusão/reabertura de etapas — rotas plano-concluir-etapa (fonte obrigatória) e plano-reabrir-etapa (motivo obrigatório), SÓ avaliador ATRIBUÍDO da sessão; conclusão não muda versão/estado do plano (é execução, não edição); guarda de versão; evento append-only na ficha. Botões Concluir/Reabrir na lista de etapas da Ficha (só avaliador atribuído + plano aprovado). Prova P3-12 na tela Provas; E2E 6/6 PASS no ar. Aguarda teste humano.
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-03 CONCLUÍDA: teste humano aprovado pelo dono ("passou" 21/10 21h45) — editor de etapas na Ficha provado: copiar modelo aprovado, adaptação com motivo obrigatório, aprovação pelo avaliador atribuído. fase.md 20/34 cards (59%). Próxima: CA-SEQ-04 (conclusão/revisão de etapas).
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-03 ENTREGUE no ar (v0.0.111 7b5c8e9, QA verde): editor de etapas por paciente — etapas no plano (migration 0021), rotas plano-salvar/plano-aprovar (só avaliador ATRIBUÍDO da sessão; grafo validado; copiar modelo só APROVADO; adaptação exige motivo; aprovado salvo → em_revisao v+1; guarda de versão), editor na Ficha (copiar modelo aprovado / manual / aprovar). Lista de fichas mostra recentes (base 4k+ parecia vazia). Acesso do dentista FECHADO: coleção pacientes volta a negar dentista (migration 0023 + boot hook) e a porta dele é server-side (meus-pacientes + ficha-paciente, só onde é o avaliador). E2E 12/12 PASS (P3-11b) + acesso 6/6 PASS. Prova P3-11b registrada (P3-11 original do 55a359b0 preservada). Aguarda teste humano.
-- 2026-10-21 · [Luiz] · TASK CA-SEQ-03 ENTREGUE no ar (v0.0.101 70507a0, QA verde): editor de etapas do plano — migration 0021 (planos_tratamento + etapas json/motivo_ajuste), rotas plano-salvar (SÓ avaliador atribuído da sessão; grafo validado; copiar só modelo APROVADO; adaptar sem motivo 400; aprovado→em_revisao v+1; guarda de versão) e plano-aprovar (atribuído, ≥1 etapa). Ficha: lista de etapas + editor com "Copiar modelo aprovado" + "Aprovar etapas" (só avaliador atribuído vê). Prova P3-11b na tela Provas (P3-11 original do card 55a359b0 preservada); E2E 12/12 PASS. Debugs: P3_11 duplicada no build (renomeada 11b); RawJson do JSVM — campo JSON lido com getString(); rotas 404 = pod velho (tocar no hook força reload). Aguarda teste humano.
-- 2026-10-21 · [Luiz] · TASKS CA-SEQ-01 e CA-SEQ-02 CONCLUÍDAS: teste humano aprovado pelo dono ("deu certo" 21/10 12h34, print do catálogo com modelo aprovado pelo dentista teste) — designação de avaliador na Ficha + aprovação clínica do modelo pelo dentista habilitado provadas de ponta a ponta; ciclo A↔B recusado na tela como esperado. fase.md 18/34 cards (53%). Próxima: editor de etapas por paciente (CA-SEQ-03).
-- 2026-10-21 · [Luiz] · TASKS CA-SEQ-01 e CA-SEQ-02 CONCLUÍDAS: teste humano aprovado pelo dono ("passou" 21/10 12h28) — designação de avaliador na Ficha (card Etapas do tratamento com nome + Rascunho) e aprovação do modelo pelo dentista habilitado (dentista@lai.local) provadas com prints; ciclo A↔B recusado na tela como esperado. fase.md 18/34 cards (53%). Próxima: editor de etapas por paciente (CA-SEQ-03).
-- 2026-10-20 · [Luiz] · TASK CA-SEQ-02 ENTREGUE no ar (v0.0.96 4bd1332, QA verde): catálogo de modelos de sequência — coleção modelos_sequencia (etapas json com chaves/dependências; escrita null, só hook), rotas modelo-salvar (grafo validado no servidor: ciclo e cross-modelo 400, paralelas ok; editar aprovado cria v2 rascunho com v1 intocada; arquivar só gestão), modelo-aprovar (só avaliador habilitado da sessão), modelo-limpar-teste. Tela /modelos (lista+dialog; avaliador aprova, gestão arquiva) + menu p/ gestão e dentista habilitado; auth.ts mapeia avaliador_habilitado. Prova P3-10 na tela Provas; E2E 12/12 PASS. Aguarda teste humano (com CA-SEQ-01).
-- 2026-10-20 · [Luiz] · TASK CA-SEQ-01 ENTREGUE (v0.0.94 491e424, QA verde): emenda "quem pode validar o planejamento clínico" — users.avaliador_habilitado (só gestão alterna; próprio não se auto-habilita), coleção planos_tratamento (rascunho/aprovado/em_revisao/encerrado; escrita direta null — só hook), rotas /tratamento/atribuir-avaliador (só gestão; valida dentista ativo+habilitado; guarda de versão), /tratamento/plano (projeção mínima: gestão/CRC/recepção leem status; dentista só o atribuído; alheio 403) e /tratamento/limpar-massa-teste. Tela /avaliadores (gestão) + Ficha mostra avaliador/estado e gestão designa. Prova P3-09c na tela Provas; E2E no ar 12/12 PASS. Aguarda teste humano.
-- 2026-10-20 · [Luiz] · TASK b2cb546c CONCLUÍDA: teste humano aprovado pelo dono ("testei passou") na v0.0.92 (07daddf). Reposição de vaga de ponta a ponta provada: 3 mensagens → mover não respondentes → ligação sem sucesso → decisão de liberação (gate recusou 2x com a regra certa antes de aceitar) → cancelamento comprovado → conciliação → vaga LIBERADA com evidência. Massa de teste apagada (9 registros).
-- 2026-10-20 · [Luiz] · TASK b2cb546c EM TESTE HUMANO (massa própria): fluxo de reposição provado com as mãos do dono — 3 mensagens registradas (botão Mensagem 1/3 novo na tela, v0.0.89), mover não respondentes (lista de ligação), ligação sem sucesso (botões novos DENTRO da lista de ligação, v0.0.92), gate recusou 2x corretamente (ligação fora da véspera; corte 17h) e liberação decidida com relógio de fixture; conciliação após cancelamento comprovado → LIBERADA com evidência. Fixes no caminho: import registrarMensagem faltando (v0.0.90), contador capado 3/3 (v0.0.91).
-- 2026-10-20 · [Luiz] · FIX d03a15ee (v0.0.88 9b843b1): entrada_em é autodate (ignora escrita via API) — data real do APP CRC agora em data_entrada (migration 0018); relatório de origem usa data_entrada com fallback; backfill dos 4.117 leads com a Data registro das planilhas (4.108 ok, 9 recuperados depois; 0 sem data). Teste humano APROVADO pelo dono (chegada compareceu provada no print; guarda recusou 2º registro como esperado).
-- 2026-10-20 · [Luiz] · TASK d03a15ee + d45e8f8a ENTREGUES (v0.0.87 776ca31): lead acompanha até o comparecimento (CA-1-17) — vínculo automático por telefone (migration 0017: agenda_itens.lead): consulta criada → agendado, confirmação → confirmado, cancelamento → aguardando_retorno; chegada manual → compareceu/faltou (botões na tela Leads + guarda de etapa); relatório de origem por campanha/período (rota /leads/relatorio-origem + card na tela Leads, sem dados pessoais); prova P3-07 na tela Provas. E2E no ar: vínculo→agendado ✓, guarda 400 ✓, agendado→compareceu ✓. rev.2-6: hook reescrito por scoping do JSVM (função top-level não é visível em callback — QA pegou) e roteamento por campos (e.collection não veio no evento).
-- 2026-10-20 · [Luiz] · TASK eec75533 CONCLUÍDA: teste humano aprovado pelo dono ("confirmo o teste, fecho a task") na v0.0.82 (11f8bef). 4.117 leads + fichas no ar.
-- 2026-10-20 · [Luiz] · TASK eec75533 ENTREGUE (v0.0.82 11f8bef): importação dos leads em aberto do APP CRC — planilhas ALC (2.449 válidas) e ITA (1.683) importadas: 4.117 leads gravados com ficha vinculada, fase do APP CRC mapeada pra etapa da central (novo/em_atendimento/aguardando_retorno/agendado), entrada_em preservada, marca importado_app_crc (migration 0016). Importador agora aceita .xlsx direto (parser na tela Leads). Dedup por id_app_crc/telefone provado (3956 duplicados pulados na reimportação).
-- 2026-10-19 · [Luiz] · TASK 84b8f8d6 ENTREGUE (v0.0.81 89dd14d): limites por agenda/turno ATIVOS (dono 13/10) — Leonel 5/turno (ITA qua 16h+), Wesley e Pamella 20/turno individual, Erika 2/horário sábado ortodontia; gate corrigido (unidade de origem aceita na piloto, política que COBRE a hora prevalece, horario_marcado com limite específico); provas P4-13/14/15 na tela Provas. E2E provado no ar: Leonel 6ª bloqueada ✓, Wesley 21ª manhã bloqueada + tarde livre ✓, Erika 3ª sábado bloqueada ✓; vínculo por nome da política da Erika corrigido (Dra. Erika); massa de teste limpa (0 restantes).
-- 2026-10-19 · [Luiz] · TASK 8421e27b CONCLUÍDA: teste humano aprovado ("testei deu certo") na v0.0.79 (6a79d2f). Entregue: sinal de sobreposição/conflito no Planejar (gate CA-1-21 visível no "Ligar reserva"), tipo do agendamento (Avaliação/Tratamento) no formulário, avaliação = consulta fixa 30min/2 por horário, bug do matcher inverso corrigido (5 impl+2 exo = sem regra). Revalidação do zero: sem_regra 5+2 ✓, 2+2=40 ✓, 2+1=30 ✓, config 30/2 gravada ✓, versão no ar = testada ✓.
-- 2026-10-19 · [Luiz] · TASK 8421e27b rev.3 (v0.0.79 6a79d2f): avaliação é consulta fixa (CL-004) — com tipo "Avaliação" o formulário esconde procedimento/quantidade e o resultado mostra "X min (consulta de avaliação)" com a duração e o limite da config da unidade (30 min / 2 por horário); regime avaliação não usa mais a tabela de duração. Bundle rev.3 provado no ar (index-DMxhk-zb.js).
-- 2026-10-19 · [Luiz] · TASK 8421e27b rev.2 (v0.0.78 680d586): (1) BUG do motor de duração corrigido — matcher "inverso" espelhava quantidades (5 implantes + 2 extrações casava 40min errado); agora só casa regra direta e o caso sem regra vai pra lista "Casos sem regra" pra direção validar (provado no ar: sem_regra). (2) "Tipo do agendamento" (Avaliação/Tratamento) agora é escolha no formulário do Planejar (default segue a agenda do dentista) — regime visível e usado pelo gate. Regressões provadas: 2+2=40, 2+1=30, 4=40, 1=30, 3=40, 5=60, 4+1=40, 5+1=sem_regra.
-- 2026-10-19 · [Luiz] · TASK 8421e27b ENTREGUE (v0.0.77 1aab519): sinal de sobreposição/conflito no Planejar (CA-1-21) — "Ligar reserva" agora consulta a capacidade antes de gravar: avaliação bloqueia no 3º por horário, tratamento bloqueia horário sobreposto, política pendente nunca vira ilimitada; badge do regime (Avaliação/Tratamento) junto do tempo sugerido. Gate já existia no servidor (P4-07 verde); agora quem usa vê o sinal. Bundle novo provado no ar (index-BRP1MU98.js).
-- 2026-10-19 · [Luiz] · TASK f79847a5 CONCLUÍDA: teste humano aprovado ("testei passou") na v0.0.76 (e7770c1). Entregue: lista de ligação + cobertura por turno com atualização na hora + liberação só pela regra + conciliação (CA-1-22). Pacote completo nas rev.1-6 (v0.0.66-76).
-- 2026-10-19 · [Luiz] · DEBUG task f79847a5 rev.6 FINAL: rota antiga mover-nao-respondentes também corrigida (3º argumento removido — cobre bundle em cache) + PROVA NO NAVEGADOR na v0.0.76 (e7770c1): Paciente Teste 1 e 2 em lista de ligação agora mostram "manhã | Thays" (antes "a definir"). Screenshot de evidência em artifacts/6d41721f-9ebd-4b70-a1e8-d24b6ad1a920.png.
-- 2026-10-19 · [Luiz] · DEBUG task f79847a5 rev.5 CONCLUÍDO: causa final era o 3º argumento vazio no findFirstRecordByFilter (assinatura inválida derrubava a busca da cobertura pro catch "a definir") → corrigido e PROVADO no ar (v0.0.75 bd9f3e5): mover -v2 retorna movidos=2, cobertura_a_definir=[] e os contatos em lista de ligação agora mostram Thays (manhã). Pacote completo da rev.3-5: rota nova mover-nao-respondentes-v2 em arquivo novo (pod fresco), filtro turno=X correto, serviço usa -v2, salvarTurno re-movendo pra atualizar responsáveis.
-- 2026-10-19 · [Luiz] · DEBUG task f79847a5 rev.3/4: cobertura cadastrada (Thays/Bianca) não atualizava quem já estava na lista de ligação ("a definir" persistia) → causa raiz dupla: (1) filtro do mover não incluía em_lista_ligacao e (2) busca da cobertura usava assinatura de filtro inválida; pod do hook não recarregava → solução definitiva: rota nova mover-nao-respondentes-v2 em arquivo novo (pod fresco) + serviço apontando pra ela (skip 44aff59 v0.0.74).
-- 2026-10-19 · [Luiz] · DEBUG task f79847a5: "Mover não respondentes" não levava contatos com resposta "Sem resposta" pra lista de ligação → causa raiz: filtro do hook só aceitava estado=mensagem_enviada → corrigido: filtro inclui sem_resposta (CA-1-19/RN-04) (skip 2a073cf v0.0.70).
-- 2026-10-17 · [Luiz] · Task f79847a5 ENTREGUE (v0.0.69 b0ad515, QA verde): lista de ligação operacional (registrar ligação por contato), decidir liberação com gate no servidor, painel de liberações + conciliar agora, conciliação automática após importação (CA-1-22), rota /liberacoes/conciliar + migration 0015. Provas P4-06 e P4-12 passando no ar; P4-04/05/07 regressão ok. 2 debugs: import duplicado no Importar.tsx; ausente_na_ultima_leitura não tratado (P4-12).
-- 2026-10-17 · [Luiz] · Task 35bff70c CONCLUÍDA: teste humano aprovado pelo dono ("Testei e passou" ~14h53) na v0.0.65 d03e183. Ficha do paciente no ar: histórico append-only com autor/hora, próxima ação com prazo vencido destacado, acesso por função (dentista sem acesso), ficha única (lead cria ficha vinculada) + Nova ficha. 3 rodadas de debug pegaram bugs reais: filtro texto×relação (P3-09a), campo teste inexistente em users + e-mail escondido no create (P3-09b). fase.md 22/54 (41%).
-- 2026-10-17 · [Luiz] · DEBUG3 35bff70c: P3-09b continuou falhando — causa nova nos logs: o create do usuário volta SEM o campo email (PocketBase esconde e-mail de auth quando emailVisibility=false e quem pede não é o dono), então dentista.email era vazio e o login dava 400. Fix: variável local emailProva com o e-mail ENVIADO (skip d03e183 v0.0.65).
-- 2026-10-17 · [Luiz] · DEBUG2 35bff70c: P3-09b falhou ("error validating submitted data") — a prova criava usuário dentista com campo teste:true, mas a coleção users NÃO tem campo teste (schema correto; bug da prova). Fix: sem teste no create + limpeza de usuários prova-dentista-* no finally (skip 8ce1ebd v0.0.64).
-- 2026-10-17 · [Luiz] · ITER 35bff70c: lista de fichas vazia no teste humano — nada no produto criava ficha de paciente (cadastrar lead criava só lead; tela Fichas lista só pacientes). Corrigido conforme SPEC-1-003 "ficha única": cadastrar lead (manual ou APP CRC) cria a ficha vinculada (lead.paciente + paciente.lead) e eventos de lead gravam as relações (aparecem no histórico); botão "Nova ficha" na tela Fichas (rota /backend/v1/ficha/criar, gestão/CRC, RN-03 duplicado) (skip b208f3c v0.0.62).
-- 2026-10-17 · [Luiz] · DEBUG 35bff70c: P3-09a falhou no teste humano ("Something went wrong") — causa raiz nos logs do Skip: listarEventos filtrava paciente/lead (TEXTO) mas a migration 0010 trocou por relações paciente_rel/lead_rel (filtro por texto = 500 no PocketBase v0.36); hook agora grava a relação junto; limpeza da massa de teste virou rota do servidor (eventos é append-only até pra gestão) (skip 8dc1046 v0.0.61).
-- 2026-10-17 · [Luiz] · Task 35bff70c entregue: ficha do paciente — tela /ficha com busca, histórico em ordem (eventos append-only com autor/hora), próxima ação com prazo (vencido destacado), acesso por função (dentista sem acesso), hook ficha_regras (evento + próxima ação com autor da sessão), provas P3-09a/b (skip eb44acb v0.0.60).
-- 2026-10-17 · [Luiz] · Task c9b95987 concluída: teste humano aprovado pelo dono ("testei, pode seguir" 09h46) — 2 e 4 coroas com dois dentistas conferindo a tabela; tempo sugerido = regra específica de cada dentista (v0.0.59 f4d3b7b, sem alteração de código).
-- 2026-10-17 · [Luiz] · Registro: checkboxes de 8d76cea5 + ac46ef6d re-marcar [x] (concluídos e testados 14/10 — correção de 16/10 não foi gravada em commit e se perdeu no reset; lição: housekeeping vai no commit imediatamente).
-- 2026-10-17 · [Luiz] · Task f124df8f concluída: resposta do paciente + cobertura de ligação — botões por linha, mover não respondentes com responsável do turno, cobertura editável pela gestão (migration 0014), provas P4-03/03b; testado pelo dono ("pode seguir" 00h27) na v0.0.59 f4d3b7b (https://projeto-lai-19327.goskip.app).
-- 2026-10-16 · [Luiz] · DEBUG3 f124df8f: P4-03b falhou no teste humano — "getString is not a function": o SDK JS do PocketBase devolve record como objeto (campo direto), não Record do servidor. Provas P4-03/03b usavam getString/getBool; corrigido para campos diretos (skip f4d3b7b v0.0.59).
-- 2026-10-16 · [Luiz] · DEBUG2 f124df8f: massa de teste 2× acumulava 8 consultas — criarMassaConfirmacao agora é idempotente (reusa se o dia já tem fixture) (skip 1595728 v0.0.58).
-- 2026-10-16 · [Luiz] · DEBUG f124df8f: "Value must be unique" na lista-dia — rota não achava contato da massa (filtro teste) e duplicava agenda_item; fix: busca sem filtrar teste (skip f3996b8 v0.0.57).
-- 2026-10-16 · [Luiz] · Task f124df8f entregue: resposta do paciente na tela Confirmações (confirmou/remarcação/cancelou/sem resposta), mover não respondentes p/ lista de ligação com responsável do turno, cobertura de ligação (migration 0014), provas P4-03/P4-03b (skip ced239c v0.0.56).
-- 2026-10-16 · [Luiz] · Task fdca5fb0 concluída: desvio de duração + conciliação de reservas no ar (v0.0.55, ref ff39792); testado pelo dono ("pode seguir" 19h36); provas P2-05b/P2-06 aprovadas na tela; 3 rodadas de debug (Only superusers → getBoolean → dedup por hash) registradas em 06_notas/debug/.
-- 2026-10-16 · [Luiz] · DEBUG task fdca5fb0 (3ª rodada): P2-05b "massa P2: 0 regras" → causa raiz: dedup por hash do hook devolve ja_aplicado=true com 0 regras em reimport (correto — P2-08 prova isso); prova exigia 4 → corrigido: aceita ja_aplicado (skip ff39792 v0.0.55).
-- 2026-10-16 · [Luiz] · DEBUG task fdca5fb0 (2ª rodada): P2-05b 500 "Something went wrong" → causa raiz nos logs do Skip: getBoolean não existe no JSVM (TypeError na rota ligar-reserva) → corrigido: getInt('campo') !== 0 nas 5 ocorrências (duracao_sugerir + confirmacao_regras) (skip 3b817d9 v0.0.54).
-- 2026-10-16 · [Luiz] · DEBUG task fdca5fb0: P2-05b "Only superusers can perform this action" → causa raiz: planejamentos.createRule = null (prova criava registro direto) + hook gravava 'sugerido' (fora do select da migration 0013) → corrigido: provas via rota sugerirDuracao(teste=true) + hook grava 'planejado' (skip bc5d3c8 v0.0.53).
+## 2026-10-23 — task 86053b82 (SPEC-1-006, CA-1-23/24/25) — IMPLEMENTADA E PUBLICADA
+- Painel de agendamento: rota /painel agregada (agendados, confirmados, sem resposta, ligações, faltas, vagas preenchidas com mediana de reposição, carga por dentista reservado÷disponível, ocupação, tempos/desvios, espera/duração, reservas sem planejamento; RN-05 só números; RN-02 teste fora salvo modo demonstração) + tela /painel (SomenteGestao).
+- Linha de base: migration 0028; ociosidade por união de intervalos por cadeira com CANCELAMENTO excluído; custo por paciente — RN-04 dados insuficientes sem custo; RN-03 registrada não se edita, recálculo = nova versão com motivo.
+- P6-01..06 14/14 PASS no ar (v0.0.146 61460db, QA verde).
+- Bugs pegos: falta sai do denominador de previstos (1/9), vagas pela data da VAGA (não created), fuso, e teste que esperava valor errado (3 em vez de 2).
+- d350fb12: CANCELAMENTO fora de todos os indicadores.
+
+## 2026-10-23 — tasks a3dc6e0f + 3926f0ae CONCLUÍDAS (teste humano aprovado pelo dono)
+- "passou" 00h45 na v0.0.137. Dono clicou chegada→chamar→iniciar→finalizar na tela /atendimento e gerou o relatório Botão × Clinicorp com os 4 casos.
+- Modo demonstração (checkbox incluir massa de teste) na fila e no relatório — dados de teste nunca entram sem ele. Massa de teste limpa (atendimentos, baixas, consultas, pendências — tudo zerado).
+
+## 2026-10-23 — task 3926f0ae (SPEC-1-005, CA-1-26) — IMPLEMENTADA E PUBLICADA
+- Botão × Clinicorp: coleção baixas_clinicorp (migration 0027; fonte arquivo/fixture/manual, upsert por paciente+procedimento+data+hora) + rota importar (gestão) + rota relatorio (fim pelo botão vs baixa do mesmo dia+paciente+profissional; diferença em min; "sem baixa"/"baixa sem horário"/"revisão (vínculo ambíguo)"; nunca hora inventada) + card na tela /atendimento.
+- P5-09 6/6 PASS no ar (v0.0.137 63ff1a4, QA verde).
+- Bugs pegos: fuso da baixa (local SP → UTC somava errado, -355min) e upsert que fundia 2 baixas distintas (ambiguidade destruída).
+
+## 2026-10-22 — task a3dc6e0f (SPEC-1-005, CA-1-23/24/25) — IMPLEMENTADA E PUBLICADA
+- Atendimento do dia: coleção atendimentos (migration 0026) + rotas abrir-dia (previstos idempotentes da agenda), registrar (chegada/chamada/início/fim/falta com autor+horário; espera e duração calculadas; fim antes do início recusado; dentista só o próprio), corrigir (recepção/gestão, motivo obrigatório, evento antes→depois), fila (dentista vê só o próprio), fechar-dia (sem início/fim = incompleto) + tela /atendimento (botões por estado, correção auditada).
+- Falta vira pendência a_agendar (b517d69d). P5-01..07 14/14 PASS no ar (v0.0.133 349047e, QA verde).
+- Debugs: função top-level inline (JSVM), campo data do bloco pendencia (ReferenceError engolido pelo try/catch — exposto e corrigido).
+
+## 2026-10-22 — task 11aeb329 (SPEC-1-002, CA-1-09 rev) — IMPLEMENTADA E PUBLICADA
+- P1-07 7/7 PASS no ar (v0.0.125 3f97c97, QA verde): consulta ocupada omitida em leitura parcial fica incerta (ausente_na_ultima_leitura=true), nunca vira vaga falsa; cancelamento explícito comprovado libera (cancelado=true, incerto=false); erro de permissão preserva dados anteriores.
+- BUG REAL de segurança: usuário SEM PAPEL conseguia aplicar lote de agenda (rota só exigia login) — gate de gestão no aplicar-lote.
+
+## 2026-10-22 — task 6a8a817e (SPEC-1-004, CA-1-16/17) — IMPLEMENTADA E PUBLICADA
+- Registro de tentativas de confirmação provado — P4-10 (2 msgs+ligação recusa; falha não conta; ligação não substitui 3ª), P4-11 (ligação no dia errado recusa; confirmação antes da decisão impede), P4-16 (domingo sem tentativas recusa), P4-17 (confirmação após decisão: régua interrompida, liberação preservada), P4-18 (confirmação concorrente impede decisão), P4-19 (contagens 1,3,2; retry e correção não multiplicam), P4-20 (3 msgs sem ligação recusa). 16/16 PASS no ar (v0.0.124 0e880ec, QA verde).
+- BUG REAL: correção falhou→enviada bloqueada pela chave idempotente (chave não incluía resultado) — fix: chave por resultado + campo corrigida_em (migration 0025).
+
+## 2026-10-22 — task 36cdfc82 (SPEC-1-004, CA-1-19) — IMPLEMENTADA E PUBLICADA
+- Corrida do aceite provada — liberação virou LOCK atômico (leitura+gravação preenchida dentro de runInTransaction); 2 CRCs aceitando simultaneamente → 1×200 (vence) + 1×409 (perde), um aceita + um expirada, liberação preenchida. Regressão do aceite sequencial PASS (v0.0.121 5d79fde, QA verde).
+- BUG REAL pego pela prova: sem a transação, os DOIS aceites venciam (2 ofertas aceitas na mesma vaga).
+
+## 2026-10-22 — task e2369241 CONCLUÍDA (teste humano aprovado pelo dono)
+- "passou" na v0.0.120. Oferta criada pela UI no Planejar + aceite → vaga preenchida, liberação virou preenchida, evento ACEITOU na ficha. Massa de teste limpa (vaga demo, Maria Demo, ofertas; base voltou a 4.118 pacientes).
+
+## 2026-10-22 — task e2369241 (SPEC-1-004, CA-1-18) — IMPLEMENTADA E PUBLICADA
+- Card "Ofertar vaga liberada" no Planejar (escolher vaga liberada → buscar paciente → até 3 → ofertar; recusados com motivo; lista de ofertas com Aceitou/Recusou) + rotas /ofertas/aceitar e /ofertas/recusar (revalidação completa no commit: oferta ofertada + vaga cancelada + liberação liberada + plano aprovado; vencedor aceita, irmãs expiram com evento na ficha, liberação vira preenchida; recusa mantém vaga aberta). E2E 10/10 PASS no ar (v0.0.120 b5a1d5e, QA verde).
+- Debugs: import do service (./pocketbase → @/lib/pocketbase/client) e função top-level inline (scoping JSVM — QA pegou).
+
+## 2026-10-21 — task e2369241 (motor) — ENTREGUE NO AR
+- Ofertas de vaga: coleção ofertas_vaga (migration 0024, única vaga+paciente) + rota /ofertas/criar (gestão/CRC; vaga CANCELADA com liberação situacao=liberada; ATÉ 3 pacientes; cada um revalidado no servidor: plano aprovado exigido, recusado entra na resposta com motivo; evento "Vaga ofertada" na ficha de cada um) + /ofertas/limpar-teste. E2E 6/6 PASS no ar (v0.0.116 e2f4d40, QA verde). Aceite (primeiro vence) fica no 36cdfc82. rev.2: vaga cancelada = bool cancelado + liberacao por situacao (bug do E2E).
+
+## 2026-10-21 — task CA-SEQ-06 CONCLUÍDA (teste humano aprovado pelo dono)
+- Teste humano aprovado (print: "✓ Elegível: Plano aprovado e dependências concluídas" no card do Planejar, paciente asp8y5cieq6b4eo) 21/10 22h17.
+- EMENDA SPEC-1-003/004 COMPLETA NO MOTOR: avaliador habilitado → modelos → etapas por paciente → conclusão/reabertura → elegibilidade. fase.md 24/34 cards (71%).
+
+## 2026-10-21 — task CA-SEQ-06 (motor) — ENTREGUE NO AR
+- Elegibilidade de tratamento: rota /tratamento/elegibilidade (sem plano/plano não aprovado/etapa anterior pendente BLOQUEIAM com motivo; avaliação dispensada; anônimo 401) + card "Elegibilidade de tratamento" no Planejar (consulta por id do paciente + etapa). E2E 6/6 PASS no ar (v0.0.114 c9473ad, QA verde). Oferta a 3 pacientes/aceite (e2369241/36cdfc82) usam esta rota com revalidação no commit.
+
+## 2026-10-21 — task CA-SEQ-04 CONCLUÍDA (teste humano aprovado pelo dono)
+- "passou" 21/10 22h — conclusão com fonte e reabertura com motivo provadas na Ficha, com eventos no histórico. fase.md 22/34 cards (65%).
+
+## 2026-10-21 — task CA-SEQ-04 — ENTREGUE NO AR
+- Conclusão/reabertura de etapas: rotas plano-concluir-etapa (fonte obrigatória) e plano-reabrir-etapa (motivo obrigatório), SÓ avaliador ATRIBUÍDO da sessão; conclusão não muda versão/estado do plano (é execução, não edição); guarda de versão; evento append-only na ficha. Botões Concluir/Reabrir na lista de etapas da Ficha (só avaliador atribuído + plano aprovado). Prova P3-12 na tela Provas; E2E 6/6 PASS no ar (v0.0.113 ebd458a, QA verde).
+
+## 2026-10-21 — task CA-SEQ-03 CONCLUÍDA (teste humano aprovado pelo dono)
+- "passou" 21/10 21h45 — editor de etapas na Ficha provado: copiar modelo aprovado, adaptação com motivo obrigatório, aprovação pelo avaliador atribuído. fase.md 20/34 cards (59%).
+
+## 2026-10-21 — task CA-SEQ-03 — ENTREGUE NO AR
+- Editor de etapas por paciente: etapas no plano (migration 0021), rotas plano-salvar/plano-aprovar (só avaliador ATRIBUÍDO da sessão; grafo validado; copiar modelo só APROVADO; adaptação exige motivo; aprovado salvo → em_revisao v+1; guarda de versão), editor na Ficha (copiar modelo aprovado / manual / aprovar). Lista de fichas mostra recentes (base 4k+ parecia vazia). Acesso do dentista FECHADO: coleção pacientes volta a negar dentista (migration 0023 + boot hook) e a porta dele é server-side (meus-pacientes + ficha-paciente, só onde é o avaliador). E2E 12/12 PASS (P3-11b) + acesso 6/6 PASS (v0.0.111 7b5c8e9, QA verde). Prova P3-11b registrada (P3-11 original do 55a359b0 preservada).
+
+## 2026-10-21 — task CA-SEQ-03 — ENTREGUE NO AR (1ª rodada)
+- Editor de etapas do plano: migration 0021 (planos_tratamento + etapas json/motivo_ajuste), rotas plano-salvar (SÓ avaliador atribuído da sessão; grafo validado; copiar só modelo APROVADO; adaptar sem motivo 400; aprovado→em_revisao v+1; guarda de versão) e plano-aprovar (atribuído, ≥1 etapa). Ficha: lista de etapas + editor com "Copiar modelo aprovado" + "Aprovar etapas" (só avaliador atribuído vê). Prova P3-11b na tela Provas (P3-11 original do card 55a359b0 preservada); E2E 12/12 PASS (v0.0.101 70507a0, QA verde). Debugs: P3_11 duplicada no build (renomeada 11b); RawJson do JSVM — campo JSON lido com getString(); rotas 404 = pod velho (tocar no hook força reload).
+
+## 2026-10-21 — tasks CA-SEQ-01 e CA-SEQ-02 CONCLUÍDAS (teste humano aprovado pelo dono)
+- "deu certo" 21/10 12h34, print do catálogo com modelo aprovado pelo dentista teste — designação de avaliador na Ficha + aprovação clínica do modelo pelo dentista habilitado provadas de ponta a ponta; ciclo A↔B recusado na tela como esperado. fase.md 18/34 cards (53%).
+
+## 2026-10-21 — tasks CA-SEQ-01 e CA-SEQ-02 CONCLUÍDAS (1º registro)
+- "passou" 21/10 12h28 — designação de avaliador na Ficha (card Etapas do tratamento com nome + Rascunho) e aprovação do modelo pelo dentista habilitado (dentista@lai.local) provadas com prints; ciclo A↔B recusado na tela como esperado.
+
+## 2026-10-20 — task CA-SEQ-02 — ENTREGUE NO AR
+- Catálogo de modelos de sequência: coleção modelos_sequencia (etapas json com chaves/dependências; escrita null, só hook), rotas modelo-salvar (grafo validado no servidor: ciclo e cross-modelo 400, paralelas ok; editar aprovado cria v2 rascunho com v1 intocada; arquivar só gestão), modelo-aprovar (só avaliador habilitado da sessão), modelo-limpar-teste. Tela /modelos (lista+dialog; avaliador aprova, gestão arquiva) + menu p/ gestão e dentista habilitado; auth.ts mapeia avaliador_habilitado. Prova P3-10 na tela Provas; E2E 12/12 PASS (v0.0.96 4bd1332, QA verde).
+
+## 2026-10-20 — task CA-SEQ-01 — ENTREGUE
+- Emenda "quem pode validar o planejamento clínico": users.avaliador_habilitado (só gestão alterna; próprio não se auto-habilita), coleção planos_tratamento (rascunho/aprovado/em_revisao/encerrado; escrita direta null — só hook), rotas /tratamento/atribuir-avaliador (só gestão; valida dentista ativo+habilitado; guarda de versão), /tratamento/plano (projeção mínima: gestão/CRC/recepção leem status; dentista só o atribuído; alheio 403) e /tratamento/limpar-massa-teste. Tela /avaliadores (gestão) + Ficha mostra avaliador/estado e gestão designa. Prova P3-09c na tela Provas; E2E no ar 12/12 PASS (v0.0.94 491e424, QA verde).
+
+## 2026-10-20 — task b2cb546c CONCLUÍDA (teste humano aprovado pelo dono)
+- "testei passou" na v0.0.92 (07daddf). Reposição de vaga de ponta a ponta provada: 3 mensagens → mover não respondentes → ligação sem sucesso → decisão de liberação (gate recusou 2x com a regra certa antes de aceitar) → cancelamento comprovado → conciliação → vaga LIBERADA com evidência. Massa de teste apagada (9 registros).
+
+## 2026-10-20 — task b2cb546c EM TESTE HUMANO (massa própria)
+- Fluxo de reposição provado com as mãos do dono — 3 mensagens registradas (botão Mensagem 1/3 novo na tela, v0.0.89), mover não respondentes (lista de ligação), ligação sem sucesso (botões novos DENTRO da lista de ligação, v0.0.92), gate recusou 2x corretamente (ligação fora da véspera; corte 17h) e liberação decidida com relógio de fixture; conciliação após cancelamento comprovado → LIBERADA com evidência. Fixes no caminho: import registrarMensagem faltando (v0.0.90), contador capado 3/3 (v0.0.91).
+
+## 2026-10-20 — fix d03a15ee (v0.0.88 9b843b1)
+- entrada_em é autodate (ignora escrita via API) — data real do APP CRC agora em data_entrada (migration 0018); relatório de origem usa data_entrada com fallback; backfill dos 4.117 leads com a Data registro das planilhas (4.108 ok, 9 recuperados depois; 0 sem data). Teste humano APROVADO pelo dono (chegada compareceu provada no print; guarda recusou 2º registro como esperado).
+
+## 2026-10-20 — tasks d03a15ee + d45e8f8a — ENTREGUES
+- Lead acompanha até o comparecimento (CA-1-17): vínculo automático por telefone (migration 0017: agenda_itens.lead): consulta criada → agendado, confirmação → confirmado, cancelamento → aguardando_retorno; chegada manual → compareceu/faltou (botões na tela Leads + guarda de etapa); relatório de origem por campanha/período (rota /leads/relatorio-origem + card na tela Leads, sem dados pessoais); prova P3-07 na tela Provas. E2E no ar: vínculo→agendado ✓, guarda 400 ✓, agendado→compareceu ✓ (v0.0.87 776ca31). rev.2-6: hook reescrito por scoping do JSVM (função top-level não é visível em callback — QA pegou) e roteamento por campos (e.collection não veio no evento).
+
+## 2026-10-20 — task eec75533 CONCLUÍDA (teste humano aprovado pelo dono)
+- "confirmo o teste, fecho a task" na v0.0.82 (11f8bef). 4.117 leads + fichas no ar.
+
+## 2026-10-20 — task eec75533 — ENTREGUE
+- Importação dos leads em aberto do APP CRC: planilhas ALC (2.449 válidas) e ITA (1.683) importadas: 4.117 leads gravados com ficha vinculada, fase do APP CRC mapeada pra etapa da central (novo/em_atendimento/aguardando_retorno/agendado), entrada_em preservada, marca importado_app_crc (migration 0016). Importador agora aceita .xlsx direto (parser na tela Leads). Dedup por id_app_crc/telefone provado (3956 duplicados pulados na reimportação) (v0.0.82 11f8bef, QA verde).
+
+## 2026-10-19 — task 84b8f8d6 — ENTREGUE
+- Limites por agenda/turno ATIVOS (dono 13/10): Leonel 5/turno (ITA qua 16h+), Wesley e Pamella 20/turno individual, Erika 2/horário sábado ortodontia; gate corrigido (unidade de origem aceita na piloto, política que COBRE a hora prevalece, horario_marcado com limite específico); provas P4-13/14/15 na tela Provas. E2E provado no ar: Leonel 6ª bloqueada ✓, Wesley 21ª manhã bloqueada + tarde livre ✓, Erika 3ª sábado bloqueada ✓; vínculo por nome da política da Erika corrigido (Dra. Erika); massa de teste limpa (0 restantes) (v0.0.81 89dd14d, QA verde).
+
+## 2026-10-19 — task 8421e27b CONCLUÍDA (teste humano aprovado)
+- "testei deu certo" na v0.0.79 (6a79d2f). Entregue: sinal de sobreposição/conflito no Planejar (gate CA-1-21 visível no "Ligar reserva"), tipo do agendamento (Avaliação/Tratamento) no formulário, avaliação = consulta fixa 30min/2 por horário, bug do matcher inverso corrigido (5 impl+2 exo = sem regra). Revalidação do zero: sem_regra 5+2 ✓, 2+2=40 ✓, 2+1=30 ✓, config 30/2 gravada ✓, versão no ar = testada ✓.
+
+## 2026-10-19 — task 8421e27b rev.3 (v0.0.79 6a79d2f)
+- Avaliação é consulta fixa (CL-004): com tipo "Avaliação" o formulário esconde procedimento/quantidade e o resultado mostra "X min (consulta de avaliação)" com a duração e o limite da config da unidade (30 min / 2 por horário); regime avaliação não usa mais a tabela de duração. Bundle rev.3 provado no ar (index-DMxhk-zb.js).
+
+## 2026-10-19 — task 8421e27b rev.2 (v0.0.78 680d586)
+- (1) BUG do motor de duração corrigido — matcher "inverso" espelhava quantidades (5 implantes + 2 extrações casava 40min errado); agora só casa regra direta e o caso sem regra vai pra lista "Casos sem regra" pra direção validar (provado no ar: sem_regra). (2) "Tipo do agendamento" (Avaliação/Tratamento) agora é escolha no formulário do Planejar (default segue a agenda do dentista) — regime visível e usado pelo gate. Regressões provadas: 2+2=40, 2+1=30, 4=40, 1=30, 3=40, 5=60, 4+1=40, 5+1=sem_regra.
+
+## 2026-10-19 — task 8421e27b — ENTREGUE
+- Sinal de sobreposição/conflito no Planejar (CA-1-21): "Ligar reserva" agora consulta a capacidade antes de gravar: avaliação bloqueia no 3º por horário, tratamento bloqueia horário sobreposto, política pendente nunca vira ilimitada; badge do regime (Avaliação/Tratamento) junto do tempo sugerido. Gate já existia no servidor (P4-07 verde); agora quem usa vê o sinal. Bundle novo provado no ar (index-BRP1MU98.js) (v0.0.77 1aab519).
+
+## 2026-10-19 — task f79847a5 CONCLUÍDA (teste humano aprovado)
+- "testei passou" na v0.0.76 (e7770c1). Entregue: lista de ligação + cobertura por turno com atualização na hora + liberação só pela regra + conciliação (CA-1-22). Pacote completo nas rev.1-6 (v0.0.66-76).
+
+## 2026-10-19 — task f79847a5 rev.6 FINAL
+- Rota antiga mover-nao-respondentes também corrigida (3º argumento removido — cobre bundle em cache) + PROVA NO NAVEGADOR na v0.0.76 (e7770c1): Paciente Teste 1 e 2 em lista de ligação agora mostram "manhã | Thays" (antes "a definir"). Screenshot de evidência em artifacts/6d41721f-9ebd-4b70-a1e8-d24b6ad1a920.png.
+
+## 2026-10-19 — task f79847a5 rev.5 CONCLUÍDO
+- Causa final era o 3º argumento vazio no findFirstRecordByFilter (assinatura inválida derrubava a busca da cobertura pro catch "a definir") → corrigido e PROVADO no ar (v0.0.75 bd9f3e5): mover -v2 retorna movidos=2, cobertura_a_definir=[] e os contatos em lista de ligação agora mostram Thays (manhã). Pacote completo da rev.3-5: rota nova mover-nao-respondentes-v2 em arquivo novo (pod fresco), filtro turno=X correto, serviço usa -v2, salvarTurno re-movendo pra atualizar responsáveis.
+
+## 2026-10-19 — task f79847a5 rev.3/4
+- Cobertura cadastrada (Thays/Bianca) não atualizava quem já estava na lista de ligação ("a definir" persistia) → causa raiz dupla: (1) filtro do mover não incluía em_lista_ligacao e (2) busca da cobertura usava assinatura de filtro inválida; pod do hook não recarregava → solução definitiva: rota nova mover-nao-respondentes-v2 em arquivo novo (pod fresco) + serviço apontando pra ela (skip 44aff59 v0.0.74).
+
+## 2026-10-19 — task f79847a5 (debug)
+- "Mover não respondentes" não levava contatos com resposta "Sem resposta" pra lista de ligação → causa raiz: filtro do hook só aceitava estado=mensagem_enviada → corrigido: filtro inclui sem_resposta (CA-1-19/RN-04) (skip 2a073cf v0.0.70).
+
+## 2026-10-17 — task f79847a5 — ENTREGUE
+- Lista de ligação operacional (registrar ligação por contato), decidir liberação com gate no servidor, painel de liberações + conciliar agora, conciliação automática após importação (CA-1-22), rota /liberacoes/conciliar + migration 0015. Provas P4-06 e P4-12 passando no ar; P4-04/05/07 regressão ok. 2 debugs: import duplicado no Importar.tsx; ausente_na_ultima_leitura não tratado (P4-12) (v0.0.69 b0ad515, QA verde).
+
+## 2026-10-17 — task 35bff70c CONCLUÍDA (teste humano aprovado pelo dono)
+- "Testei e passou" ~14h53 na v0.0.65 d03e183. Ficha do paciente no ar: histórico append-only com autor/hora, próxima ação com prazo vencido destacado, acesso por função (dentista sem acesso), ficha única (lead cria ficha vinculada) + Nova ficha. 3 rodadas de debug pegaram bugs reais: filtro texto×relação (P3-09a), campo teste inexistente em users + e-mail escondido no create (P3-09b). fase.md 22/54 (41%).
+
+## 2026-10-17 — task 35bff70c DEBUG3
+- P3-09b continuou falhando — causa nova nos logs: o create do usuário volta SEM o campo email (PocketBase esconde e-mail de auth quando emailVisibility=false e quem pede não é o dono), então dentista.email era vazio e o login dava 400. Fix: variável local emailProva com o e-mail ENVIADO (skip d03e183 v0.0.65).
+
+## 2026-10-17 — task 35bff70c DEBUG2
+- P3-09b falhou ("error validating submitted data") — a prova criava usuário dentista com campo teste:true, mas a coleção users NÃO tem campo teste (schema correto; bug da prova). Fix: sem teste no create + limpeza de usuários prova-dentista-* no finally (skip 8ce1ebd v0.0.64).
+
+## 2026-10-17 — task 35bff70c ITER
+- Lista de fichas vazia no teste humano — nada no produto criava ficha de paciente (cadastrar lead criava só lead; tela Fichas lista só pacientes). Corrigido conforme SPEC-1-003 "ficha única": cadastrar lead (manual ou APP CRC) cria a ficha vinculada (lead.paciente + paciente.lead) e eventos de lead gravam as relações (aparecem no histórico); botão "Nova ficha" na tela Fichas (rota /backend/v1/ficha/criar, gestão/CRC, RN-03 duplicado) (skip b208f3c v0.0.62).
+
+## 2026-10-17 — task 35bff70c DEBUG
+- P3-09a falhou no teste humano ("Something went wrong") — causa raiz nos logs do Skip: listarEventos filtrava paciente/lead (TEXTO) mas a migration 0010 trocou por relações paciente_rel/lead_rel (filtro por texto = 500 no PocketBase v0.36); hook agora grava a relação junto; limpeza da massa de teste virou rota do servidor (eventos é append-only até pra gestão) (skip 8dc1046 v0.0.61).
+
+## 2026-10-17 — task 35bff70c — ENTREGUE
+- Ficha do paciente: tela /ficha com busca, histórico em ordem (eventos append-only com autor/hora), próxima ação com prazo (vencido destacado), acesso por função (dentista sem acesso), hook ficha_regras (evento + próxima ação com autor da sessão), provas P3-09a/b (skip eb44acb v0.0.60).
+
+## 2026-10-17 — task c9b95987 concluída
+- Teste humano aprovado pelo dono ("testei, pode seguir" 09h46) — 2 e 4 coroas com dois dentistas conferindo a tabela; tempo sugerido = regra específica de cada dentista (v0.0.59 f4d3b7b, sem alteração de código).
+
+## 2026-10-17 — Registro
+- Checkboxes de 8d76cea5 + ac46ef6d re-marcar [x] (concluídos e testados 14/10 — correção de 16/10 não foi gravada em commit e se perdeu no reset; lição: housekeeping vai no commit imediatamente).
+
+## 2026-10-17 — task f124df8f concluída
+- Resposta do paciente + cobertura de ligação: botões por linha, mover não respondentes com responsável do turno, cobertura editável pela gestão (migration 0014), provas P4-03/03b; testado pelo dono ("pode seguir" 00h27) na v0.0.59 f4d3b7b (https://projeto-lai-19327.goskip.app).
+
+## 2026-10-16 — task f124df8f DEBUG3
+- P4-03b falhou no teste humano — "getString is not a function": o SDK JS do PocketBase devolve record como objeto (campo direto), não Record do servidor. Provas P4-03/03b usavam getString/getBool; corrigido para campos diretos (skip f4d3b7b v0.0.59).
+
+## 2026-10-16 — task f124df8f DEBUG2
+- Massa de teste 2× acumulava 8 consultas — criarMassaConfirmacao agora é idempotente (reusa se o dia já tem fixture) (skip 1595728 v0.0.58).
+
+## 2026-10-16 — task f124df8f DEBUG
+- "Value must be unique" na lista-dia — rota não achava contato da massa (filtro teste) e duplicava agenda_item; fix: busca sem filtrar teste (skip f3996b8 v0.0.57).
+
+## 2026-10-16 — task f124df8f — ENTREGUE
+- Resposta do paciente na tela Confirmações (confirmou/remarcação/cancelou/sem resposta), mover não respondentes p/ lista de ligação com responsável do turno, cobertura de ligação (migration 0014), provas P4-03/P4-03b (skip ced239c v0.0.56).
+
+## 2026-10-16 — task fdca5fb0 concluída
+- Desvio de duração + conciliação de reservas no ar (v0.0.55, ref ff39792); testado pelo dono ("pode seguir" 19h36); provas P2-05b/P2-06 aprovadas na tela; 3 rodadas de debug (Only superusers → getBoolean → dedup por hash) registradas em 06_notas/debug/.
+
+## 2026-10-16 — task fdca5fb0 DEBUG (3ª rodada)
+- P2-05b "massa P2: 0 regras" → causa raiz: dedup por hash do hook devolve ja_aplicado=true com 0 regras em reimport (correto — P2-08 prova isso); prova exigia 4 → corrigido: aceita ja_aplicado (skip ff39792 v0.0.55).
+
+## 2026-10-16 — task fdca5fb0 DEBUG (2ª rodada)
+- P2-05b 500 "Something went wrong" → causa raiz nos logs do Skip: getBoolean não existe no JSVM (TypeError na rota ligar-reserva) → corrigido: getInt('campo') !== 0 nas 5 ocorrências (duracao_sugerir + confirmacao_regras) (skip 3b817d9 v0.0.54).
+
+## 2026-10-16 — task fdca5fb0 DEBUG
+- P2-05b "Only superusers can perform this action" → causa raiz: planejamentos.createRule = null (prova criava registro direto) + hook gravava 'sugerido' (fora do select da migration 0013) → corrigido: provas via rota sugerirDuracao(teste=true) + hook grava 'planejado' (skip bc5d3c8 v0.0.53).
+
 ## 2026-10-16 — task fdca5fb0 (SPEC-1-002, CA-1-10/11) — IMPLEMENTADA E PUBLICADA
 - Migration 0013 (aditiva): coleção desvios_duracao + campos em planejamentos (paciente, agenda_item rel único, minutos_reservados, criado_por) + valores novos de situacao (planejado/reservado/reserva_nao_encontrada/cancelado) preservando os existentes.
 - Hook duracao_sugerir.js +4 rotas: ligar-reserva (reserva simulada, mesmo profissional, item livre; diferença usa tempo ARREDONDADO e cria desvio sem_motivo — RN-04), motivo-desvio (obrigatório → justificado), revisar-desvio (gestão → revisado), conciliar (RN-05/06 on-demand, sem cron).
@@ -72,7 +204,9 @@
 - Verificação independente: versão no ar = testada (6e10115, lastPublishedRef igual); QA verde; segredos limpos; GitHub 7/7 código + registros; rotas 401 anônimo; banco sem resíduo de massa (0 itens de teste); checklist de UI 10/10; diff 100% coberto por CA-1-18 + RN-01/02/15.
 - Aprendizado capturado: AP-2026-10-16-1527 (massa da prova auto-apaga → massa na tela).
 
-- 2026-10-16 · [Luiz] · DEBUG task 5bcfa6f1: "não consegui baixar a planilha" (lista vazia) → causa raiz: sem consultas no dia-alvo (massa da prova se auto-apaga; agenda real não importada) + UX sem orientação → corrigido: botão "Criar massa de teste" na tela + textos de estado (skip 6e10115 v0.0.50).
+## 2026-10-16 — task 5bcfa6f1 DEBUG
+- "não consegui baixar a planilha" (lista vazia) → causa raiz: sem consultas no dia-alvo (massa da prova se auto-apaga; agenda real não importada) + UX sem orientação → corrigido: botão "Criar massa de teste" na tela + textos de estado (skip 6e10115 v0.0.50).
+
 ## 2026-10-16 — task 5bcfa6f1 (SPEC-1-004, CA-1-18) — IMPLEMENTADA E PUBLICADA
 - Rota /backend/v1/confirmacao/lista-dia no hook confirmacao_regras.js: consultas do dia-alvo (APPOINTMENT, não canceladas/excluídas) ganham contato pendente se não tiverem (RN-01 idempotente); lista em ordem de horário com telefone validado e mensagem montada do modelo (fallback CL-009 da SPEC: nome, telefone, mensagem).
 - Serviço confirmacao.ts: gerarListaDia, dividirSaidas (XLSX até limite / envio manual / corrigir telefone) e exportarXlsx (SheetJS import dinâmico; registro RN-15 em provas_execucoes; exportar NUNCA cria tentativa — RN-02).
@@ -94,7 +228,8 @@
 - Provas P3-04 (pendência entra/sai), P3-05 (agendamento futuro verificado → agendado), P3-06 (aguardando_condicao → revisão) e P3-11 parcial (sem plano → revisão) na tela Provas; regressão P3-01..03 e P2-01..05 intocada.
 - Publicado v0.0.46 (0ce4ea1) 14:08 UTC; QA verde (1 erro meu de </CardBody> corrigido no 2º apply). Produção provada: lastPublishedRef = 0ce4ea1; coleção pendencias na nuvem (anônimo vê 0); rotas anônimo = 401 (regras de acesso ok). E2E completo por API fica para o teste humano (login do dono).
 
-- 16/10 10h54: teste humano APROVADO pelo dono ("testei, pode seguir"). Task 6d5de2f5 CONCLUÍDA (v0.0.42, d9a5e12 no ar). fase.md 13/54 cards. Aprendizado capturado (2 padrões: prova imune a resíduo; push truncado no GitHub).
+## 2026-10-16 10h54 — task 6d5de2f5 CONCLUÍDA (teste humano aprovado pelo dono)
+- "testei, pode seguir". Task CONCLUÍDA (v0.0.42, d9a5e12 no ar). fase.md 13/54 cards. Aprendizado capturado (2 padrões: prova imune a resíduo; push truncado no GitHub).
 
 ## 2026-10-16 — task 6d5de2f5 (debug teste humano)
 - Teste do dono pegou bug real: P2-05 falhou com "agrupamento inesperado: 3 grupo(s)" — a asserção lia a coleção INTEIRA de planejamentos de teste; resíduo de execuções anteriores contaminou a contagem (50 execuções registradas).

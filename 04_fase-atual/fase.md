@@ -2,9 +2,9 @@
 
 <!-- fase-format:2 -->
 
-- [ ] Comparar os números do painel com a contagem direta da base @"L A Rodrigues" !26/10/2026  <!-- id:22d83348-1372-46f4-88cd-0cf15f55cd06 -->
+- [x] Comparar os números do painel com a contagem direta da base @"L A Rodrigues" !26/10/2026 ✅ 23/10/2026 (15/15 indicadores conferidos, zero divergência; P2.1-01 custo sem entrada = "dados insuficientes"; relatório em 05_entregas/fase-2/comparacao-do-painel.md; comparação no lote do dia de uso fica pra depois do CL-008)  <!-- id:22d83348-1372-46f4-88cd-0cf15f55cd06 -->
   > Para cada indicador do painel e da linha de base, o número da tela ao lado da contagem direta, no mesmo período; sem dado da clínica aparece "dados insuficientes". SPEC-2-001 · CA-2-01.
-- [ ] Escrever o roteiro de uso da central para cada função @"L A Rodrigues" !27/10/2026  <!-- id:bffde635-3aa5-48b1-ab88-a76834e96eb2 -->
+- [x] Escrever o roteiro de uso da central para cada função @"L A Rodrigues" !27/10/2026 ✅ 23/10/2026 (roteiro das 5 funções + conferência de usuários em 05_entregas/fase-2/uso-pela-equipe.md; usuários reais a criar pela gestão antes do dia de uso; tabela de problemas pronta pra preencher)  <!-- id:bffde635-3aa5-48b1-ab88-a76834e96eb2 -->
   > Conferir que cada função tem usuário e escrever o passo a passo da CRC, da recepção, do dentista e da gestão para o dia de uso. SPEC-2-001 · CA-2-02.
 - [ ] Corrigir os problemas encontrados no dia de uso @"L A Rodrigues" !06/11/2026  <!-- id:abb0fefa-2464-47b8-80a4-60ffc453ea8c -->
   > Começa depois do dia de uso da clínica; até lá a construção segue pela SPEC-2-002. Corrigir o que está no aceite da fase 1 e levar o resto ao consultor. SPEC-2-001 · CA-2-03, CA-2-04.

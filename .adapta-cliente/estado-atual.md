@@ -2,16 +2,16 @@
 
 - schema_version: adapta-cliente-state/v3
 - fase: 2
-- task_id: 22d83348-1372-46f4-88cd-0cf15f55cd06
+- task_id: bffde635 (roteiro) concluída; abb0fefa aguarda dia de uso
 - spec: 04_fase-atual/specs/spec-2-001-central-em-uso-pela-equipe.md
-- etapa: pronta-para-construcao
-- teste_humano: pendente para a SPEC-2-001; aceite do painel da fase 1 registrado em 23/10 às 10h10
+- etapa: aguardando_dia_de_uso
+- teste_humano: SPEC-2-001 teste único quando as 3 tasks estiverem no ar (a 3ª depende do CL-008)
 - verificacao_automatica: pacote documental validado; sem novo teste do app
 - sistema: lai
 - skip_projeto: 65741
 - skip_versao: v0.0.146 (61460db), conforme entrega registrada no changelog
-- ultima_acao: liberação documental da fase 2 a partir da decisão AC-23-02 e das SPECs preparadas pelo Claude
-- proxima_acao: comparar os números do painel com a contagem direta da base, conforme SPEC-2-001
+- ultima_acao: 23/10 15h30 — comparação 15/15 + roteiro por função entregues (SPEC-2-001 tasks 1-2)
+- proxima_acao: seguir para a SPEC-2-002 (tarefas com dono e prazo) — a task 3 da 2-001 só fecha depois do dia de uso (CL-008)
 - atualizado_em: 2026-10-23
 
 Estado anterior preservado em `05_entregas/fase-1/estado-executor-antes-da-liberacao.md`.
